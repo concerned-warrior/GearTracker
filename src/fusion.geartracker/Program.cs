@@ -1,47 +1,66 @@
-﻿var config = new ConfigurationBuilder()
-    .AddJsonFile("./appsettings/appsettings.json", optional: false, reloadOnChange: false)
-    .Build();
-var gearTrackerConfig = new GearTrackerConfig();
-var httpClient = new HttpClient();
-var graphQLClient = new TestServerGraphQLClient(httpClient);
-
-config.Bind(nameof(GearTrackerConfig), gearTrackerConfig);
-
-httpClient.BaseAddress = new Uri(config[nameof(httpClient.BaseAddress)]!);
-httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config["BearerToken"]!);
-
-
-var response = await graphQLClient.Execute(new GuildReportsWithPlayers(gearTrackerConfig.GuildId));
-var reports = response.Data?.__Reports.__Data ?? new Report[0];
-
-Console.WriteLine($"Number of reports: {reports.Length}");
-
-for (int i = 0; i < reports.Length; i++)
+﻿internal class Program
 {
-    var report = reports[i];
-    var endTime = DateTimeOffset.FromUnixTimeMilliseconds((long)report.EndTime);
+    private DataService dataService;
+    private FusionData data;
 
-    // if (endTime < gearTrackerConfig.LastReportDate)
-    // {
-    //     break;
-    // }
 
-    Console.WriteLine($"{i}) {report.Title} {report.Code} {endTime} {endTime > gearTrackerConfig.LastReportDate}");
+    private static async Task Main(string[] args)
+    {
+        var programConfig = CreateProgramConfig("./appsettings/appsettings.json");
+        var dataService = CreateDataService(programConfig);
+        var data = dataService.Load();
+        var program = new Program(dataService, data);
+
+        await program.UpdateReports();
+
+        dataService.Save(data);
+    }
+
+
+    private static DataService CreateDataService (ProgramConfig programConfig)
+    {
+        var httpClient = new HttpClient();
+        var graphQLClient = new WCLGraphQLClient(httpClient);
+        var dataService = new DataService(graphQLClient, programConfig);
+
+        httpClient.BaseAddress = new Uri(programConfig.BaseAddress);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", programConfig.BearerToken);
+
+        return dataService;
+    }
+
+
+    private static ProgramConfig CreateProgramConfig (string appSettingsPath)
+    {
+        var config = new ConfigurationBuilder()
+            .AddJsonFile(appSettingsPath, optional: false, reloadOnChange: false)
+            .Build();
+
+        var programConfig = new ProgramConfig();
+
+        config.Bind(programConfig);
+
+        return programConfig;
+    }
+
+
+    public async Task UpdateReports ()
+    {
+        var reports = await dataService.GetReports();
+
+        foreach (var report in reports)
+        {
+            if (!data.ReportsByCode.ContainsKey(report.Code))
+            {
+                data.ReportsByCode.Add(report.Code, report);
+            }
+        }
+    }
+
+
+    public Program (DataService dataService, FusionData data)
+    {
+        this.dataService = dataService;
+        this.data = data;
+    }
 }
-
-
-// Console.WriteLine(response.Query);
-// Console.WriteLine("----- DATA -----");
-// Console.WriteLine(JsonSerializer.Serialize(response.Data, new JsonSerializerOptions
-// {
-//     WriteIndented = true,
-//     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-// }));
-
-// Console.WriteLine($"Title: {report.Title}");
-// Console.WriteLine($"Code: {report.Code}");
-// Console.WriteLine($"EndTime: {endTime}");
-// Console.WriteLine($"EndTimeOffset: {endTimeOffset}");
-Console.WriteLine($"LastReportDate: {gearTrackerConfig.LastReportDate}");
-// Console.WriteLine($"endTime > LastReportDate: {endTime > gearTrackerConfig.LastReportDate}");
-// Console.WriteLine($"endTimeOffset > LastReportDate: {endTimeOffset > gearTrackerConfig.LastReportDate}");

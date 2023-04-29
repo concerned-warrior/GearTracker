@@ -1,12 +1,12 @@
 namespace fusion.geartracker.graphql;
 
-public record GuildReportsWithPlayers(int guildID, int limit = 20, int page = 1) : GraphQL<Query, ReportData>
+public record Reports(int guildId, int limit = 20, int page = 1) : GraphQL<Query, ReportData>
 {
     public override ReportData Execute(Query query)
     {
         return query.ReportData(reportData => new ReportData
         {
-            __Reports = reportData.Reports(endTime: null, guildID, guildName: null, guildServerSlug: null, guildServerRegion: null, guildTagID: null, userID: null, limit, page, startTime: null, zoneID: null, gameZoneID: null, reportPagination => new ReportPagination
+            __Reports = reportData.Reports(endTime: null, guildID: guildId, guildName: null, guildServerSlug: null, guildServerRegion: null, guildTagID: null, userID: null, limit, page, startTime: null, zoneID: null, gameZoneID: null, reportPagination => new ReportPagination
             {
                 __Data = reportPagination.Data(report => new Report
                 {
@@ -16,14 +16,6 @@ public record GuildReportsWithPlayers(int guildID, int limit = 20, int page = 1)
                     EndTime = report.EndTime,
                     ExportedSegments = report.ExportedSegments,
                     Segments = report.Segments,
-                    // __MasterData = report.MasterData(translate: null, reportMasterData => new ReportMasterData
-                    // {
-                    //     __Actors = reportMasterData.Actors(type: "Player", subType: null, reportActor => new ReportActor
-                    //     {
-                    //         Id = reportActor.Id,
-                    //         Name = reportActor.Name,
-                    //     })!,
-                    // })!,
                 })!,
                 Total = reportPagination.Total,
                 From = reportPagination.From,
