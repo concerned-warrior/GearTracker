@@ -2,8 +2,8 @@ namespace fusion.geartracker.data;
 
 public class FusionData
 {
-    public List<int> ItemsToTrack { get; set; } = new();
-    public List<string> PlayersToTrack { get; set; } = new();
+    public HashSet<int> ItemsToTrack { get; set; } = new();
+    public HashSet<string> PlayersToTrack { get; set; } = new();
     public Dictionary<string, FusionReport> ReportsByCode { get; set; } = new();
     public Dictionary<string, FusionPlayer> PlayersByName { get; set; } = new();
 

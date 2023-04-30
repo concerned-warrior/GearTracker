@@ -12,11 +12,11 @@ public class DataService
     };
 
 
-    public async Task<List<FusionReport>> GetReports ()
+    public async Task<HashSet<FusionReport>> GetReports ()
     {
         ReportPagination reportPagination = new();
         FusionReport lastReport = new();
-        List<FusionReport> reports = new();
+        HashSet<FusionReport> reports = new();
 
         do
         {
@@ -39,11 +39,11 @@ public class DataService
     }
 
 
-    public async Task<List<FusionPlayer>> GetPlayers (List<FusionReport> reports, List<string> playersToTrack)
+    public async Task<List<FusionPlayer>> GetPlayers (HashSet<FusionReport> reports, HashSet<string> playersToTrack)
     {
         var players = new List<FusionPlayer>();
 
-        foreach (var report in reports)
+        await Parallel.ForEachAsync(reports, async (report, cancellationToken) =>
         {
             var result = await graphQLClient.Execute(new Players(report.Code));
             var actors = result.Data?.__Report.__MasterData.__Actors ?? new ReportActor[0];
@@ -55,35 +55,85 @@ public class DataService
                     players.Add(FusionPlayer.FromActor(report, actor));
                 }
             }
-        }
+        });
+
+        players.Sort((a, b) => a.Report.StartTime.CompareTo(b.Report.StartTime));
 
         return players;
     }
 
 
-    public async Task<List<FusionCombatantInfo>> GetCombatantInfoList (List<FusionPlayer> players, List<int> itemsToTrack)
+    private async Task<FusionCombatantInfo> getCombatantInfo (FusionPlayer player)
     {
-        var combatantInfoList = new List<FusionCombatantInfo>();
+        var report = player.Report;
+        var startTime = 0.0;
+        var endTime = report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds();
+        var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.Id));
+        var reportEventPaginator = result.Data?.__Report.__Events ?? new();
+        var combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.Value ?? "[]");
 
-        foreach (var player in players)
+        while (reportEventPaginator.NextPageTimestamp > 0)
         {
-            var report = player.Report;
-            var startTime = 0.0;
-            var endTime = report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds();
-            Console.WriteLine($"{report.Code}, {startTime}, {endTime}, {player.Id}");
-            var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.Id));
-            Console.WriteLine(result.Query);
-            foreach (var error in result.Errors ?? new GraphQueryError[0])
-            {
-                Console.WriteLine(error.Message);
-            }
-            Console.WriteLine(result.Data?.__Report.__Events.Data ?? "{}");
-            var combatantInfo = FusionCombatantInfo.FromJSONString(player, result.Data?.__Report.__Events.Data ?? "{}");
+            startTime = (double)reportEventPaginator.NextPageTimestamp;
+            result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.Id));
+            reportEventPaginator = result.Data?.__Report.__Events ?? new();
 
-            combatantInfo.Gear = combatantInfo.Gear.FindAll(gear => itemsToTrack.Contains(gear.Id));
+            combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.Value ?? "[]", combatantInfo);
         }
 
-        return combatantInfoList;
+        return combatantInfo;
+    }
+
+
+    public async Task<Dictionary<FusionPlayer, HashSet<FusionGear>>> GetGearSetByPlayer (List<FusionPlayer> players, HashSet<int> itemsToTrack)
+    {
+        var gearListByPlayer = new Dictionary<FusionPlayer, List<FusionGear>>();
+        var gearSetByPlayer = new Dictionary<FusionPlayer, HashSet<FusionGear>>();
+        var gearToTrack = itemsToTrack.Aggregate(new HashSet<FusionGear>(itemsToTrack.Count), (seed, itemId) =>
+        {
+            seed.Add(new FusionGear { Id = itemId });
+
+            return seed;
+        });
+
+        await Parallel.ForEachAsync(players, async (player, cancellationToken) =>
+        {
+            var combatantInfo = await getCombatantInfo(player);
+
+            combatantInfo.Gear.IntersectWith(gearToTrack);
+
+            foreach (var gear in combatantInfo.Gear)
+            {
+                gear.FirstSeenAt = player.Report.StartTime;
+            }
+
+            if (gearListByPlayer.ContainsKey(player))
+            {
+                gearListByPlayer[player].AddRange(combatantInfo.Gear);
+            }
+            else
+            {
+                gearListByPlayer.Add(player, new(combatantInfo.Gear));
+            }
+        });
+
+        foreach ((var player, var gearList) in gearListByPlayer)
+        {
+            gearList.Sort((a, b) => a.FirstSeenAt.CompareTo(b.FirstSeenAt));
+            gearList.ForEach(gear =>
+            {
+                if (gearSetByPlayer.ContainsKey(player))
+                {
+                    gearSetByPlayer[player].Add(gear);
+                }
+                else
+                {
+                    gearSetByPlayer.Add(player, new() { gear });
+                }
+            });
+        }
+
+        return gearSetByPlayer;
     }
 
 

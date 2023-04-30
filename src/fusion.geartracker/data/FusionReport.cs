@@ -1,6 +1,6 @@
 namespace fusion.geartracker.data;
 
-public class FusionReport
+public class FusionReport : IEquatable<FusionReport>
 {
     public string Code { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
@@ -8,6 +8,18 @@ public class FusionReport
     public DateTimeOffset EndTime { get; set; }
     public int ExportedSegments { get; set; }
     public int Segments { get; set; }
+
+
+    public bool Equals (FusionReport? other)
+    {
+        return Code.Equals(other?.Code);
+    }
+
+
+    public override int GetHashCode()
+    {
+        return Code.GetHashCode();
+    }
 
 
     public override string ToString ()

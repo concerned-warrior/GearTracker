@@ -46,7 +46,7 @@
     }
 
 
-    public async Task<List<FusionReport>> UpdateReports ()
+    public async Task<HashSet<FusionReport>> UpdateReports ()
     {
         var reports = await dataService.GetReports();
 
@@ -62,29 +62,25 @@
     }
 
 
-    public async Task<List<FusionPlayer>> FindPlayers (List<FusionReport> reports)
+    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports)
     {
         return await dataService.GetPlayers(reports, data.PlayersToTrack);
     }
 
 
-    public async Task<List<FusionGear>> UpdateGear (List<FusionPlayer> players)
+    public async Task<Dictionary<FusionPlayer, HashSet<FusionGear>>> UpdateGear (List<FusionPlayer> players)
     {
-        var combatantInfoList = await dataService.GetCombatantInfoList(players, data.ItemsToTrack);
+        var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, data.ItemsToTrack);
 
-        combatantInfoList.Sort((a, b) => a.Player.Report.StartTime.CompareTo(b.Player.Report.StartTime));
-
-        foreach (var combatantInfo in combatantInfoList)
+        foreach ((var player, var gearSet) in gearSetByPlayer)
         {
-            foreach (var gear in combatantInfo.Gear)
+            foreach (var gear in gearSet)
             {
-                gear.FirstSeenAt = combatantInfo.Player.Report.StartTime;
+                Console.WriteLine($"{gear.FirstSeenAt} - {player} acquired {gear}");
             }
-
-            data.AddGearToPlayer(combatantInfo);
         }
 
-        return new();
+        return gearSetByPlayer;
     }
 
 

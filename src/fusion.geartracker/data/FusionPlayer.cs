@@ -1,11 +1,23 @@
 namespace fusion.geartracker.data;
 
-public class FusionPlayer
+public class FusionPlayer : IEquatable<FusionPlayer>
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public FusionReport Report { get; set; } = new();
     public Dictionary<int, FusionGear> GearById { get; set; } = new();
+
+
+    public bool Equals (FusionPlayer? other)
+    {
+        return Name.Equals(other?.Name);
+    }
+
+
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
+    }
 
 
     public override string ToString ()

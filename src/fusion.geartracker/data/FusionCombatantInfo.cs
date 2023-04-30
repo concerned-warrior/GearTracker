@@ -2,18 +2,24 @@ namespace fusion.geartracker.data;
 
 public class FusionCombatantInfo
 {
-    public long Timestamp { get; set; }
-    public int Fight { get; set; }
-    public List<FusionGear> Gear { get; set; } = new();
+    public HashSet<FusionGear> Gear { get; set; } = new();
     public FusionPlayer Player { get; set; } = new();
 
 
-    public static FusionCombatantInfo FromJSONString (FusionPlayer player, string json)
+    public static FusionCombatantInfo FromJsonArrayString (FusionPlayer player, string json, FusionCombatantInfo? seed = null)
     {
-        var combatantInfo = JsonSerializer.Deserialize<FusionCombatantInfo>(json, DataService.DataJsonSerializerOptions) ?? new();
+        var combatantInfoList = JsonSerializer.Deserialize<List<FusionCombatantInfo>>(json, DataService.DataJsonSerializerOptions) ?? new();
 
-        combatantInfo.Player = player;
+        seed = seed is null ? new FusionCombatantInfo()
+        {
+            Player = player,
+        } : seed;
 
-        return combatantInfo;
+        return combatantInfoList.Aggregate(seed, (seed, combatantInfo) =>
+        {
+            seed.Gear.UnionWith(combatantInfo.Gear);
+
+            return seed;
+        });
     }
 }

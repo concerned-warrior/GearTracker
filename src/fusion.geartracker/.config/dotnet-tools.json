@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "zeroql.cli": {
-      "version": "3.6.0",
+      "version": "3.6.1-preview.1",
       "commands": [
         "zeroql"
       ]
