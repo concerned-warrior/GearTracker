@@ -5,6 +5,12 @@ public class DataService
     private ProgramConfig programConfig;
     private WCLGraphQLClient graphQLClient;
 
+    public static JsonSerializerOptions DataJsonSerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = true,
+    };
+
 
     public async Task<List<FusionReport>> GetReports ()
     {
@@ -33,6 +39,54 @@ public class DataService
     }
 
 
+    public async Task<List<FusionPlayer>> GetPlayers (List<FusionReport> reports, List<string> playersToTrack)
+    {
+        var players = new List<FusionPlayer>();
+
+        foreach (var report in reports)
+        {
+            var result = await graphQLClient.Execute(new Players(report.Code));
+            var actors = result.Data?.__Report.__MasterData.__Actors ?? new ReportActor[0];
+
+            foreach (var actor in actors)
+            {
+                if (playersToTrack.Contains(actor.Name ?? string.Empty))
+                {
+                    players.Add(FusionPlayer.FromActor(report, actor));
+                }
+            }
+        }
+
+        return players;
+    }
+
+
+    public async Task<List<FusionCombatantInfo>> GetCombatantInfoList (List<FusionPlayer> players, List<int> itemsToTrack)
+    {
+        var combatantInfoList = new List<FusionCombatantInfo>();
+
+        foreach (var player in players)
+        {
+            var report = player.Report;
+            var startTime = 0.0;
+            var endTime = report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds();
+            Console.WriteLine($"{report.Code}, {startTime}, {endTime}, {player.Id}");
+            var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.Id));
+            Console.WriteLine(result.Query);
+            foreach (var error in result.Errors ?? new GraphQueryError[0])
+            {
+                Console.WriteLine(error.Message);
+            }
+            Console.WriteLine(result.Data?.__Report.__Events.Data ?? "{}");
+            var combatantInfo = FusionCombatantInfo.FromJSONString(player, result.Data?.__Report.__Events.Data ?? "{}");
+
+            combatantInfo.Gear = combatantInfo.Gear.FindAll(gear => itemsToTrack.Contains(gear.Id));
+        }
+
+        return combatantInfoList;
+    }
+
+
     public FusionData Load ()
     {
         FusionData data;
@@ -41,7 +95,7 @@ public class DataService
         {
             using var stream = File.OpenRead(programConfig.AppDataPath);
 
-            data = JsonSerializer.Deserialize<FusionData>(stream) ?? new();
+            data = JsonSerializer.Deserialize<FusionData>(stream, DataJsonSerializerOptions) ?? new();
         }
         catch (Exception ex)
         {
@@ -60,11 +114,7 @@ public class DataService
         {
             using var stream = File.OpenWrite(programConfig.AppDataPath);
 
-            JsonSerializer.Serialize(stream, data, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true,
-            });
+            JsonSerializer.Serialize(stream, data, DataJsonSerializerOptions);
         }
         catch (Exception ex)
         {

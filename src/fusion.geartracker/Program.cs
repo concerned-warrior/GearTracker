@@ -11,7 +11,9 @@
         var data = dataService.Load();
         var program = new Program(dataService, data);
 
-        await program.UpdateReports();
+        var reports = await program.UpdateReports();
+        var players = await program.FindPlayers(reports);
+        var gear = await program.UpdateGear(players);
 
         dataService.Save(data);
     }
@@ -44,7 +46,7 @@
     }
 
 
-    public async Task UpdateReports ()
+    public async Task<List<FusionReport>> UpdateReports ()
     {
         var reports = await dataService.GetReports();
 
@@ -55,6 +57,34 @@
                 data.ReportsByCode.Add(report.Code, report);
             }
         }
+
+        return reports;
+    }
+
+
+    public async Task<List<FusionPlayer>> FindPlayers (List<FusionReport> reports)
+    {
+        return await dataService.GetPlayers(reports, data.PlayersToTrack);
+    }
+
+
+    public async Task<List<FusionGear>> UpdateGear (List<FusionPlayer> players)
+    {
+        var combatantInfoList = await dataService.GetCombatantInfoList(players, data.ItemsToTrack);
+
+        combatantInfoList.Sort((a, b) => a.Player.Report.StartTime.CompareTo(b.Player.Report.StartTime));
+
+        foreach (var combatantInfo in combatantInfoList)
+        {
+            foreach (var gear in combatantInfo.Gear)
+            {
+                gear.FirstSeenAt = combatantInfo.Player.Report.StartTime;
+            }
+
+            data.AddGearToPlayer(combatantInfo);
+        }
+
+        return new();
     }
 
 

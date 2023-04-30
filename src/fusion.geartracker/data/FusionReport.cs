@@ -12,7 +12,7 @@ public class FusionReport
 
     public override string ToString ()
     {
-        return $"{Title} {Code} {StartTime}-{EndTime}";
+        return $"{Title} {Code} {StartTime.ToLocalTime()}-{EndTime.ToLocalTime()}";
     }
 
 

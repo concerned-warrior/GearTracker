@@ -8,7 +8,7 @@ public record Gear(string code, double startTime, double endTime, int playerId) 
         {
             __Report = reportData.Report(code, report => new Report
             {
-                __Events = report.Events(abilityID: null, dataType: EventDataType.Combatantinfo, death: null, difficulty: null, encounterID: null, endTime, fightIDs: null, filterExpression: null, hostilityType: null, includeResources: null, killType: null, limit: null, sourceAurasAbsent: null, sourceAurasPresent: null, sourceClass: null, sourceID: playerId, sourceInstanceID: null, startTime, targetAurasAbsent: null, targetAurasPresent: null, targetClass: null, targetID: null, targetInstanceID: null, translate: null, useAbilityIDs: null, useActorIDs: null, viewOptions: null, wipeCutoff: null, reportEventPaginator => new ReportEventPaginator
+                __Events = report.Events(abilityID: null, dataType: EventDataType.Combatantinfo, death: null, difficulty: null, encounterID: null, endTime, fightIDs: null, filterExpression: null, hostilityType: null, includeResources: null, killType: null, limit: null, sourceAurasAbsent: null, sourceAurasPresent: null, sourceClass: "Any", sourceID: playerId, sourceInstanceID: null, startTime, targetAurasAbsent: null, targetAurasPresent: null, targetClass: null, targetID: null, targetInstanceID: null, translate: null, useAbilityIDs: null, useActorIDs: null, viewOptions: null, wipeCutoff: null, reportEventPaginator => new ReportEventPaginator
                 {
                     Data = reportEventPaginator.Data,
                     NextPageTimestamp = reportEventPaginator.NextPageTimestamp,
