@@ -17,6 +17,7 @@ Make a `src/fusion.geartracker/appsettings/appsettings.json` file with the follo
   "clientId": "{your client id}",
   "clientSecret": "{your client secret}",
   "guildId": 123456,
+  "useReportCache": false,
   "firstReportDate": "2023-05-01",
   "lastReportDate": "2023-01-01",
   "itemsToTrack": [
@@ -36,6 +37,8 @@ Make a `src/fusion.geartracker/appsettings/appsettings.json` file with the follo
 - **clientId**: Your WCL API client identifier from [WCL V2 clients](https://classic.warcraftlogs.com/api/clients)
 - **clientSecret**: Your WCL API client secret from [WCL V2 clients](https://classic.warcraftlogs.com/api/clients)
 - **guildId**: The guild identifier can be found on a WCL guild reports URL
+- **guildId**: The guild identifier can be found on a WCL guild reports URL
+- **useReportCache**: Whether or not to use saved report data instead of pulling from WCL
 - **firstReportDate**: The most recent date from which to pull data
 - **lastReportDate**: The oldest date from which to pull data
 - **itemsToTrack**: A list of item identifiers found on [Wowhead](https://www.wowhead.com)

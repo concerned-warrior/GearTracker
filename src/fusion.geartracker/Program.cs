@@ -7,11 +7,11 @@
     private static async Task Main(string[] args)
     {
         var programConfig = CreateProgramConfig("./appsettings/appsettings.json");
-        var dataService = CreateDataService(programConfig);
+        var dataService = await CreateDataService(programConfig);
         var data = dataService.Load();
         var program = new Program(dataService, data);
 
-        var reports = await program.UpdateReports();
+        var reports = programConfig.UseReportCache ? data.ReportsByCode.Values.ToHashSet() : await program.UpdateReports();
         var players = await program.FindPlayers(reports, programConfig.PlayersToTrack);
 
         await program.UpdateGear(players, programConfig.ItemsToTrack);
@@ -20,14 +20,36 @@
     }
 
 
-    private static DataService CreateDataService (ProgramConfig programConfig)
+    private static async Task SetBearerToken (HttpClient httpClient, ProgramConfig programConfig)
+    {
+        var clientAddress = new Uri(programConfig.BaseAddress);
+        var clientId = HttpUtility.UrlEncode(programConfig.ClientId);
+        var clientSecret = HttpUtility.UrlEncode(programConfig.ClientSecret);
+        var encodedPair = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri($"{clientAddress.Scheme}://{clientAddress.Host}/oauth/token"),
+            Content = new StringContent("grant_type=client_credentials", Encoding.UTF8, "application/x-www-form-urlencoded"),
+            Headers = { { "Authorization", $"Basic {encodedPair}" } },
+        };
+        var response = await httpClient.SendAsync(request);
+        var contentStream = await response.Content.ReadAsStreamAsync();
+        var bearerObject = JsonDocument.Parse(contentStream);
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerObject.RootElement.GetProperty("access_token").GetString());
+    }
+
+
+    private static async Task<DataService> CreateDataService (ProgramConfig programConfig)
     {
         var httpClient = new HttpClient();
         var graphQLClient = new WCLGraphQLClient(httpClient);
         var dataService = new DataService(graphQLClient, programConfig);
 
         httpClient.BaseAddress = new Uri(programConfig.BaseAddress);
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", programConfig.BearerToken);
+
+        await SetBearerToken(httpClient, programConfig);
 
         return dataService;
     }
