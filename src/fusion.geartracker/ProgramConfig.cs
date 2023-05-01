@@ -12,4 +12,18 @@ public class ProgramConfig
     public DateTime LastReportDate { get; set; }
     public HashSet<int> ItemsToTrack { get; set; } = new();
     public HashSet<string> PlayersToTrack { get; set; } = new();
+
+
+    public static ProgramConfig Load (string appSettingsPath)
+    {
+        var config = new ConfigurationBuilder()
+            .AddJsonFile(appSettingsPath, optional: false, reloadOnChange: false)
+            .Build();
+
+        var programConfig = new ProgramConfig();
+
+        config.Bind(programConfig);
+
+        return programConfig;
+    }
 }

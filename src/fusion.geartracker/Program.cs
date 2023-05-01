@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿namespace fusion.geartracker;
+
+internal class Program
 {
     private DataService dataService;
     private FusionData data;
@@ -6,9 +8,9 @@
 
     private static async Task Main(string[] args)
     {
-        var programConfig = CreateProgramConfig("./appsettings/appsettings.json");
+        var programConfig = ProgramConfig.Load($"{Directory.GetCurrentDirectory()}/../../appsettings/appsettings.json");
         var dataService = await CreateDataService(programConfig);
-        var data = dataService.Load();
+        var data = FusionData.Load(programConfig.AppDataPath);
         var program = new Program(dataService, data);
 
         var reports = programConfig.UseReportCache ? data.ReportsByCode.Values.ToHashSet() : await program.UpdateReports();
@@ -16,7 +18,7 @@
 
         await program.UpdateGear(players, programConfig.ItemsToTrack);
 
-        dataService.Save(data);
+        data.Save(programConfig.AppDataPath);
     }
 
 
@@ -52,20 +54,6 @@
         await SetBearerToken(httpClient, programConfig);
 
         return dataService;
-    }
-
-
-    private static ProgramConfig CreateProgramConfig (string appSettingsPath)
-    {
-        var config = new ConfigurationBuilder()
-            .AddJsonFile(appSettingsPath, optional: false, reloadOnChange: false)
-            .Build();
-
-        var programConfig = new ProgramConfig();
-
-        config.Bind(programConfig);
-
-        return programConfig;
     }
 
 

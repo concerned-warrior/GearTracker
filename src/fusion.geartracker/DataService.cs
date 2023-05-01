@@ -137,42 +137,6 @@ public class DataService
     }
 
 
-    public FusionData Load ()
-    {
-        FusionData data;
-
-        try
-        {
-            using var stream = File.OpenRead(programConfig.AppDataPath);
-
-            data = JsonSerializer.Deserialize<FusionData>(stream, DataJsonSerializerOptions) ?? new();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"DataService Load - {ex.Message}");
-
-            data = new();
-        }
-
-        return data;
-    }
-
-
-    public void Save (FusionData data)
-    {
-        try
-        {
-            using var stream = File.OpenWrite(programConfig.AppDataPath);
-
-            JsonSerializer.Serialize(stream, data, DataJsonSerializerOptions);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"DataService Save - {ex.Message}");
-        }
-    }
-
-
     public DataService (WCLGraphQLClient graphQLClient, ProgramConfig programConfig)
     {
         this.programConfig = programConfig;

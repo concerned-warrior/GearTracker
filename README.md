@@ -8,11 +8,11 @@ Use [Warcraft Logs](https://www.warcraftlogs.com) (WCL) to discover when gear is
 
 ### Application settings
 
-Make a `src/fusion.geartracker/appsettings/appsettings.json` file with the following fields:
+Make a `appsettings/appsettings.json` file with the following fields:
 
 ```json
 {
-  "appDataPath": "appdata/data.json",
+  "appDataPath": "../../appdata/data.json",
   "baseAddress": "https://www.warcraftlogs.com/api/v2/client",
   "clientId": "{your client id}",
   "clientSecret": "{your client secret}",
@@ -47,6 +47,10 @@ Make a `src/fusion.geartracker/appsettings/appsettings.json` file with the follo
 ## Running the gear tracker
 
 Execute `dotnet run` in `src/fusion.geartracker`
+
+## Running the CSV generator
+
+Execute `dotnet run` in `src/fusion.geartracker.csv`
 
 ## Understanding application data
 
