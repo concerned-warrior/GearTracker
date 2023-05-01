@@ -131,10 +131,10 @@ namespace fusion.geartracker.graphql
         public int ClassID { get; set; }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("EncounterRankings")]
-        public global::fusion.geartracker.graphql.JSON __EncounterRankings { get; set; }
+        public global::System.Text.Json.JsonElement __EncounterRankings { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("encounterRankings")]
-        public global::fusion.geartracker.graphql.JSON? EncounterRankings(bool? byBracket, string? className, RankingCompareType? compare, int? difficulty, int? encounterID, bool? includeCombatantInfo, bool? includePrivateLogs, CharacterRankingMetricType? metric, int? partition, RoleType? role, int? size, string? specName, RankingTimeframeType? timeframe)
+        public global::System.Text.Json.JsonElement? EncounterRankings(bool? byBracket, string? className, RankingCompareType? compare, int? difficulty, int? encounterID, bool? includeCombatantInfo, bool? includePrivateLogs, CharacterRankingMetricType? metric, int? partition, RoleType? role, int? size, string? specName, RankingTimeframeType? timeframe)
         {
             return __EncounterRankings;
         }
@@ -149,10 +149,10 @@ namespace fusion.geartracker.graphql
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("GameData")]
-        public global::fusion.geartracker.graphql.JSON __GameData { get; set; }
+        public global::System.Text.Json.JsonElement __GameData { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("gameData")]
-        public global::fusion.geartracker.graphql.JSON? GameData(int? specID, bool? forceUpdate)
+        public global::System.Text.Json.JsonElement? GameData(int? specID, bool? forceUpdate)
         {
             return __GameData;
         }
@@ -200,10 +200,10 @@ namespace fusion.geartracker.graphql
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("ZoneRankings")]
-        public global::fusion.geartracker.graphql.JSON __ZoneRankings { get; set; }
+        public global::System.Text.Json.JsonElement __ZoneRankings { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("zoneRankings")]
-        public global::fusion.geartracker.graphql.JSON? ZoneRankings(bool? byBracket, string? className, RankingCompareType? compare, int? difficulty, bool? includePrivateLogs, CharacterRankingMetricType? metric, int? partition, RoleType? role, int? size, string? specName, RankingTimeframeType? timeframe, int? zoneID)
+        public global::System.Text.Json.JsonElement? ZoneRankings(bool? byBracket, string? className, RankingCompareType? compare, int? difficulty, bool? includePrivateLogs, CharacterRankingMetricType? metric, int? partition, RoleType? role, int? size, string? specName, RankingTimeframeType? timeframe, int? zoneID)
         {
             return __ZoneRankings;
         }
@@ -467,19 +467,19 @@ namespace fusion.geartracker.graphql
         public string Name { get; set; }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("CharacterRankings")]
-        public global::fusion.geartracker.graphql.JSON __CharacterRankings { get; set; }
+        public global::System.Text.Json.JsonElement __CharacterRankings { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("characterRankings")]
-        public global::fusion.geartracker.graphql.JSON? CharacterRankings(int? bracket, int? difficulty, string? filter, int? page, int? partition, string? serverRegion, string? serverSlug, int? size, LeaderboardRank? leaderboard, HardModeLevelRankFilter? hardModeLevel, CharacterRankingMetricType? metric, bool? includeCombatantInfo, string? className, string? specName, ExternalBuffRankFilter? externalBuffs, int? covenantID, int? soulbindID)
+        public global::System.Text.Json.JsonElement? CharacterRankings(int? bracket, int? difficulty, string? filter, int? page, int? partition, string? serverRegion, string? serverSlug, int? size, LeaderboardRank? leaderboard, HardModeLevelRankFilter? hardModeLevel, CharacterRankingMetricType? metric, bool? includeCombatantInfo, string? className, string? specName, ExternalBuffRankFilter? externalBuffs, int? covenantID, int? soulbindID)
         {
             return __CharacterRankings;
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("FightRankings")]
-        public global::fusion.geartracker.graphql.JSON __FightRankings { get; set; }
+        public global::System.Text.Json.JsonElement __FightRankings { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("fightRankings")]
-        public global::fusion.geartracker.graphql.JSON? FightRankings(int? bracket, int? difficulty, string? filter, int? page, int? partition, string? serverRegion, string? serverSlug, int? size, LeaderboardRank? leaderboard, HardModeLevelRankFilter? hardModeLevel, FightRankingMetricType? metric)
+        public global::System.Text.Json.JsonElement? FightRankings(int? bracket, int? difficulty, string? filter, int? page, int? partition, string? serverRegion, string? serverSlug, int? size, LeaderboardRank? leaderboard, HardModeLevelRankFilter? hardModeLevel, FightRankingMetricType? metric)
         {
             return __FightRankings;
         }
@@ -907,10 +907,10 @@ namespace fusion.geartracker.graphql
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("Graph")]
-        public global::fusion.geartracker.graphql.JSON __Graph { get; set; }
+        public global::System.Text.Json.JsonElement __Graph { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("graph")]
-        public global::fusion.geartracker.graphql.JSON? Graph(double? abilityID, GraphDataType? dataType, int? death, int? difficulty, int? encounterID, double? endTime, int[]? fightIDs, string? filterExpression, HostilityType? hostilityType, KillType? killType, string? sourceAurasAbsent, string? sourceAurasPresent, string? sourceClass, int? sourceID, int? sourceInstanceID, double? startTime, string? targetAurasAbsent, string? targetAurasPresent, string? targetClass, int? targetID, int? targetInstanceID, bool? translate, int? viewOptions, ViewType? viewBy, int? wipeCutoff)
+        public global::System.Text.Json.JsonElement? Graph(double? abilityID, GraphDataType? dataType, int? death, int? difficulty, int? encounterID, double? endTime, int[]? fightIDs, string? filterExpression, HostilityType? hostilityType, KillType? killType, string? sourceAurasAbsent, string? sourceAurasPresent, string? sourceClass, int? sourceID, int? sourceInstanceID, double? startTime, string? targetAurasAbsent, string? targetAurasPresent, string? targetClass, int? targetID, int? targetInstanceID, bool? translate, int? viewOptions, ViewType? viewBy, int? wipeCutoff)
         {
             return __Graph;
         }
@@ -952,10 +952,10 @@ namespace fusion.geartracker.graphql
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("PlayerDetails")]
-        public global::fusion.geartracker.graphql.JSON __PlayerDetails { get; set; }
+        public global::System.Text.Json.JsonElement __PlayerDetails { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("playerDetails")]
-        public global::fusion.geartracker.graphql.JSON? PlayerDetails(int? difficulty, int? encounterID, double? endTime, int[]? fightIDs, KillType? killType, double? startTime, bool? translate)
+        public global::System.Text.Json.JsonElement? PlayerDetails(int? difficulty, int? encounterID, double? endTime, int[]? fightIDs, KillType? killType, double? startTime, bool? translate)
         {
             return __PlayerDetails;
         }
@@ -970,10 +970,10 @@ namespace fusion.geartracker.graphql
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("Rankings")]
-        public global::fusion.geartracker.graphql.JSON __Rankings { get; set; }
+        public global::System.Text.Json.JsonElement __Rankings { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("rankings")]
-        public global::fusion.geartracker.graphql.JSON? Rankings(RankingCompareType? compare, int? difficulty, int? encounterID, int[]? fightIDs, ReportRankingMetricType? playerMetric, RankingTimeframeType? timeframe)
+        public global::System.Text.Json.JsonElement? Rankings(RankingCompareType? compare, int? difficulty, int? encounterID, int[]? fightIDs, ReportRankingMetricType? playerMetric, RankingTimeframeType? timeframe)
         {
             return __Rankings;
         }
@@ -997,10 +997,10 @@ namespace fusion.geartracker.graphql
         public double StartTime { get; set; }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("Table")]
-        public global::fusion.geartracker.graphql.JSON __Table { get; set; }
+        public global::System.Text.Json.JsonElement __Table { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("table")]
-        public global::fusion.geartracker.graphql.JSON? Table(double? abilityID, TableDataType? dataType, int? death, int? difficulty, int? encounterID, double? endTime, int[]? fightIDs, string? filterExpression, HostilityType? hostilityType, KillType? killType, string? sourceAurasAbsent, string? sourceAurasPresent, string? sourceClass, int? sourceID, int? sourceInstanceID, double? startTime, string? targetAurasAbsent, string? targetAurasPresent, string? targetClass, int? targetID, int? targetInstanceID, bool? translate, int? viewOptions, ViewType? viewBy, int? wipeCutoff)
+        public global::System.Text.Json.JsonElement? Table(double? abilityID, TableDataType? dataType, int? death, int? difficulty, int? encounterID, double? endTime, int[]? fightIDs, string? filterExpression, HostilityType? hostilityType, KillType? killType, string? sourceAurasAbsent, string? sourceAurasPresent, string? sourceClass, int? sourceID, int? sourceInstanceID, double? startTime, string? targetAurasAbsent, string? targetAurasPresent, string? targetClass, int? targetID, int? targetInstanceID, bool? translate, int? viewOptions, ViewType? viewBy, int? wipeCutoff)
         {
             return __Table;
         }
@@ -1034,7 +1034,7 @@ namespace fusion.geartracker.graphql
     public class ReportEventPaginator
     {
         [ZeroQL.GraphQLFieldSelector("data")]
-        public global::fusion.geartracker.graphql.JSON? Data { get; set; }
+        public global::System.Text.Json.JsonElement? Data { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("nextPageTimestamp")]
         public double? NextPageTimestamp { get; set; }
@@ -2081,19 +2081,19 @@ namespace fusion.geartracker.graphql
     public class ProgressRaceData
     {
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("ProgressRace")]
-        public global::fusion.geartracker.graphql.JSON __ProgressRace { get; set; }
+        public global::System.Text.Json.JsonElement __ProgressRace { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("progressRace")]
-        public global::fusion.geartracker.graphql.JSON? ProgressRace(string? serverRegion, string? serverSubregion, string? serverSlug, int? zoneID, int? competitionID, int? difficulty, int? size, int? guildID, string? guildName)
+        public global::System.Text.Json.JsonElement? ProgressRace(string? serverRegion, string? serverSubregion, string? serverSlug, int? zoneID, int? competitionID, int? difficulty, int? size, int? guildID, string? guildName)
         {
             return __ProgressRace;
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("DetailedComposition")]
-        public global::fusion.geartracker.graphql.JSON __DetailedComposition { get; set; }
+        public global::System.Text.Json.JsonElement __DetailedComposition { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("detailedComposition")]
-        public global::fusion.geartracker.graphql.JSON? DetailedComposition(int? competitionID, int? guildID, string? guildName, string? serverSlug, string? serverRegion, int? encounterID, int? difficulty, int? size)
+        public global::System.Text.Json.JsonElement? DetailedComposition(int? competitionID, int? guildID, string? guildName, string? serverSlug, string? serverRegion, int? encounterID, int? difficulty, int? size)
         {
             return __DetailedComposition;
         }
@@ -2245,88 +2245,73 @@ namespace fusion.geartracker.graphql
     public class ViewModels
     {
         [ZeroQL.GraphQLFieldSelector("googleAnalytics")]
-        public global::fusion.geartracker.graphql.JSON? GoogleAnalytics { get; set; }
+        public global::System.Text.Json.JsonElement? GoogleAnalytics { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("game")]
-        public global::fusion.geartracker.graphql.JSON? Game { get; set; }
+        public global::System.Text.Json.JsonElement? Game { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("headerTitle")]
-        public global::fusion.geartracker.graphql.JSON? HeaderTitle { get; set; }
+        public global::System.Text.Json.JsonElement? HeaderTitle { get; set; }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("ArticleCategory")]
-        public global::fusion.geartracker.graphql.JSON __ArticleCategory { get; set; }
+        public global::System.Text.Json.JsonElement __ArticleCategory { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("articleCategory")]
-        public global::fusion.geartracker.graphql.JSON? ArticleCategory(string? articleCategorySlug)
+        public global::System.Text.Json.JsonElement? ArticleCategory(string? articleCategorySlug)
         {
             return __ArticleCategory;
         }
 
         [ZeroQL.GraphQLFieldSelector("articleCategories")]
-        public global::fusion.geartracker.graphql.JSON? ArticleCategories { get; set; }
+        public global::System.Text.Json.JsonElement? ArticleCategories { get; set; }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("ArticleSlugs")]
-        public global::fusion.geartracker.graphql.JSON __ArticleSlugs { get; set; }
+        public global::System.Text.Json.JsonElement __ArticleSlugs { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("articleSlugs")]
-        public global::fusion.geartracker.graphql.JSON? ArticleSlugs(string? articleCategorySlug, string? siteName)
+        public global::System.Text.Json.JsonElement? ArticleSlugs(string? articleCategorySlug, string? siteName)
         {
             return __ArticleSlugs;
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("Article")]
-        public global::fusion.geartracker.graphql.JSON __Article { get; set; }
+        public global::System.Text.Json.JsonElement __Article { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("article")]
-        public global::fusion.geartracker.graphql.JSON? Article(string? articleSlug, string? articleCategorySlug, string? siteName)
+        public global::System.Text.Json.JsonElement? Article(string? articleSlug, string? articleCategorySlug, string? siteName)
         {
             return __Article;
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("CmsNavigation")]
-        public global::fusion.geartracker.graphql.JSON __CmsNavigation { get; set; }
+        public global::System.Text.Json.JsonElement __CmsNavigation { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("cmsNavigation")]
-        public global::fusion.geartracker.graphql.JSON? CmsNavigation(string? currentSlug)
+        public global::System.Text.Json.JsonElement? CmsNavigation(string? currentSlug)
         {
             return __CmsNavigation;
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("PageOfArticlePreviews")]
-        public global::fusion.geartracker.graphql.JSON __PageOfArticlePreviews { get; set; }
+        public global::System.Text.Json.JsonElement __PageOfArticlePreviews { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("pageOfArticlePreviews")]
-        public global::fusion.geartracker.graphql.JSON? PageOfArticlePreviews(string? articleCategorySlug, int? pageNumber, string? siteName)
+        public global::System.Text.Json.JsonElement? PageOfArticlePreviews(string? articleCategorySlug, int? pageNumber, string? siteName)
         {
             return __PageOfArticlePreviews;
         }
 
         [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never), JsonPropertyName("Snippets")]
-        public global::fusion.geartracker.graphql.JSON __Snippets { get; set; }
+        public global::System.Text.Json.JsonElement __Snippets { get; set; }
 
         [ZeroQL.GraphQLFieldSelector("snippets")]
-        public global::fusion.geartracker.graphql.JSON? Snippets(string[]? snippetSlugs)
+        public global::System.Text.Json.JsonElement? Snippets(string[]? snippetSlugs)
         {
             return __Snippets;
         }
 
         [ZeroQL.GraphQLFieldSelector("articleIndexPage")]
-        public global::fusion.geartracker.graphql.JSON? ArticleIndexPage { get; set; }
-    }
-
-    public sealed record JSON : ZeroQLScalar
-    {
-        public JSON()
-        {
-        }
-
-        public JSON(string value)
-        {
-            Value = value;
-        }
-
-        public static implicit operator JSON(string value) => new JSON(value);
-        public static implicit operator string (JSON scalar) => scalar.Value;
+        public global::System.Text.Json.JsonElement? ArticleIndexPage { get; set; }
     }
 
     [System.CodeDom.Compiler.GeneratedCode ( "ZeroQL" ,  "3.6.1.0" )]
@@ -2342,55 +2327,55 @@ namespace fusion.geartracker.graphql
     public enum CharacterRankingMetricType
     {
         [ZeroQL.GraphQLFieldSelector("bossdps")]
-        bossdps,
+        Bossdps,
         [ZeroQL.GraphQLFieldSelector("bossndps")]
-        bossndps,
+        Bossndps,
         [ZeroQL.GraphQLFieldSelector("bossrdps")]
-        bossrdps,
+        Bossrdps,
         [ZeroQL.GraphQLFieldSelector("default")]
-        @default,
+        Default,
         [ZeroQL.GraphQLFieldSelector("dps")]
-        dps,
+        Dps,
         [ZeroQL.GraphQLFieldSelector("hps")]
-        hps,
+        Hps,
         [ZeroQL.GraphQLFieldSelector("krsi")]
-        krsi,
+        Krsi,
         [ZeroQL.GraphQLFieldSelector("playerscore")]
-        playerscore,
+        Playerscore,
         [ZeroQL.GraphQLFieldSelector("playerspeed")]
-        playerspeed,
+        Playerspeed,
         [ZeroQL.GraphQLFieldSelector("ndps")]
-        ndps,
+        Ndps,
         [ZeroQL.GraphQLFieldSelector("rdps")]
-        rdps,
+        Rdps,
         [ZeroQL.GraphQLFieldSelector("tankhps")]
-        tankhps,
+        Tankhps,
         [ZeroQL.GraphQLFieldSelector("wdps")]
-        wdps,
+        Wdps,
         [ZeroQL.GraphQLFieldSelector("healercombineddps")]
-        healercombineddps,
+        Healercombineddps,
         [ZeroQL.GraphQLFieldSelector("healercombinedbossdps")]
-        healercombinedbossdps,
+        Healercombinedbossdps,
         [ZeroQL.GraphQLFieldSelector("healercombinedndps")]
-        healercombinedndps,
+        Healercombinedndps,
         [ZeroQL.GraphQLFieldSelector("healercombinedbossndps")]
-        healercombinedbossndps,
+        Healercombinedbossndps,
         [ZeroQL.GraphQLFieldSelector("healercombinedrdps")]
-        healercombinedrdps,
+        Healercombinedrdps,
         [ZeroQL.GraphQLFieldSelector("healercombinedbossrdps")]
-        healercombinedbossrdps,
+        Healercombinedbossrdps,
         [ZeroQL.GraphQLFieldSelector("tankcombineddps")]
-        tankcombineddps,
+        Tankcombineddps,
         [ZeroQL.GraphQLFieldSelector("tankcombinedbossdps")]
-        tankcombinedbossdps,
+        Tankcombinedbossdps,
         [ZeroQL.GraphQLFieldSelector("tankcombinedndps")]
-        tankcombinedndps,
+        Tankcombinedndps,
         [ZeroQL.GraphQLFieldSelector("tankcombinedbossndps")]
-        tankcombinedbossndps,
+        Tankcombinedbossndps,
         [ZeroQL.GraphQLFieldSelector("tankcombinedrdps")]
-        tankcombinedrdps,
+        Tankcombinedrdps,
         [ZeroQL.GraphQLFieldSelector("tankcombinedbossrdps")]
-        tankcombinedbossrdps
+        Tankcombinedbossrdps
     }
 
     [System.CodeDom.Compiler.GeneratedCode ( "ZeroQL" ,  "3.6.1.0" )]
@@ -2460,17 +2445,17 @@ namespace fusion.geartracker.graphql
     public enum FightRankingMetricType
     {
         [ZeroQL.GraphQLFieldSelector("default")]
-        @default,
+        Default,
         [ZeroQL.GraphQLFieldSelector("execution")]
-        execution,
+        Execution,
         [ZeroQL.GraphQLFieldSelector("feats")]
-        feats,
+        Feats,
         [ZeroQL.GraphQLFieldSelector("score")]
-        score,
+        Score,
         [ZeroQL.GraphQLFieldSelector("speed")]
-        speed,
+        Speed,
         [ZeroQL.GraphQLFieldSelector("progress")]
-        progress
+        Progress
     }
 
     [System.CodeDom.Compiler.GeneratedCode ( "ZeroQL" ,  "3.6.1.0" )]
@@ -2597,27 +2582,27 @@ namespace fusion.geartracker.graphql
     public enum ReportRankingMetricType
     {
         [ZeroQL.GraphQLFieldSelector("bossdps")]
-        bossdps,
+        Bossdps,
         [ZeroQL.GraphQLFieldSelector("bossrdps")]
-        bossrdps,
+        Bossrdps,
         [ZeroQL.GraphQLFieldSelector("default")]
-        @default,
+        Default,
         [ZeroQL.GraphQLFieldSelector("dps")]
-        dps,
+        Dps,
         [ZeroQL.GraphQLFieldSelector("hps")]
-        hps,
+        Hps,
         [ZeroQL.GraphQLFieldSelector("krsi")]
-        krsi,
+        Krsi,
         [ZeroQL.GraphQLFieldSelector("playerscore")]
-        playerscore,
+        Playerscore,
         [ZeroQL.GraphQLFieldSelector("playerspeed")]
-        playerspeed,
+        Playerspeed,
         [ZeroQL.GraphQLFieldSelector("rdps")]
-        rdps,
+        Rdps,
         [ZeroQL.GraphQLFieldSelector("tankhps")]
-        tankhps,
+        Tankhps,
         [ZeroQL.GraphQLFieldSelector("wdps")]
-        wdps
+        Wdps
     }
 
     [System.CodeDom.Compiler.GeneratedCode ( "ZeroQL" ,  "3.6.1.0" )]
@@ -2675,23 +2660,21 @@ namespace fusion.geartracker.graphql
         [global::System.Runtime.CompilerServices.ModuleInitializer]
         public static void Init()
         {
-            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.JSON)] = new JSONJsonConverter();
-            // global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.JSON)] = new ZeroQLScalarJsonConverter<global::fusion.geartracker.graphql.JSON>();
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.RankingCompareType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.RankingCompareType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.RankingCompareType>{{"Rankings", global::fusion.geartracker.graphql.RankingCompareType.Rankings}, {"Parses", global::fusion.geartracker.graphql.RankingCompareType.Parses}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.RankingCompareType, string>{{global::fusion.geartracker.graphql.RankingCompareType.Rankings, "Rankings"}, {global::fusion.geartracker.graphql.RankingCompareType.Parses, "Parses"}, });
-            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.CharacterRankingMetricType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.CharacterRankingMetricType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.CharacterRankingMetricType>{{"bossdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.bossdps}, {"bossndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.bossndps}, {"bossrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.bossrdps}, {"default", global::fusion.geartracker.graphql.CharacterRankingMetricType.@default}, {"dps", global::fusion.geartracker.graphql.CharacterRankingMetricType.dps}, {"hps", global::fusion.geartracker.graphql.CharacterRankingMetricType.hps}, {"krsi", global::fusion.geartracker.graphql.CharacterRankingMetricType.krsi}, {"playerscore", global::fusion.geartracker.graphql.CharacterRankingMetricType.playerscore}, {"playerspeed", global::fusion.geartracker.graphql.CharacterRankingMetricType.playerspeed}, {"ndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.ndps}, {"rdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.rdps}, {"tankhps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankhps}, {"wdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.wdps}, {"healercombineddps", global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombineddps}, {"healercombinedbossdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedbossdps}, {"healercombinedndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedndps}, {"healercombinedbossndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedbossndps}, {"healercombinedrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedrdps}, {"healercombinedbossrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedbossrdps}, {"tankcombineddps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombineddps}, {"tankcombinedbossdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedbossdps}, {"tankcombinedndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedndps}, {"tankcombinedbossndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedbossndps}, {"tankcombinedrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedrdps}, {"tankcombinedbossrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedbossrdps}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.CharacterRankingMetricType, string>{{global::fusion.geartracker.graphql.CharacterRankingMetricType.bossdps, "bossdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.bossndps, "bossndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.bossrdps, "bossrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.@default, "default"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.dps, "dps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.hps, "hps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.krsi, "krsi"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.playerscore, "playerscore"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.playerspeed, "playerspeed"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.ndps, "ndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.rdps, "rdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankhps, "tankhps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.wdps, "wdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombineddps, "healercombineddps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedbossdps, "healercombinedbossdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedndps, "healercombinedndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedbossndps, "healercombinedbossndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedrdps, "healercombinedrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.healercombinedbossrdps, "healercombinedbossrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombineddps, "tankcombineddps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedbossdps, "tankcombinedbossdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedndps, "tankcombinedndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedbossndps, "tankcombinedbossndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedrdps, "tankcombinedrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.tankcombinedbossrdps, "tankcombinedbossrdps"}, });
+            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.CharacterRankingMetricType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.CharacterRankingMetricType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.CharacterRankingMetricType>{{"bossdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Bossdps}, {"bossndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Bossndps}, {"bossrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Bossrdps}, {"default", global::fusion.geartracker.graphql.CharacterRankingMetricType.Default}, {"dps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Dps}, {"hps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Hps}, {"krsi", global::fusion.geartracker.graphql.CharacterRankingMetricType.Krsi}, {"playerscore", global::fusion.geartracker.graphql.CharacterRankingMetricType.Playerscore}, {"playerspeed", global::fusion.geartracker.graphql.CharacterRankingMetricType.Playerspeed}, {"ndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Ndps}, {"rdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Rdps}, {"tankhps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankhps}, {"wdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Wdps}, {"healercombineddps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombineddps}, {"healercombinedbossdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedbossdps}, {"healercombinedndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedndps}, {"healercombinedbossndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedbossndps}, {"healercombinedrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedrdps}, {"healercombinedbossrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedbossrdps}, {"tankcombineddps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombineddps}, {"tankcombinedbossdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedbossdps}, {"tankcombinedndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedndps}, {"tankcombinedbossndps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedbossndps}, {"tankcombinedrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedrdps}, {"tankcombinedbossrdps", global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedbossrdps}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.CharacterRankingMetricType, string>{{global::fusion.geartracker.graphql.CharacterRankingMetricType.Bossdps, "bossdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Bossndps, "bossndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Bossrdps, "bossrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Default, "default"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Dps, "dps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Hps, "hps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Krsi, "krsi"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Playerscore, "playerscore"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Playerspeed, "playerspeed"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Ndps, "ndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Rdps, "rdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankhps, "tankhps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Wdps, "wdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombineddps, "healercombineddps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedbossdps, "healercombinedbossdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedndps, "healercombinedndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedbossndps, "healercombinedbossndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedrdps, "healercombinedrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Healercombinedbossrdps, "healercombinedbossrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombineddps, "tankcombineddps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedbossdps, "tankcombinedbossdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedndps, "tankcombinedndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedbossndps, "tankcombinedbossndps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedrdps, "tankcombinedrdps"}, {global::fusion.geartracker.graphql.CharacterRankingMetricType.Tankcombinedbossrdps, "tankcombinedbossrdps"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.RoleType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.RoleType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.RoleType>{{"Any", global::fusion.geartracker.graphql.RoleType.Any}, {"DPS", global::fusion.geartracker.graphql.RoleType.Dps}, {"Healer", global::fusion.geartracker.graphql.RoleType.Healer}, {"Tank", global::fusion.geartracker.graphql.RoleType.Tank}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.RoleType, string>{{global::fusion.geartracker.graphql.RoleType.Any, "Any"}, {global::fusion.geartracker.graphql.RoleType.Dps, "DPS"}, {global::fusion.geartracker.graphql.RoleType.Healer, "Healer"}, {global::fusion.geartracker.graphql.RoleType.Tank, "Tank"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.RankingTimeframeType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.RankingTimeframeType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.RankingTimeframeType>{{"Today", global::fusion.geartracker.graphql.RankingTimeframeType.Today}, {"Historical", global::fusion.geartracker.graphql.RankingTimeframeType.Historical}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.RankingTimeframeType, string>{{global::fusion.geartracker.graphql.RankingTimeframeType.Today, "Today"}, {global::fusion.geartracker.graphql.RankingTimeframeType.Historical, "Historical"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.LeaderboardRank)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.LeaderboardRank>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.LeaderboardRank>{{"Any", global::fusion.geartracker.graphql.LeaderboardRank.Any}, {"LogsOnly", global::fusion.geartracker.graphql.LeaderboardRank.LogsOnly}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.LeaderboardRank, string>{{global::fusion.geartracker.graphql.LeaderboardRank.Any, "Any"}, {global::fusion.geartracker.graphql.LeaderboardRank.LogsOnly, "LogsOnly"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.HardModeLevelRankFilter)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.HardModeLevelRankFilter>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.HardModeLevelRankFilter>{{"Any", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Any}, {"Highest", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Highest}, {"NormalMode", global::fusion.geartracker.graphql.HardModeLevelRankFilter.NormalMode}, {"Level0", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level0}, {"Level1", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level1}, {"Level2", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level2}, {"Level3", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level3}, {"Level4", global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level4}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.HardModeLevelRankFilter, string>{{global::fusion.geartracker.graphql.HardModeLevelRankFilter.Any, "Any"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.Highest, "Highest"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.NormalMode, "NormalMode"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level0, "Level0"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level1, "Level1"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level2, "Level2"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level3, "Level3"}, {global::fusion.geartracker.graphql.HardModeLevelRankFilter.Level4, "Level4"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.ExternalBuffRankFilter)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.ExternalBuffRankFilter>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.ExternalBuffRankFilter>{{"Any", global::fusion.geartracker.graphql.ExternalBuffRankFilter.Any}, {"Require", global::fusion.geartracker.graphql.ExternalBuffRankFilter.Require}, {"Exclude", global::fusion.geartracker.graphql.ExternalBuffRankFilter.Exclude}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.ExternalBuffRankFilter, string>{{global::fusion.geartracker.graphql.ExternalBuffRankFilter.Any, "Any"}, {global::fusion.geartracker.graphql.ExternalBuffRankFilter.Require, "Require"}, {global::fusion.geartracker.graphql.ExternalBuffRankFilter.Exclude, "Exclude"}, });
-            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.FightRankingMetricType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.FightRankingMetricType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.FightRankingMetricType>{{"default", global::fusion.geartracker.graphql.FightRankingMetricType.@default}, {"execution", global::fusion.geartracker.graphql.FightRankingMetricType.execution}, {"feats", global::fusion.geartracker.graphql.FightRankingMetricType.feats}, {"score", global::fusion.geartracker.graphql.FightRankingMetricType.score}, {"speed", global::fusion.geartracker.graphql.FightRankingMetricType.speed}, {"progress", global::fusion.geartracker.graphql.FightRankingMetricType.progress}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.FightRankingMetricType, string>{{global::fusion.geartracker.graphql.FightRankingMetricType.@default, "default"}, {global::fusion.geartracker.graphql.FightRankingMetricType.execution, "execution"}, {global::fusion.geartracker.graphql.FightRankingMetricType.feats, "feats"}, {global::fusion.geartracker.graphql.FightRankingMetricType.score, "score"}, {global::fusion.geartracker.graphql.FightRankingMetricType.speed, "speed"}, {global::fusion.geartracker.graphql.FightRankingMetricType.progress, "progress"}, });
+            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.FightRankingMetricType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.FightRankingMetricType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.FightRankingMetricType>{{"default", global::fusion.geartracker.graphql.FightRankingMetricType.Default}, {"execution", global::fusion.geartracker.graphql.FightRankingMetricType.Execution}, {"feats", global::fusion.geartracker.graphql.FightRankingMetricType.Feats}, {"score", global::fusion.geartracker.graphql.FightRankingMetricType.Score}, {"speed", global::fusion.geartracker.graphql.FightRankingMetricType.Speed}, {"progress", global::fusion.geartracker.graphql.FightRankingMetricType.Progress}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.FightRankingMetricType, string>{{global::fusion.geartracker.graphql.FightRankingMetricType.Default, "default"}, {global::fusion.geartracker.graphql.FightRankingMetricType.Execution, "execution"}, {global::fusion.geartracker.graphql.FightRankingMetricType.Feats, "feats"}, {global::fusion.geartracker.graphql.FightRankingMetricType.Score, "score"}, {global::fusion.geartracker.graphql.FightRankingMetricType.Speed, "speed"}, {global::fusion.geartracker.graphql.FightRankingMetricType.Progress, "progress"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.GuildRank)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.GuildRank>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.GuildRank>{{"NonMember", global::fusion.geartracker.graphql.GuildRank.NonMember}, {"Applicant", global::fusion.geartracker.graphql.GuildRank.Applicant}, {"Recruit", global::fusion.geartracker.graphql.GuildRank.Recruit}, {"Member", global::fusion.geartracker.graphql.GuildRank.Member}, {"Officer", global::fusion.geartracker.graphql.GuildRank.Officer}, {"GuildMaster", global::fusion.geartracker.graphql.GuildRank.GuildMaster}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.GuildRank, string>{{global::fusion.geartracker.graphql.GuildRank.NonMember, "NonMember"}, {global::fusion.geartracker.graphql.GuildRank.Applicant, "Applicant"}, {global::fusion.geartracker.graphql.GuildRank.Recruit, "Recruit"}, {global::fusion.geartracker.graphql.GuildRank.Member, "Member"}, {global::fusion.geartracker.graphql.GuildRank.Officer, "Officer"}, {global::fusion.geartracker.graphql.GuildRank.GuildMaster, "GuildMaster"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.EventDataType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.EventDataType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.EventDataType>{{"All", global::fusion.geartracker.graphql.EventDataType.All}, {"Buffs", global::fusion.geartracker.graphql.EventDataType.Buffs}, {"Casts", global::fusion.geartracker.graphql.EventDataType.Casts}, {"CombatantInfo", global::fusion.geartracker.graphql.EventDataType.CombatantInfo}, {"DamageDone", global::fusion.geartracker.graphql.EventDataType.DamageDone}, {"DamageTaken", global::fusion.geartracker.graphql.EventDataType.DamageTaken}, {"Deaths", global::fusion.geartracker.graphql.EventDataType.Deaths}, {"Debuffs", global::fusion.geartracker.graphql.EventDataType.Debuffs}, {"Dispels", global::fusion.geartracker.graphql.EventDataType.Dispels}, {"Healing", global::fusion.geartracker.graphql.EventDataType.Healing}, {"Interrupts", global::fusion.geartracker.graphql.EventDataType.Interrupts}, {"Resources", global::fusion.geartracker.graphql.EventDataType.Resources}, {"Summons", global::fusion.geartracker.graphql.EventDataType.Summons}, {"Threat", global::fusion.geartracker.graphql.EventDataType.Threat}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.EventDataType, string>{{global::fusion.geartracker.graphql.EventDataType.All, "All"}, {global::fusion.geartracker.graphql.EventDataType.Buffs, "Buffs"}, {global::fusion.geartracker.graphql.EventDataType.Casts, "Casts"}, {global::fusion.geartracker.graphql.EventDataType.CombatantInfo, "CombatantInfo"}, {global::fusion.geartracker.graphql.EventDataType.DamageDone, "DamageDone"}, {global::fusion.geartracker.graphql.EventDataType.DamageTaken, "DamageTaken"}, {global::fusion.geartracker.graphql.EventDataType.Deaths, "Deaths"}, {global::fusion.geartracker.graphql.EventDataType.Debuffs, "Debuffs"}, {global::fusion.geartracker.graphql.EventDataType.Dispels, "Dispels"}, {global::fusion.geartracker.graphql.EventDataType.Healing, "Healing"}, {global::fusion.geartracker.graphql.EventDataType.Interrupts, "Interrupts"}, {global::fusion.geartracker.graphql.EventDataType.Resources, "Resources"}, {global::fusion.geartracker.graphql.EventDataType.Summons, "Summons"}, {global::fusion.geartracker.graphql.EventDataType.Threat, "Threat"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.HostilityType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.HostilityType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.HostilityType>{{"Friendlies", global::fusion.geartracker.graphql.HostilityType.Friendlies}, {"Enemies", global::fusion.geartracker.graphql.HostilityType.Enemies}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.HostilityType, string>{{global::fusion.geartracker.graphql.HostilityType.Friendlies, "Friendlies"}, {global::fusion.geartracker.graphql.HostilityType.Enemies, "Enemies"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.KillType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.KillType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.KillType>{{"All", global::fusion.geartracker.graphql.KillType.All}, {"Encounters", global::fusion.geartracker.graphql.KillType.Encounters}, {"Kills", global::fusion.geartracker.graphql.KillType.Kills}, {"Trash", global::fusion.geartracker.graphql.KillType.Trash}, {"Wipes", global::fusion.geartracker.graphql.KillType.Wipes}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.KillType, string>{{global::fusion.geartracker.graphql.KillType.All, "All"}, {global::fusion.geartracker.graphql.KillType.Encounters, "Encounters"}, {global::fusion.geartracker.graphql.KillType.Kills, "Kills"}, {global::fusion.geartracker.graphql.KillType.Trash, "Trash"}, {global::fusion.geartracker.graphql.KillType.Wipes, "Wipes"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.GraphDataType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.GraphDataType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.GraphDataType>{{"Summary", global::fusion.geartracker.graphql.GraphDataType.Summary}, {"Buffs", global::fusion.geartracker.graphql.GraphDataType.Buffs}, {"Casts", global::fusion.geartracker.graphql.GraphDataType.Casts}, {"DamageDone", global::fusion.geartracker.graphql.GraphDataType.DamageDone}, {"DamageTaken", global::fusion.geartracker.graphql.GraphDataType.DamageTaken}, {"Deaths", global::fusion.geartracker.graphql.GraphDataType.Deaths}, {"Debuffs", global::fusion.geartracker.graphql.GraphDataType.Debuffs}, {"Dispels", global::fusion.geartracker.graphql.GraphDataType.Dispels}, {"Healing", global::fusion.geartracker.graphql.GraphDataType.Healing}, {"Interrupts", global::fusion.geartracker.graphql.GraphDataType.Interrupts}, {"Resources", global::fusion.geartracker.graphql.GraphDataType.Resources}, {"Summons", global::fusion.geartracker.graphql.GraphDataType.Summons}, {"Survivability", global::fusion.geartracker.graphql.GraphDataType.Survivability}, {"Threat", global::fusion.geartracker.graphql.GraphDataType.Threat}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.GraphDataType, string>{{global::fusion.geartracker.graphql.GraphDataType.Summary, "Summary"}, {global::fusion.geartracker.graphql.GraphDataType.Buffs, "Buffs"}, {global::fusion.geartracker.graphql.GraphDataType.Casts, "Casts"}, {global::fusion.geartracker.graphql.GraphDataType.DamageDone, "DamageDone"}, {global::fusion.geartracker.graphql.GraphDataType.DamageTaken, "DamageTaken"}, {global::fusion.geartracker.graphql.GraphDataType.Deaths, "Deaths"}, {global::fusion.geartracker.graphql.GraphDataType.Debuffs, "Debuffs"}, {global::fusion.geartracker.graphql.GraphDataType.Dispels, "Dispels"}, {global::fusion.geartracker.graphql.GraphDataType.Healing, "Healing"}, {global::fusion.geartracker.graphql.GraphDataType.Interrupts, "Interrupts"}, {global::fusion.geartracker.graphql.GraphDataType.Resources, "Resources"}, {global::fusion.geartracker.graphql.GraphDataType.Summons, "Summons"}, {global::fusion.geartracker.graphql.GraphDataType.Survivability, "Survivability"}, {global::fusion.geartracker.graphql.GraphDataType.Threat, "Threat"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.ViewType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.ViewType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.ViewType>{{"Default", global::fusion.geartracker.graphql.ViewType.Default}, {"Ability", global::fusion.geartracker.graphql.ViewType.Ability}, {"Source", global::fusion.geartracker.graphql.ViewType.Source}, {"Target", global::fusion.geartracker.graphql.ViewType.Target}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.ViewType, string>{{global::fusion.geartracker.graphql.ViewType.Default, "Default"}, {global::fusion.geartracker.graphql.ViewType.Ability, "Ability"}, {global::fusion.geartracker.graphql.ViewType.Source, "Source"}, {global::fusion.geartracker.graphql.ViewType.Target, "Target"}, });
-            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.ReportRankingMetricType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.ReportRankingMetricType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.ReportRankingMetricType>{{"bossdps", global::fusion.geartracker.graphql.ReportRankingMetricType.bossdps}, {"bossrdps", global::fusion.geartracker.graphql.ReportRankingMetricType.bossrdps}, {"default", global::fusion.geartracker.graphql.ReportRankingMetricType.@default}, {"dps", global::fusion.geartracker.graphql.ReportRankingMetricType.dps}, {"hps", global::fusion.geartracker.graphql.ReportRankingMetricType.hps}, {"krsi", global::fusion.geartracker.graphql.ReportRankingMetricType.krsi}, {"playerscore", global::fusion.geartracker.graphql.ReportRankingMetricType.playerscore}, {"playerspeed", global::fusion.geartracker.graphql.ReportRankingMetricType.playerspeed}, {"rdps", global::fusion.geartracker.graphql.ReportRankingMetricType.rdps}, {"tankhps", global::fusion.geartracker.graphql.ReportRankingMetricType.tankhps}, {"wdps", global::fusion.geartracker.graphql.ReportRankingMetricType.wdps}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.ReportRankingMetricType, string>{{global::fusion.geartracker.graphql.ReportRankingMetricType.bossdps, "bossdps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.bossrdps, "bossrdps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.@default, "default"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.dps, "dps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.hps, "hps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.krsi, "krsi"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.playerscore, "playerscore"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.playerspeed, "playerspeed"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.rdps, "rdps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.tankhps, "tankhps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.wdps, "wdps"}, });
+            global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.ReportRankingMetricType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.ReportRankingMetricType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.ReportRankingMetricType>{{"bossdps", global::fusion.geartracker.graphql.ReportRankingMetricType.Bossdps}, {"bossrdps", global::fusion.geartracker.graphql.ReportRankingMetricType.Bossrdps}, {"default", global::fusion.geartracker.graphql.ReportRankingMetricType.Default}, {"dps", global::fusion.geartracker.graphql.ReportRankingMetricType.Dps}, {"hps", global::fusion.geartracker.graphql.ReportRankingMetricType.Hps}, {"krsi", global::fusion.geartracker.graphql.ReportRankingMetricType.Krsi}, {"playerscore", global::fusion.geartracker.graphql.ReportRankingMetricType.Playerscore}, {"playerspeed", global::fusion.geartracker.graphql.ReportRankingMetricType.Playerspeed}, {"rdps", global::fusion.geartracker.graphql.ReportRankingMetricType.Rdps}, {"tankhps", global::fusion.geartracker.graphql.ReportRankingMetricType.Tankhps}, {"wdps", global::fusion.geartracker.graphql.ReportRankingMetricType.Wdps}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.ReportRankingMetricType, string>{{global::fusion.geartracker.graphql.ReportRankingMetricType.Bossdps, "bossdps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Bossrdps, "bossrdps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Default, "default"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Dps, "dps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Hps, "hps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Krsi, "krsi"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Playerscore, "playerscore"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Playerspeed, "playerspeed"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Rdps, "rdps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Tankhps, "tankhps"}, {global::fusion.geartracker.graphql.ReportRankingMetricType.Wdps, "wdps"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.TableDataType)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.TableDataType>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.TableDataType>{{"Summary", global::fusion.geartracker.graphql.TableDataType.Summary}, {"Buffs", global::fusion.geartracker.graphql.TableDataType.Buffs}, {"Casts", global::fusion.geartracker.graphql.TableDataType.Casts}, {"DamageDone", global::fusion.geartracker.graphql.TableDataType.DamageDone}, {"DamageTaken", global::fusion.geartracker.graphql.TableDataType.DamageTaken}, {"Deaths", global::fusion.geartracker.graphql.TableDataType.Deaths}, {"Debuffs", global::fusion.geartracker.graphql.TableDataType.Debuffs}, {"Dispels", global::fusion.geartracker.graphql.TableDataType.Dispels}, {"Healing", global::fusion.geartracker.graphql.TableDataType.Healing}, {"Interrupts", global::fusion.geartracker.graphql.TableDataType.Interrupts}, {"Resources", global::fusion.geartracker.graphql.TableDataType.Resources}, {"Summons", global::fusion.geartracker.graphql.TableDataType.Summons}, {"Survivability", global::fusion.geartracker.graphql.TableDataType.Survivability}, {"Threat", global::fusion.geartracker.graphql.TableDataType.Threat}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.TableDataType, string>{{global::fusion.geartracker.graphql.TableDataType.Summary, "Summary"}, {global::fusion.geartracker.graphql.TableDataType.Buffs, "Buffs"}, {global::fusion.geartracker.graphql.TableDataType.Casts, "Casts"}, {global::fusion.geartracker.graphql.TableDataType.DamageDone, "DamageDone"}, {global::fusion.geartracker.graphql.TableDataType.DamageTaken, "DamageTaken"}, {global::fusion.geartracker.graphql.TableDataType.Deaths, "Deaths"}, {global::fusion.geartracker.graphql.TableDataType.Debuffs, "Debuffs"}, {global::fusion.geartracker.graphql.TableDataType.Dispels, "Dispels"}, {global::fusion.geartracker.graphql.TableDataType.Healing, "Healing"}, {global::fusion.geartracker.graphql.TableDataType.Interrupts, "Interrupts"}, {global::fusion.geartracker.graphql.TableDataType.Resources, "Resources"}, {global::fusion.geartracker.graphql.TableDataType.Summons, "Summons"}, {global::fusion.geartracker.graphql.TableDataType.Survivability, "Survivability"}, {global::fusion.geartracker.graphql.TableDataType.Threat, "Threat"}, });
             global::ZeroQL.Json.ZeroQLJsonSerializersStore.Converters[typeof(global::fusion.geartracker.graphql.SubscriptionStatus)] = new global::ZeroQL.Json.ZeroQLEnumConverter<global::fusion.geartracker.graphql.SubscriptionStatus>(new global::System.Collections.Generic.Dictionary<string, global::fusion.geartracker.graphql.SubscriptionStatus>{{"Silver", global::fusion.geartracker.graphql.SubscriptionStatus.Silver}, {"Gold", global::fusion.geartracker.graphql.SubscriptionStatus.Gold}, {"Platinum", global::fusion.geartracker.graphql.SubscriptionStatus.Platinum}, {"LegacySilver", global::fusion.geartracker.graphql.SubscriptionStatus.LegacySilver}, {"LegacyGold", global::fusion.geartracker.graphql.SubscriptionStatus.LegacyGold}, {"LegacyPlatinum", global::fusion.geartracker.graphql.SubscriptionStatus.LegacyPlatinum}, }, new global::System.Collections.Generic.Dictionary<global::fusion.geartracker.graphql.SubscriptionStatus, string>{{global::fusion.geartracker.graphql.SubscriptionStatus.Silver, "Silver"}, {global::fusion.geartracker.graphql.SubscriptionStatus.Gold, "Gold"}, {global::fusion.geartracker.graphql.SubscriptionStatus.Platinum, "Platinum"}, {global::fusion.geartracker.graphql.SubscriptionStatus.LegacySilver, "LegacySilver"}, {global::fusion.geartracker.graphql.SubscriptionStatus.LegacyGold, "LegacyGold"}, {global::fusion.geartracker.graphql.SubscriptionStatus.LegacyPlatinum, "LegacyPlatinum"}, });
         }

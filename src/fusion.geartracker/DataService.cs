@@ -70,7 +70,7 @@ public class DataService
         var endTime = report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds();
         var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.ActorId));
         var reportEventPaginator = result.Data?.__Report.__Events ?? new();
-        var combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.Value ?? "[]");
+        var combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]");
 
         while (reportEventPaginator.NextPageTimestamp > 0)
         {
@@ -78,7 +78,7 @@ public class DataService
             result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.ActorId));
             reportEventPaginator = result.Data?.__Report.__Events ?? new();
 
-            combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.Value ?? "[]", combatantInfo);
+            combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]", combatantInfo);
         }
 
         return combatantInfo;
