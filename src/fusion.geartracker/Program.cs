@@ -12,8 +12,9 @@
         var program = new Program(dataService, data);
 
         var reports = await program.UpdateReports();
-        var players = await program.FindPlayers(reports);
-        var gear = await program.UpdateGear(players);
+        var players = await program.FindPlayers(reports, programConfig.PlayersToTrack);
+
+        await program.UpdateGear(players, programConfig.ItemsToTrack);
 
         dataService.Save(data);
     }
@@ -52,7 +53,11 @@
 
         foreach (var report in reports)
         {
-            if (!data.ReportsByCode.ContainsKey(report.Code))
+            if (data.ReportsByCode.ContainsKey(report.Code))
+            {
+                data.ReportsByCode[report.Code] = report;
+            }
+            else
             {
                 data.ReportsByCode.Add(report.Code, report);
             }
@@ -62,25 +67,65 @@
     }
 
 
-    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports)
+    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, HashSet<string> playersToTrack)
     {
-        return await dataService.GetPlayers(reports, data.PlayersToTrack);
+        var players = await dataService.GetPlayers(reports, playersToTrack);
+
+        return players.FindAll(player =>
+        {
+            if (data.ReportCodesByPlayer.TryGetValue(player.Name, out var codes))
+            {
+                var result = !codes.Contains(player.Report.Code);
+
+                codes.Add(player.Report.Code);
+
+                return result;
+            }
+            else
+            {
+                data.ReportCodesByPlayer.Add(player.Name, new() { player.Report.Code });
+
+                return true;
+            }
+        });
     }
 
 
-    public async Task<Dictionary<FusionPlayer, HashSet<FusionGear>>> UpdateGear (List<FusionPlayer> players)
+    public async Task UpdateGear (List<FusionPlayer> players, HashSet<int> itemsToTrack)
     {
-        var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, data.ItemsToTrack);
+        var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, itemsToTrack);
 
         foreach ((var player, var gearSet) in gearSetByPlayer)
         {
+            Dictionary<int, FusionGear> playerGearById;
+
+            // Get current player gear, if any
+            if (data.PlayersByName.TryGetValue(player.Name, out var playerData))
+            {
+                playerGearById = playerData.GearById;
+            }
+            else
+            {
+                data.PlayersByName.Add(player.Name, player);
+
+                playerGearById = player.GearById;
+            }
+
+            // Update player gear
             foreach (var gear in gearSet)
             {
                 Console.WriteLine($"{gear.FirstSeenAt} - {player} acquired {gear}");
+
+                if (playerGearById.ContainsKey(gear.Id))
+                {
+                    playerGearById[gear.Id] = gear;
+                }
+                else
+                {
+                    playerGearById.Add(gear.Id, gear);
+                }
             }
         }
-
-        return gearSetByPlayer;
     }
 
 

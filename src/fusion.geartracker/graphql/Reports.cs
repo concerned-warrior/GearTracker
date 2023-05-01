@@ -1,6 +1,6 @@
 namespace fusion.geartracker.graphql;
 
-public record Reports(int guildId, int limit = 20, int page = 1) : GraphQL<Query, ReportData>
+public record Reports(int guildId, int limit = 50, int page = 1) : GraphQL<Query, ReportData>
 {
     public override ReportData Execute(Query query)
     {

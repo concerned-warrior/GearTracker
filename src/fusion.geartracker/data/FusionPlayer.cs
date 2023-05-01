@@ -2,7 +2,7 @@ namespace fusion.geartracker.data;
 
 public class FusionPlayer : IEquatable<FusionPlayer>
 {
-    public int Id { get; set; }
+    public int ActorId { get; set; }
     public string Name { get; set; } = string.Empty;
     public FusionReport Report { get; set; } = new();
     public Dictionary<int, FusionGear> GearById { get; set; } = new();
@@ -30,7 +30,7 @@ public class FusionPlayer : IEquatable<FusionPlayer>
     {
         return new FusionPlayer
         {
-            Id = actor.Id ?? 0,
+            ActorId = actor.Id ?? 0,
             Name = actor.Name ?? string.Empty,
             Report = report,
         };

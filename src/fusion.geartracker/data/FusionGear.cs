@@ -6,6 +6,7 @@ public class FusionGear : IEquatable<FusionGear>
     public string Icon { get; set; } = string.Empty;
     public int ItemLevel { get; set; }
     public int Enchant { get; set; }
+    public List<FusionGem> Gems { get; set; } = new();
     public DateTimeOffset FirstSeenAt { get; set; }
 
 
