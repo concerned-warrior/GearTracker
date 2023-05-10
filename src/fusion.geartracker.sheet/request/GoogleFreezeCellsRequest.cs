@@ -2,7 +2,7 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleFreezeCellsRequest : Request
 {
-    public GoogleFreezeCellsRequest (Spreadsheet spreadsheet, Sheet sheet)
+    public GoogleFreezeCellsRequest (GoogleSheetsBuilder builder)
     {
         UpdateSheetProperties = new()
         {
@@ -14,7 +14,7 @@ public class GoogleFreezeCellsRequest : Request
                     FrozenColumnCount = 7,
                     FrozenRowCount = 2,
                 },
-                SheetId = sheet.Properties.SheetId,
+                SheetId = builder.Sheet.Properties.SheetId,
             },
         };
     }

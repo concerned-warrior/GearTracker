@@ -30,7 +30,7 @@ public class GoogleConditionalFormatRuleRequest : Request
     };
 
 
-    private void addConditionalFormatRule (Sheet sheet)
+    private void addConditionalFormatRule (GoogleSheetsBuilder builder)
     {
         AddConditionalFormatRule = new()
         {
@@ -42,7 +42,7 @@ public class GoogleConditionalFormatRuleRequest : Request
                 {
                     new()
                     {
-                        SheetId = sheet.Properties.SheetId,
+                        SheetId = builder.Sheet.Properties.SheetId,
                     },
                 },
             },
@@ -50,7 +50,7 @@ public class GoogleConditionalFormatRuleRequest : Request
     }
 
 
-    private void updateConditionalFormatRule (Sheet sheet)
+    private void updateConditionalFormatRule (GoogleSheetsBuilder builder)
     {
         UpdateConditionalFormatRule = new()
         {
@@ -62,7 +62,7 @@ public class GoogleConditionalFormatRuleRequest : Request
                 {
                     new()
                     {
-                        SheetId = sheet.Properties.SheetId,
+                        SheetId = builder.Sheet.Properties.SheetId,
                     },
                 },
             },
@@ -70,23 +70,23 @@ public class GoogleConditionalFormatRuleRequest : Request
     }
 
 
-    private bool hasConditionalFormatRule (Spreadsheet spreadsheet, Sheet sheet)
+    private bool hasConditionalFormatRule (GoogleSheetsBuilder builder)
     {
-        var conditionalFormatRule = sheet.ConditionalFormats?.ElementAtOrDefault(0);
+        var conditionalFormatRule = builder.Sheet.ConditionalFormats?.ElementAtOrDefault(0);
 
         return conditionalFormatRule?.GradientRule is not null;
     }
 
 
-    public GoogleConditionalFormatRuleRequest (Spreadsheet spreadsheet, Sheet sheet)
+    public GoogleConditionalFormatRuleRequest (GoogleSheetsBuilder builder)
     {
-        if (hasConditionalFormatRule(spreadsheet, sheet))
+        if (hasConditionalFormatRule(builder))
         {
-            updateConditionalFormatRule(sheet);
+            updateConditionalFormatRule(builder);
         }
         else
         {
-            addConditionalFormatRule(sheet);
+            addConditionalFormatRule(builder);
         }
     }
 }

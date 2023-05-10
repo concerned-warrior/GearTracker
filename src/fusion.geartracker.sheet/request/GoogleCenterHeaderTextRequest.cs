@@ -2,7 +2,7 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleCenterHeaderTextRequest : Request
 {
-    public GoogleCenterHeaderTextRequest (Spreadsheet spreadsheet, Sheet sheet)
+    public GoogleCenterHeaderTextRequest (GoogleSheetsBuilder builder)
     {
         RepeatCell = new()
         {
@@ -18,7 +18,7 @@ public class GoogleCenterHeaderTextRequest : Request
             {
                 StartRowIndex = 1,
                 EndRowIndex = 2,
-                SheetId = sheet.Properties.SheetId,
+                SheetId = builder.Sheet.Properties.SheetId,
             },
         };
     }

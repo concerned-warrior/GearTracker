@@ -2,7 +2,7 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleFormatSheetRequest : Request
 {
-    public GoogleFormatSheetRequest (Spreadsheet spreadsheet, Sheet sheet)
+    public GoogleFormatSheetRequest (GoogleSheetsBuilder builder)
     {
         RepeatCell = new()
         {
@@ -52,7 +52,7 @@ public class GoogleFormatSheetRequest : Request
             },
             Range = new()
             {
-                SheetId = sheet.Properties.SheetId,
+                SheetId = builder.Sheet.Properties.SheetId,
             },
         };
     }

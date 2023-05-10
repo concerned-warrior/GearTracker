@@ -11,6 +11,63 @@ public class FusionPlayer : IEquatable<FusionPlayer>
     public Dictionary<string, FusionGear> GearById { get; set; } = new();
 
 
+    public int GetAverageItemLevel ()
+    {
+        var itemCount = 0;
+        var itemLevel = 0;
+        var gearSlots = GearById.Values
+            .GroupBy(gear => gear.Slot)
+            .Select(group =>
+            {
+                var groupList = group.ToList();
+
+                groupList.Sort((a, b) => b.ItemLevel.CompareTo(a.ItemLevel));
+
+                return groupList;
+            })
+            .ToList();
+
+        foreach (var gear in gearSlots)
+        {
+            var item = gear.ElementAtOrDefault(0);
+
+            if (item is not null)
+            {
+                itemCount += 1;
+                itemLevel += item.ItemLevel;
+            }
+        }
+
+        return itemLevel / itemCount;
+    }
+
+
+    public DateTimeOffset GetLast10 ()
+    {
+        var result = DateTimeOffset.MinValue;
+
+        foreach (var gear in GearById.Values.Where(gear => gear.InstanceSize.Equals(10)))
+        {
+            result = result > gear.FirstSeenAt ? result : gear.FirstSeenAt;
+        }
+
+        return result;
+    }
+
+
+    public DateTimeOffset GetLast25 ()
+    {
+        var result = DateTimeOffset.MinValue;
+
+        foreach (var gear in GearById.Values.Where(gear => gear.InstanceSize.Equals(25)))
+        {
+            result = result > gear.FirstSeenAt ? result : gear.FirstSeenAt;
+        }
+
+        return result;
+    }
+
+
     public bool Equals (FusionPlayer? other)
     {
         return Name.Equals(other?.Name);

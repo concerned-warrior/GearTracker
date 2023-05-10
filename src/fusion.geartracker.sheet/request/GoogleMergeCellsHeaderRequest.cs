@@ -2,9 +2,9 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleMergeCellsHeaderRequest : Request
 {
-    public static List<Request> CreateRequests (GoogleSheetsBuilder builder, Sheet sheet)
+    public static List<Request> CreateRequests (GoogleSheetsBuilder builder)
     {
-        var gridRanges = builder.GetItemGroupGridRanges(sheet);
+        var gridRanges = builder.GetItemGroupGridRanges();
 
         return gridRanges.ConvertAll(gridRange => new Request
         {

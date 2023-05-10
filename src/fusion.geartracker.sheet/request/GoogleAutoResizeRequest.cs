@@ -2,14 +2,14 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleAutoResizeRequest : Request
 {
-    public GoogleAutoResizeRequest (Spreadsheet spreadsheet, Sheet sheet)
+    public GoogleAutoResizeRequest (GoogleSheetsBuilder builder)
     {
         AutoResizeDimensions = new()
         {
             Dimensions = new()
             {
                 Dimension = "COLUMNS",
-                SheetId = sheet.Properties.SheetId,
+                SheetId = builder.Sheet.Properties.SheetId,
             },
         };
     }

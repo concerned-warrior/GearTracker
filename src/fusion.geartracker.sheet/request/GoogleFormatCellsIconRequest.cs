@@ -2,9 +2,9 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleFormatCellsIconRequest : Request
 {
-    public static List<Request> CreateRequests (GoogleSheetsBuilder builder, Sheet sheet)
+    public static List<Request> CreateRequests (GoogleSheetsBuilder builder)
     {
-        var gridRanges = builder.GetItemGroupIconGridRanges(sheet);
+        var gridRanges = builder.GetItemGroupIconGridRanges();
 
         return gridRanges.ConvertAll(gridRange => new Request
         {

@@ -2,7 +2,7 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleUpdateSpreadsheetPropertiesRequest : Request
 {
-    public GoogleUpdateSpreadsheetPropertiesRequest (Spreadsheet spreadsheet)
+    public GoogleUpdateSpreadsheetPropertiesRequest (GoogleSheetsBuilder builder)
     {
         UpdateSpreadsheetProperties = new()
         {
@@ -13,7 +13,7 @@ public class GoogleUpdateSpreadsheetPropertiesRequest : Request
                 SpreadsheetTheme = new()
                 {
                     PrimaryFontFamily = "Roboto Mono",
-                    ThemeColors = spreadsheet.Properties.SpreadsheetTheme.ThemeColors,
+                    ThemeColors = builder.Spreadsheet.Properties.SpreadsheetTheme.ThemeColors,
                 },
             },
         };

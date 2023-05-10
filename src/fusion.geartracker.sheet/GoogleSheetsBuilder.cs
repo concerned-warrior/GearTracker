@@ -2,6 +2,9 @@ namespace fusion.geartracker.sheet;
 
 public class GoogleSheetsBuilder
 {
+    public Spreadsheet Spreadsheet { get; }
+    public Sheet Sheet { get; }
+
     private List<List<object>> data = new();
     private List<string> headersItemGroup = new() { "Icon", "iLvl", "Name", "Date" };
     private List<string> headersLeft = new() { "Name", "Raid", "aiLvl", "Class", "Spec", "Last 10", "Last 25" };
@@ -29,25 +32,17 @@ public class GoogleSheetsBuilder
 
     public void AddPlayer (FusionPlayer player)
     {
+        var last10 = player.GetLast10().ToLocalTime().ToString("d");
+        var last25 = player.GetLast25().ToLocalTime().ToString("d");
+        var gear = player.GearById.Values.ToList();
         var rows = new List<List<object>>();
         var rowCount = 1;
-
-        var tokenAverageLevel = new object();
-        var tokenLast10SeenAt = new object();
-        var tokenLast25SeenAt = new object();
-
-        var last10SeenAt = DateTimeOffset.MinValue;
-        var last25SeenAt = DateTimeOffset.MinValue;
-
-        var gear = player.GearById.Values.ToList();
 
         gear.Sort((a, b) => b.ItemLevel.CompareTo(a.ItemLevel));
 
         for (var i = 0; i < rowCount; i++)
         {
-            var itemCount = 0;
-            var itemLevel = 0;
-            var row = new List<object> { player.Name, player.Raid, tokenAverageLevel, player.Class, player.Spec, tokenLast10SeenAt, tokenLast25SeenAt };
+            var row = new List<object> { player.Name, player.Raid, player.GetAverageItemLevel(), player.Class, player.Spec, last10, last25 };
 
             foreach (var slot in headersSlots)
             {
@@ -72,38 +67,11 @@ public class GoogleSheetsBuilder
                 }
                 else
                 {
-                    itemCount += 1;
-                    itemLevel += currentItem.ItemLevel;
-
-                    if (currentItem.InstanceSize == 10)
-                    {
-                        last10SeenAt = last10SeenAt > currentItem.FirstSeenAt ? last10SeenAt : currentItem.FirstSeenAt;
-                    }
-                    else if (currentItem.InstanceSize == 25)
-                    {
-                        last25SeenAt = last25SeenAt > currentItem.FirstSeenAt ? last25SeenAt : currentItem.FirstSeenAt;
-                    }
-
                     row.AddRange(new List<object> { $"=image(\"https://assets.rpglogs.com/img/warcraft/abilities/{currentItem.Icon}\")", currentItem.ItemLevel, currentItem.Name, currentItem.FirstSeenAt.ToLocalTime().ToString("d") });
                 }
             }
 
-            if (i == 0 && itemCount > 0)
-            {
-                row[row.IndexOf(tokenAverageLevel)] = (int)(itemLevel / itemCount);
-            }
-            else
-            {
-                row[row.IndexOf(tokenAverageLevel)] = 0;
-            }
-
             rows.Add(row);
-        }
-
-        foreach (var row in rows)
-        {
-            row[row.IndexOf(tokenLast10SeenAt)] = last10SeenAt.ToLocalTime().ToString("d");
-            row[row.IndexOf(tokenLast25SeenAt)] = last25SeenAt.ToLocalTime().ToString("d");
         }
 
         data.AddRange(rows);
@@ -119,11 +87,11 @@ public class GoogleSheetsBuilder
             max = max > list.Count ? max : list.Count;
         }
 
-        return $"A1:{getColumnOffset(max)}{data.Count}";
+        return $"'{Sheet.Properties.Title}'!A1:{getColumnOffset(max)}{data.Count}";
     }
 
 
-    public List<GridRange> GetPlayerGridRanges (Sheet sheet)
+    public List<GridRange> GetPlayerGridRanges ()
     {
         var gridRanges = new List<GridRange>();
         var currentName = string.Empty;
@@ -148,7 +116,7 @@ public class GoogleSheetsBuilder
                     EndColumnIndex = endingColumn,
                     StartRowIndex = startingRowCurrentName,
                     EndRowIndex = i,
-                    SheetId = sheet.Properties.SheetId,
+                    SheetId = Sheet.Properties.SheetId,
                 });
             }
 
@@ -164,7 +132,7 @@ public class GoogleSheetsBuilder
                 EndColumnIndex = endingColumn,
                 StartRowIndex = startingRowCurrentName,
                 EndRowIndex = i,
-                SheetId = sheet.Properties.SheetId,
+                SheetId = Sheet.Properties.SheetId,
             });
         }
 
@@ -172,7 +140,7 @@ public class GoogleSheetsBuilder
     }
 
 
-    public List<GridRange> GetItemGroupGridRanges (Sheet sheet)
+    public List<GridRange> GetItemGroupGridRanges ()
     {
         var gridRanges = new List<GridRange>();
         var startingColumn = headersLeft.Count;
@@ -186,7 +154,7 @@ public class GoogleSheetsBuilder
                 EndColumnIndex = endingColumn,
                 StartRowIndex = 0,
                 EndRowIndex = 1,
-                SheetId = sheet.Properties.SheetId,
+                SheetId = Sheet.Properties.SheetId,
             });
 
             startingColumn += headersItemGroup.Count;
@@ -197,7 +165,7 @@ public class GoogleSheetsBuilder
     }
 
 
-    public List<GridRange> GetItemGroupIconGridRanges (Sheet sheet)
+    public List<GridRange> GetItemGroupIconGridRanges ()
     {
         var gridRanges = new List<GridRange>();
         var startingColumn = headersLeft.Count;
@@ -209,7 +177,7 @@ public class GoogleSheetsBuilder
                 StartColumnIndex = startingColumn,
                 EndColumnIndex = startingColumn + 1,
                 StartRowIndex = 2,
-                SheetId = sheet.Properties.SheetId,
+                SheetId = Sheet.Properties.SheetId,
             });
 
             startingColumn += headersItemGroup.Count;
@@ -242,5 +210,12 @@ public class GoogleSheetsBuilder
     public IList<IList<object>> GetData ()
     {
         return data.ConvertAll(list => (IList<object>)list);
+    }
+
+
+    public GoogleSheetsBuilder (Spreadsheet spreadsheet, Sheet sheet)
+    {
+        Spreadsheet = spreadsheet;
+        Sheet = sheet;
     }
 }

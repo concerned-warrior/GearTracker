@@ -2,9 +2,9 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleFormatCellsLeftRequest : Request
 {
-    public static List<Request> CreateRequests (GoogleSheetsBuilder builder, Sheet sheet)
+    public static List<Request> CreateRequests (GoogleSheetsBuilder builder)
     {
-        var gridRanges = builder.GetPlayerGridRanges(sheet);
+        var gridRanges = builder.GetPlayerGridRanges();
 
         return gridRanges.ConvertAll(gridRange =>
         {
