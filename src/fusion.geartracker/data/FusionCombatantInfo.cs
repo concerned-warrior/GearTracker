@@ -2,7 +2,7 @@ namespace fusion.geartracker.data;
 
 public class FusionCombatantInfo
 {
-    public HashSet<FusionGear> Gear { get; set; } = new();
+    public List<FusionGear> Gear { get; set; } = new();
     public FusionPlayer Player { get; set; } = new();
 
 
@@ -15,9 +15,17 @@ public class FusionCombatantInfo
             Player = player,
         } : seed;
 
+        combatantInfoList.ForEach(combatantInfo =>
+        {
+            for (var i = 0; i < combatantInfo.Gear.Count; i++)
+            {
+                combatantInfo.Gear[i].SlotId = i + 1;
+            }
+        });
+
         return combatantInfoList.Aggregate(seed, (seed, combatantInfo) =>
         {
-            seed.Gear.UnionWith(combatantInfo.Gear);
+            seed.Gear = seed.Gear.Union(combatantInfo.Gear).ToList();
 
             return seed;
         });

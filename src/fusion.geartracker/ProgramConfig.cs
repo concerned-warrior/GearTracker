@@ -7,11 +7,14 @@ public class ProgramConfig
     public string ClientId { get; set; } = string.Empty;
     public string ClientSecret { get; set; } = string.Empty;
     public int GuildId { get; set; }
+    public string SheetsClientId { get; set; } = string.Empty;
+    public string SheetsClientSecret { get; set; } = string.Empty;
+    public string SheetsSpreadsheetId { get; set; } = string.Empty;
     public bool UseReportCache { get; set; }
     public DateTime FirstReportDate { get; set; }
     public DateTime LastReportDate { get; set; }
-    public HashSet<int> ItemsToTrack { get; set; } = new();
-    public HashSet<string> PlayersToTrack { get; set; } = new();
+    public HashSet<TrackedItem> ItemsToTrack { get; set; } = new();
+    public HashSet<TrackedPlayer> PlayersToTrack { get; set; } = new();
 
 
     public static ProgramConfig Load (string appSettingsPath)

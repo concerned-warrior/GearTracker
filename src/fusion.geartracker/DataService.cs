@@ -39,9 +39,10 @@ public class DataService
     }
 
 
-    public async Task<List<FusionPlayer>> GetPlayers (HashSet<FusionReport> reports, HashSet<string> playersToTrack)
+    public async Task<List<FusionPlayer>> GetPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack)
     {
-        var players = new List<FusionPlayer>();
+        var playersBag = new ConcurrentBag<FusionPlayer>();
+        var playersList = new List<FusionPlayer>();
 
         await Parallel.ForEachAsync(reports, async (report, cancellationToken) =>
         {
@@ -50,16 +51,18 @@ public class DataService
 
             foreach (var actor in actors)
             {
-                if (playersToTrack.Contains(actor.Name ?? string.Empty))
+                if (playersToTrack.TryGetValue(new() { Name = actor.Name ?? string.Empty }, out var trackedPlayer))
                 {
-                    players.Add(FusionPlayer.FromActor(report, actor));
+                    playersBag.Add(FusionPlayer.FromActor(actor, report, trackedPlayer));
                 }
             }
         });
 
-        players.Sort((a, b) => a.Report.StartTime.CompareTo(b.Report.StartTime));
+        playersList.AddRange(playersBag);
 
-        return players;
+        playersList.Sort((a, b) => a.Report.StartTime.CompareTo(b.Report.StartTime));
+
+        return playersList;
     }
 
 
@@ -85,13 +88,14 @@ public class DataService
     }
 
 
-    public async Task<Dictionary<FusionPlayer, HashSet<FusionGear>>> GetGearSetByPlayer (List<FusionPlayer> players, HashSet<int> itemsToTrack)
+    public async Task<Dictionary<FusionPlayer, HashSet<FusionGear>>> GetGearSetByPlayer (List<FusionPlayer> players, HashSet<TrackedItem> itemsToTrack)
     {
+        var gearListByPlayerLock = new object();
         var gearListByPlayer = new Dictionary<FusionPlayer, List<FusionGear>>();
         var gearSetByPlayer = new Dictionary<FusionPlayer, HashSet<FusionGear>>();
-        var gearToTrack = itemsToTrack.Aggregate(new HashSet<FusionGear>(itemsToTrack.Count), (seed, itemId) =>
+        var gearToTrack = itemsToTrack.Aggregate(new HashSet<FusionGear>(itemsToTrack.Count), (seed, item) =>
         {
-            seed.Add(new FusionGear { Id = itemId });
+            FusionGear.FromTrackedItem(item).ForEach(item => seed.Add(item));
 
             return seed;
         });
@@ -100,20 +104,30 @@ public class DataService
         {
             var combatantInfo = await getCombatantInfo(player);
 
-            combatantInfo.Gear.IntersectWith(gearToTrack);
+            combatantInfo.Gear = combatantInfo.Gear.Join(gearToTrack, a => a, b => b, (a, b) =>
+            {
+                a.Name = b.Name;
+                a.Slot = b.Slot;
+                a.InstanceSize = b.InstanceSize;
+
+                return a;
+            }).ToList();
 
             foreach (var gear in combatantInfo.Gear)
             {
                 gear.FirstSeenAt = player.Report.StartTime;
             }
 
-            if (gearListByPlayer.ContainsKey(player))
+            lock (gearListByPlayerLock)
             {
-                gearListByPlayer[player].AddRange(combatantInfo.Gear);
-            }
-            else
-            {
-                gearListByPlayer.Add(player, new(combatantInfo.Gear));
+                if (gearListByPlayer.ContainsKey(player))
+                {
+                    gearListByPlayer[player].AddRange(combatantInfo.Gear);
+                }
+                else
+                {
+                    gearListByPlayer.Add(player, new(combatantInfo.Gear));
+                }
             }
         });
 

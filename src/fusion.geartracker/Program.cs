@@ -77,7 +77,7 @@ internal class Program
     }
 
 
-    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, HashSet<string> playersToTrack)
+    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack)
     {
         var players = await dataService.GetPlayers(reports, playersToTrack);
 
@@ -101,13 +101,13 @@ internal class Program
     }
 
 
-    public async Task UpdateGear (List<FusionPlayer> players, HashSet<int> itemsToTrack)
+    public async Task UpdateGear (List<FusionPlayer> players, HashSet<TrackedItem> itemsToTrack)
     {
         var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, itemsToTrack);
 
         foreach ((var player, var gearSet) in gearSetByPlayer)
         {
-            Dictionary<int, FusionGear> playerGearById;
+            Dictionary<string, FusionGear> playerGearById;
 
             // Get current player gear, if any
             if (data.PlayersByName.TryGetValue(player.Name, out var playerData))
@@ -124,15 +124,15 @@ internal class Program
             // Update player gear
             foreach (var gear in gearSet)
             {
-                Console.WriteLine($"{gear.FirstSeenAt} - {player} acquired {gear}");
+                var gearHash = gear.GetHashString();
 
-                if (playerGearById.ContainsKey(gear.Id))
+                if (playerGearById.ContainsKey(gearHash))
                 {
-                    playerGearById[gear.Id] = gear;
+                    playerGearById[gearHash] = gear;
                 }
                 else
                 {
-                    playerGearById.Add(gear.Id, gear);
+                    playerGearById.Add(gearHash, gear);
                 }
             }
         }
