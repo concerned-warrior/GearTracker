@@ -14,9 +14,12 @@ internal class Program
         var program = new Program(dataService, data);
 
         var reports = programConfig.UseReportCache ? data.ReportsByCode.Values.ToHashSet() : await program.UpdateReports();
-        var players = await program.FindPlayers(reports, programConfig.PlayersToTrack);
+        var players = await program.FindPlayers(reports, programConfig.PlayersToTrack, programConfig.UseReportCache);
 
-        await program.UpdateGear(players, programConfig.ItemsToTrack);
+        if (programConfig.UpdateGear)
+        {
+            await program.UpdateGear(players, programConfig.ItemsToTrack);
+        }
 
         data.Save(programConfig.AppDataPath);
     }
@@ -77,9 +80,9 @@ internal class Program
     }
 
 
-    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack)
+    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack, bool useReportCache)
     {
-        var players = await dataService.GetPlayers(reports, playersToTrack);
+        var players = await dataService.GetPlayers(reports, playersToTrack, useReportCache);
 
         return players.FindAll(player =>
         {

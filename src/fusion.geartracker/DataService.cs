@@ -39,24 +39,42 @@ public class DataService
     }
 
 
-    public async Task<List<FusionPlayer>> GetPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack)
+    public async Task<List<FusionPlayer>> GetPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack, bool useReportCache)
     {
         var playersBag = new ConcurrentBag<FusionPlayer>();
         var playersList = new List<FusionPlayer>();
 
-        await Parallel.ForEachAsync(reports, async (report, cancellationToken) =>
+        if (useReportCache)
         {
-            var result = await graphQLClient.Execute(new Players(report.Code));
-            var actors = result.Data?.__Report.__MasterData.__Actors ?? new ReportActor[0];
-
-            foreach (var actor in actors)
+            foreach (var report in reports)
             {
-                if (playersToTrack.TryGetValue(new() { Name = actor.Name ?? string.Empty }, out var trackedPlayer))
+                foreach (var actor in report.Actors)
                 {
-                    playersBag.Add(FusionPlayer.FromActor(actor, report, trackedPlayer));
+                    if (playersToTrack.TryGetValue(new() { Name = actor.Name }, out var trackedPlayer))
+                    {
+                        playersBag.Add(FusionPlayer.FromActor(new() { Id = actor.ActorId, Name = actor.Name }, report, trackedPlayer));
+                    }
                 }
             }
-        });
+        }
+        else
+        {
+            await Parallel.ForEachAsync(reports, async (report, cancellationToken) =>
+            {
+                var result = await graphQLClient.Execute(new Players(report.Code));
+                var actors = result.Data?.__Report.__MasterData.__Actors ?? new ReportActor[0];
+
+                foreach (var actor in actors)
+                {
+                    report.Actors.Add(new FusionPlayer { ActorId = actor.Id ?? 0, Name = actor.Name ?? string.Empty });
+
+                    if (playersToTrack.TryGetValue(new() { Name = actor.Name ?? string.Empty }, out var trackedPlayer))
+                    {
+                        playersBag.Add(FusionPlayer.FromActor(actor, report, trackedPlayer));
+                    }
+                }
+            });
+        }
 
         playersList.AddRange(playersBag);
 

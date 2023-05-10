@@ -21,6 +21,7 @@ Make a `appsettings/appsettings.json` file with the following fields:
   "sheetsClientSecret": "{your google client secret}",
   "sheetsSpreadsheetId": "{your google spreadsheet id}",
   "useReportCache": false,
+  "updateGear": true,
   "firstReportDate": "2023-05-01",
   "lastReportDate": "2023-01-01",
   "itemsToTrack": [
@@ -44,6 +45,7 @@ Make a `appsettings/appsettings.json` file with the following fields:
 - **sheetsClientId**: Your Google client identifier
 - **sheetsClientSecret**: Your Google client secret
 - **useReportCache**: Whether or not to use saved report data instead of pulling from WCL
+- **updateGear**: Whether or not to update player gear, which will save WCL API Points if just updating the report cache
 - **firstReportDate**: The most recent date from which to pull data
 - **lastReportDate**: The oldest date from which to pull data
 - **itemsToTrack**: A list of item identifiers found on [Wowhead](https://www.wowhead.com)
