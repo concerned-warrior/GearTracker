@@ -8,7 +8,7 @@ public class FusionReport : IEquatable<FusionReport>
     public DateTimeOffset EndTime { get; set; }
     public int ExportedSegments { get; set; }
     public int Segments { get; set; }
-    public HashSet<FusionPlayer> Actors { get; set; } = new();
+    public Dictionary<string, int> Actors { get; set; } = new();
 
 
     public bool Equals (FusionReport? other)

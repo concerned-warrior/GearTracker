@@ -7,6 +7,7 @@ public class DataService
 
     public static JsonSerializerOptions DataJsonSerializerOptions = new()
     {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true,
     };
@@ -48,11 +49,11 @@ public class DataService
         {
             foreach (var report in reports)
             {
-                foreach (var actor in report.Actors)
+                foreach ((var name, var id) in report.Actors)
                 {
-                    if (playersToTrack.TryGetValue(new() { Name = actor.Name }, out var trackedPlayer))
+                    if (playersToTrack.TryGetValue(new() { Name = name }, out var trackedPlayer))
                     {
-                        playersBag.Add(FusionPlayer.FromActor(new() { Id = actor.ActorId, Name = actor.Name }, report, trackedPlayer));
+                        playersBag.Add(FusionPlayer.FromActor(new() { Id = id, Name = name }, report, trackedPlayer));
                     }
                 }
             }
@@ -66,7 +67,7 @@ public class DataService
 
                 foreach (var actor in actors)
                 {
-                    report.Actors.Add(new FusionPlayer { ActorId = actor.Id ?? 0, Name = actor.Name ?? string.Empty });
+                    report.Actors.TryAdd(actor.Name!, (int)actor.Id!);
 
                     if (playersToTrack.TryGetValue(new() { Name = actor.Name ?? string.Empty }, out var trackedPlayer))
                     {

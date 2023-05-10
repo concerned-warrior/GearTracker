@@ -12,6 +12,7 @@ public class ProgramConfig
     public string SheetsSpreadsheetId { get; set; } = string.Empty;
     public bool UseReportCache { get; set; }
     public bool UpdateGear { get; set; }
+    public int PlayerCountToUpdate { get; set; }
     public DateTime FirstReportDate { get; set; }
     public DateTime LastReportDate { get; set; }
     public HashSet<TrackedItem> ItemsToTrack { get; set; } = new();

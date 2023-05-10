@@ -14,11 +14,11 @@ internal class Program
         var program = new Program(dataService, data);
 
         var reports = programConfig.UseReportCache ? data.ReportsByCode.Values.ToHashSet() : await program.UpdateReports();
-        var players = await program.FindPlayers(reports, programConfig.PlayersToTrack, programConfig.UseReportCache);
+        var players = await program.FindPlayers(reports, programConfig);
 
         if (programConfig.UpdateGear)
         {
-            await program.UpdateGear(players, programConfig.ItemsToTrack);
+            await program.UpdateGear(players, programConfig);
         }
 
         data.Save(programConfig.AppDataPath);
@@ -80,33 +80,37 @@ internal class Program
     }
 
 
-    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack, bool useReportCache)
+    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, ProgramConfig programConfig)
     {
-        var players = await dataService.GetPlayers(reports, playersToTrack, useReportCache);
+        var players = await dataService.GetPlayers(reports, programConfig.PlayersToTrack, programConfig.UseReportCache);
 
-        return players.FindAll(player =>
+        Console.WriteLine($"Found {players.Count} players");
+
+        players = players.FindAll(player =>
         {
             if (data.ReportCodesByPlayer.TryGetValue(player.Name, out var codes))
             {
-                var result = !codes.Contains(player.Report.Code);
-
-                codes.Add(player.Report.Code);
-
-                return result;
+                return !codes.Contains(player.Report.Code);
             }
             else
             {
-                data.ReportCodesByPlayer.Add(player.Name, new() { player.Report.Code });
-
                 return true;
             }
         });
+
+        Console.WriteLine($"Found {players.Count} players to check in reports");
+
+        players = players.GetRange(0, programConfig.PlayerCountToUpdate);
+
+        Console.WriteLine($"Updating gear for {players.Count} players");
+
+        return players;
     }
 
 
-    public async Task UpdateGear (List<FusionPlayer> players, HashSet<TrackedItem> itemsToTrack)
+    public async Task UpdateGear (List<FusionPlayer> players, ProgramConfig programConfig)
     {
-        var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, itemsToTrack);
+        var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, programConfig.ItemsToTrack);
 
         foreach ((var player, var gearSet) in gearSetByPlayer)
         {
@@ -137,6 +141,19 @@ internal class Program
                 {
                     playerGearById.Add(gearHash, gear);
                 }
+            }
+        }
+
+        foreach (var player in players)
+        {
+            // Save this report as checked for this player
+            if (data.ReportCodesByPlayer.TryGetValue(player.Name, out var codes))
+            {
+                codes.Add(player.Report.Code);
+            }
+            else
+            {
+                data.ReportCodesByPlayer.Add(player.Name, new() { player.Report.Code });
             }
         }
     }
