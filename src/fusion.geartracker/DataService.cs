@@ -13,11 +13,11 @@ public class DataService
     };
 
 
-    public async Task<HashSet<FusionReport>> GetReports ()
+    public async Task<HashSet<WCLReport>> GetReports ()
     {
         ReportPagination reportPagination = new();
-        FusionReport lastReport = new();
-        HashSet<FusionReport> reports = new();
+        WCLReport lastReport = new();
+        HashSet<WCLReport> reports = new();
 
         do
         {
@@ -27,7 +27,7 @@ public class DataService
 
             foreach (var report in reportPagination.__Data)
             {
-                lastReport = FusionReport.FromReport(report);
+                lastReport = WCLReport.FromReport(report);
 
                 if (lastReport.StartTime < programConfig.FirstReportDate && lastReport.EndTime > programConfig.LastReportDate)
                 {
@@ -40,10 +40,10 @@ public class DataService
     }
 
 
-    public async Task<List<FusionPlayer>> GetPlayers (HashSet<FusionReport> reports, HashSet<TrackedPlayer> playersToTrack, bool useReportCache)
+    public async Task<List<WCLPlayer>> GetPlayers (HashSet<WCLReport> reports, HashSet<TrackedPlayer> playersToTrack, bool useReportCache)
     {
-        var playersBag = new ConcurrentBag<FusionPlayer>();
-        var playersList = new List<FusionPlayer>();
+        var playersBag = new ConcurrentBag<WCLPlayer>();
+        var playersList = new List<WCLPlayer>();
 
         if (useReportCache)
         {
@@ -53,7 +53,7 @@ public class DataService
                 {
                     if (playersToTrack.TryGetValue(new() { Name = name }, out var trackedPlayer))
                     {
-                        playersBag.Add(FusionPlayer.FromActor(new() { Id = id, Name = name }, report, trackedPlayer));
+                        playersBag.Add(WCLPlayer.FromActor(new() { Id = id, Name = name }, report, trackedPlayer));
                     }
                 }
             }
@@ -71,7 +71,7 @@ public class DataService
 
                     if (playersToTrack.TryGetValue(new() { Name = actor.Name ?? string.Empty }, out var trackedPlayer))
                     {
-                        playersBag.Add(FusionPlayer.FromActor(actor, report, trackedPlayer));
+                        playersBag.Add(WCLPlayer.FromActor(actor, report, trackedPlayer));
                     }
                 }
             });
@@ -85,14 +85,14 @@ public class DataService
     }
 
 
-    private async Task<FusionCombatantInfo> getCombatantInfo (FusionPlayer player)
+    private async Task<WCLCombatantInfo> getCombatantInfo (WCLPlayer player)
     {
         var report = player.Report;
         var startTime = 0.0;
         var endTime = report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds();
         var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.ActorId));
         var reportEventPaginator = result.Data?.__Report.__Events ?? new();
-        var combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]");
+        var combatantInfo = WCLCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]");
 
         while (reportEventPaginator.NextPageTimestamp > 0)
         {
@@ -100,21 +100,21 @@ public class DataService
             result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.ActorId));
             reportEventPaginator = result.Data?.__Report.__Events ?? new();
 
-            combatantInfo = FusionCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]", combatantInfo);
+            combatantInfo = WCLCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]", combatantInfo);
         }
 
         return combatantInfo;
     }
 
 
-    public async Task<Dictionary<FusionPlayer, HashSet<FusionGear>>> GetGearSetByPlayer (List<FusionPlayer> players, HashSet<TrackedItem> itemsToTrack)
+    public async Task<Dictionary<WCLPlayer, HashSet<WCLGear>>> GetGearSetByPlayer (List<WCLPlayer> players, HashSet<TrackedItem> itemsToTrack)
     {
         var gearListByPlayerLock = new object();
-        var gearListByPlayer = new Dictionary<FusionPlayer, List<FusionGear>>();
-        var gearSetByPlayer = new Dictionary<FusionPlayer, HashSet<FusionGear>>();
-        var gearToTrack = itemsToTrack.Aggregate(new HashSet<FusionGear>(itemsToTrack.Count), (seed, item) =>
+        var gearListByPlayer = new Dictionary<WCLPlayer, List<WCLGear>>();
+        var gearSetByPlayer = new Dictionary<WCLPlayer, HashSet<WCLGear>>();
+        var gearToTrack = itemsToTrack.Aggregate(new HashSet<WCLGear>(itemsToTrack.Count), (seed, item) =>
         {
-            FusionGear.FromTrackedItem(item).ForEach(item => seed.Add(item));
+            WCLGear.FromTrackedItem(item).ForEach(item => seed.Add(item));
 
             return seed;
         });

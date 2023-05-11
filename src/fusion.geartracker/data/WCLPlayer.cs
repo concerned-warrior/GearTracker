@@ -1,14 +1,14 @@
 namespace fusion.geartracker.data;
 
-public class FusionPlayer : IEquatable<FusionPlayer>
+public class WCLPlayer : IEquatable<WCLPlayer>
 {
     public int ActorId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Raid { get; set; } = string.Empty;
     public string Class { get; set; } = string.Empty;
     public string Spec { get; set; } = string.Empty;
-    public FusionReport Report { get; set; } = new();
-    public Dictionary<string, FusionGear> GearById { get; set; } = new();
+    public WCLReport Report { get; set; } = new();
+    public Dictionary<string, WCLGear> GearById { get; set; } = new();
 
 
     public int GetAverageItemLevel ()
@@ -68,7 +68,7 @@ public class FusionPlayer : IEquatable<FusionPlayer>
     }
 
 
-    public bool Equals (FusionPlayer? other)
+    public bool Equals (WCLPlayer? other)
     {
         return Name.Equals(other?.Name);
     }
@@ -86,7 +86,7 @@ public class FusionPlayer : IEquatable<FusionPlayer>
     }
 
 
-    public static FusionPlayer FromActor (ReportActor actor, FusionReport report, TrackedPlayer trackedPlayer)
+    public static WCLPlayer FromActor (ReportActor actor, WCLReport report, TrackedPlayer trackedPlayer)
     {
         return new()
         {

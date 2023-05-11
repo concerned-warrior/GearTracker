@@ -3,7 +3,7 @@
 internal class Program
 {
     private GoogleSheetsService sheetsService;
-    private FusionData data;
+    private WCLData data;
 
 
     private static async Task Main(string[] args)
@@ -15,7 +15,7 @@ internal class Program
             ClientSecret = programConfig.SheetsClientSecret,
         }, new[] { SheetsService.Scope.Spreadsheets }, "console", CancellationToken.None);
         var sheetsService = new GoogleSheetsService(programConfig, credential);
-        var data = FusionData.Load(programConfig.AppDataPath);
+        var data = WCLData.Load(programConfig.AppDataPath);
         var program = new Program(sheetsService, data);
 
         var spreadsheet = await sheetsService.ResetSpreadsheet();
@@ -35,7 +35,7 @@ internal class Program
     }
 
 
-    public async Task UpdateSheet (GoogleSheetsBuilder builder, List<FusionPlayer> players)
+    public async Task UpdateSheet (GoogleSheetsBuilder builder, List<WCLPlayer> players)
     {
         builder.AddHeaders();
         players.ForEach(builder.AddPlayer);
@@ -45,7 +45,7 @@ internal class Program
     }
 
 
-    public Program (GoogleSheetsService sheetsService, FusionData data)
+    public Program (GoogleSheetsService sheetsService, WCLData data)
     {
         this.sheetsService = sheetsService;
         this.data = data;

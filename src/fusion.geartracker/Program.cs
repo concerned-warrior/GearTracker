@@ -3,14 +3,14 @@
 internal class Program
 {
     private DataService dataService;
-    private FusionData data;
+    private WCLData data;
 
 
     private static async Task Main(string[] args)
     {
         var programConfig = ProgramConfig.Load($"{Directory.GetCurrentDirectory()}/../../appsettings/appsettings.json");
         var dataService = await CreateDataService(programConfig);
-        var data = FusionData.Load(programConfig.AppDataPath);
+        var data = WCLData.Load(programConfig.AppDataPath);
         var program = new Program(dataService, data);
 
         var reports = programConfig.UseReportCache ? data.ReportsByCode.Values.ToHashSet() : await program.UpdateReports();
@@ -60,7 +60,7 @@ internal class Program
     }
 
 
-    public async Task<HashSet<FusionReport>> UpdateReports ()
+    public async Task<HashSet<WCLReport>> UpdateReports ()
     {
         var reports = await dataService.GetReports();
 
@@ -80,7 +80,7 @@ internal class Program
     }
 
 
-    public async Task<List<FusionPlayer>> FindPlayers (HashSet<FusionReport> reports, ProgramConfig programConfig)
+    public async Task<List<WCLPlayer>> FindPlayers (HashSet<WCLReport> reports, ProgramConfig programConfig)
     {
         var players = await dataService.GetPlayers(reports, programConfig.PlayersToTrack, programConfig.UseReportCache);
 
@@ -100,7 +100,7 @@ internal class Program
 
         Console.WriteLine($"Found {players.Count} players to check in reports");
 
-        players = players.GetRange(0, programConfig.PlayerCountToUpdate);
+        players = players.GetRange(0, programConfig.PlayerCountToUpdate < players.Count ? programConfig.PlayerCountToUpdate : players.Count);
 
         Console.WriteLine($"Updating gear for {players.Count} players");
 
@@ -108,13 +108,13 @@ internal class Program
     }
 
 
-    public async Task UpdateGear (List<FusionPlayer> players, ProgramConfig programConfig)
+    public async Task UpdateGear (List<WCLPlayer> players, ProgramConfig programConfig)
     {
         var gearSetByPlayer = await dataService.GetGearSetByPlayer(players, programConfig.ItemsToTrack);
 
         foreach ((var player, var gearSet) in gearSetByPlayer)
         {
-            Dictionary<string, FusionGear> playerGearById;
+            Dictionary<string, WCLGear> playerGearById;
 
             // Get current player gear, if any
             if (data.PlayersByName.TryGetValue(player.Name, out var playerData))
@@ -159,7 +159,7 @@ internal class Program
     }
 
 
-    public Program (DataService dataService, FusionData data)
+    public Program (DataService dataService, WCLData data)
     {
         this.dataService = dataService;
         this.data = data;

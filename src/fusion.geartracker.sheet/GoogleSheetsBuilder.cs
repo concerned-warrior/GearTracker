@@ -30,7 +30,7 @@ public class GoogleSheetsBuilder
     }
 
 
-    public void AddPlayer (FusionPlayer player)
+    public void AddPlayer (WCLPlayer player)
     {
         var last10 = player.GetLast10().ToLocalTime().ToString("d");
         var last25 = player.GetLast25().ToLocalTime().ToString("d");
@@ -46,7 +46,7 @@ public class GoogleSheetsBuilder
 
             foreach (var slot in headersSlots)
             {
-                var slotGear = gear.Aggregate(new List<FusionGear>(), (list, item) =>
+                var slotGear = gear.Aggregate(new List<WCLGear>(), (list, item) =>
                 {
                     var existingItem = list.Find(existingItem => existingItem.Id.Equals(item.Id));
 

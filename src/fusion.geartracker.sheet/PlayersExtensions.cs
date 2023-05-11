@@ -3,7 +3,7 @@ namespace fusion.geartracker.sheet;
 public static class PlayersExtensions
 {
     // Name
-    public static List<FusionPlayer> ByName (this Dictionary<string, FusionPlayer> playersByName)
+    public static List<WCLPlayer> ByName (this Dictionary<string, WCLPlayer> playersByName)
     {
         var players = playersByName.Values.ToList();
 
@@ -14,7 +14,7 @@ public static class PlayersExtensions
 
 
     // Raid,Last25,Last10
-    public static List<FusionPlayer> ByRaidLastUpgrade (this Dictionary<string, FusionPlayer> playersByName)
+    public static List<WCLPlayer> ByRaidLastUpgrade (this Dictionary<string, WCLPlayer> playersByName)
     {
         var players = playersByName.Values.ToList();
 
@@ -27,7 +27,7 @@ public static class PlayersExtensions
 
 
     // Raid,Class,Spec,aiLvl
-    public static List<FusionPlayer> ByRaidSpec (this Dictionary<string, FusionPlayer> playersByName)
+    public static List<WCLPlayer> ByRaidSpec (this Dictionary<string, WCLPlayer> playersByName)
     {
         var players = playersByName.Values.ToList();
 
@@ -41,7 +41,7 @@ public static class PlayersExtensions
 
 
     // Class,Spec,aiLvl
-    public static List<FusionPlayer> BySpec (this Dictionary<string, FusionPlayer> playersByName)
+    public static List<WCLPlayer> BySpec (this Dictionary<string, WCLPlayer> playersByName)
     {
         var players = playersByName.Values.ToList();
 

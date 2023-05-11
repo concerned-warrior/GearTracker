@@ -1,6 +1,6 @@
 namespace fusion.geartracker.data;
 
-public class FusionGem
+public class WCLGem
 {
     public int Id { get; set; }
     public string Icon { get; set; } = string.Empty;

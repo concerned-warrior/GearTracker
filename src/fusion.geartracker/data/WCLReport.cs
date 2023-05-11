@@ -1,6 +1,6 @@
 namespace fusion.geartracker.data;
 
-public class FusionReport : IEquatable<FusionReport>
+public class WCLReport : IEquatable<WCLReport>
 {
     public string Code { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
@@ -11,7 +11,7 @@ public class FusionReport : IEquatable<FusionReport>
     public Dictionary<string, int> Actors { get; set; } = new();
 
 
-    public bool Equals (FusionReport? other)
+    public bool Equals (WCLReport? other)
     {
         return Code.Equals(other?.Code);
     }
@@ -29,9 +29,9 @@ public class FusionReport : IEquatable<FusionReport>
     }
 
 
-    public static FusionReport FromReport (Report report)
+    public static WCLReport FromReport (Report report)
     {
-        return new FusionReport
+        return new WCLReport
         {
             Code = report.Code,
             Title = report.Title,

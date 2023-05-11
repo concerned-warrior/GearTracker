@@ -1,16 +1,16 @@
 namespace fusion.geartracker.data;
 
-public class FusionCombatantInfo
+public class WCLCombatantInfo
 {
-    public List<FusionGear> Gear { get; set; } = new();
-    public FusionPlayer Player { get; set; } = new();
+    public List<WCLGear> Gear { get; set; } = new();
+    public WCLPlayer Player { get; set; } = new();
 
 
-    public static FusionCombatantInfo FromJsonArrayString (FusionPlayer player, string json, FusionCombatantInfo? seed = null)
+    public static WCLCombatantInfo FromJsonArrayString (WCLPlayer player, string json, WCLCombatantInfo? seed = null)
     {
-        var combatantInfoList = JsonSerializer.Deserialize<List<FusionCombatantInfo>>(json, DataService.DataJsonSerializerOptions) ?? new();
+        var combatantInfoList = JsonSerializer.Deserialize<List<WCLCombatantInfo>>(json, DataService.DataJsonSerializerOptions) ?? new();
 
-        seed = seed is null ? new FusionCombatantInfo()
+        seed = seed is null ? new WCLCombatantInfo()
         {
             Player = player,
         } : seed;

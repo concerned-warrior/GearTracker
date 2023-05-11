@@ -1,25 +1,25 @@
 namespace fusion.geartracker.data;
 
-public class FusionData
+public class WCLData
 {
-    public Dictionary<string, FusionReport> ReportsByCode { get; set; } = new();
-    public Dictionary<string, FusionPlayer> PlayersByName { get; set; } = new();
+    public Dictionary<string, WCLReport> ReportsByCode { get; set; } = new();
+    public Dictionary<string, WCLPlayer> PlayersByName { get; set; } = new();
     public Dictionary<string, HashSet<string>> ReportCodesByPlayer { get; set; } = new();
 
 
-    public static FusionData Load (string path)
+    public static WCLData Load (string path)
     {
-        FusionData data;
+        WCLData data;
 
         try
         {
             using var stream = File.OpenRead(path);
 
-            data = JsonSerializer.Deserialize<FusionData>(stream, DataService.DataJsonSerializerOptions) ?? new();
+            data = JsonSerializer.Deserialize<WCLData>(stream, DataService.DataJsonSerializerOptions) ?? new();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"FusionData Load - {ex.Message}");
+            Console.WriteLine($"WCLData Load - {ex.Message}");
 
             data = new();
         }
@@ -40,7 +40,7 @@ public class FusionData
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"FusionData Save - {ex.Message}");
+            Console.WriteLine($"WCLData Save - {ex.Message}");
         }
     }
 }

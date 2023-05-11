@@ -1,6 +1,6 @@
 namespace fusion.geartracker.data;
 
-public class FusionGear : IEquatable<FusionGear>
+public class WCLGear : IEquatable<WCLGear>
 {
     public int Id { get; set; }
     public int SlotId { get; set; }
@@ -10,13 +10,13 @@ public class FusionGear : IEquatable<FusionGear>
     public string Icon { get; set; } = string.Empty;
     public int ItemLevel { get; set; }
     public int PermanentEnchant { get; set; }
-    public List<FusionGem> Gems { get; set; } = new();
+    public List<WCLGem> Gems { get; set; } = new();
     public DateTimeOffset FirstSeenAt { get; set; }
 
     private static List<string> slots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Main Hand", "Off Hand", "Ranged" };
 
 
-    public bool Equals (FusionGear? other)
+    public bool Equals (WCLGear? other)
     {
         return Id.Equals(other?.Id) && SlotId.Equals(other?.SlotId);
     }
@@ -40,9 +40,9 @@ public class FusionGear : IEquatable<FusionGear>
     }
 
 
-    public static List<FusionGear> FromTrackedItem (TrackedItem trackedItem)
+    public static List<WCLGear> FromTrackedItem (TrackedItem trackedItem)
     {
-        var gear = new List<FusionGear>();
+        var gear = new List<WCLGear>();
         var index = slots.IndexOf(trackedItem.Slot);
 
         while (index > -1)
