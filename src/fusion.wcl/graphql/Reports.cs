@@ -1,4 +1,4 @@
-namespace fusion.geartracker.graphql;
+namespace fusion.wcl.graphql;
 
 public record Reports(int guildId, int limit = 50, int page = 1) : GraphQL<Query, ReportData>
 {

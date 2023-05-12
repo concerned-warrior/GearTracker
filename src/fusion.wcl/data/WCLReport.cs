@@ -1,4 +1,4 @@
-namespace fusion.geartracker.data;
+namespace fusion.wcl.data;
 
 public class WCLReport : IEquatable<WCLReport>
 {
@@ -8,7 +8,11 @@ public class WCLReport : IEquatable<WCLReport>
     public DateTimeOffset EndTime { get; set; }
     public int ExportedSegments { get; set; }
     public int Segments { get; set; }
-    public Dictionary<string, int> Actors { get; set; } = new();
+
+    // Set in IWCLService.GetReportPlayers
+    public Dictionary<int, string> Actors { get; set; } = new();
+    // Set in Program.UpdateGear
+    public Dictionary<string, WCLCombatantInfo> CombatantInfoByActor { get; set; } = new();
 
 
     public bool Equals (WCLReport? other)
@@ -20,12 +24,6 @@ public class WCLReport : IEquatable<WCLReport>
     public override int GetHashCode()
     {
         return Code.GetHashCode();
-    }
-
-
-    public override string ToString ()
-    {
-        return $"{Title} {Code} {StartTime.ToLocalTime()}-{EndTime.ToLocalTime()}";
     }
 
 

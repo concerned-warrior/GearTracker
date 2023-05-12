@@ -1,25 +1,31 @@
-namespace fusion.geartracker.data;
+namespace fusion.wcl.data;
 
 public class WCLCombatantInfo
 {
     public List<WCLGear> Gear { get; set; } = new();
+    [JsonIgnore]
     public WCLPlayer Player { get; set; } = new();
 
 
     public static WCLCombatantInfo FromJsonArrayString (WCLPlayer player, string json, WCLCombatantInfo? seed = null)
     {
-        var combatantInfoList = JsonSerializer.Deserialize<List<WCLCombatantInfo>>(json, DataService.DataJsonSerializerOptions) ?? new();
+        var combatantInfoList = JsonSerializer.Deserialize<List<WCLCombatantInfo>>(json, IWCLService.DataJsonSerializerOptions) ?? new();
 
-        seed = seed is null ? new WCLCombatantInfo()
+        seed = seed is null ? new()
         {
             Player = player,
         } : seed;
 
+        // Assign slot identifiers based on their position in the WCL response
         combatantInfoList.ForEach(combatantInfo =>
         {
             for (var i = 0; i < combatantInfo.Gear.Count; i++)
             {
-                combatantInfo.Gear[i].SlotId = i + 1;
+                var gear = combatantInfo.Gear[i];
+
+                gear.Name = gear.Id.ToString();
+                gear.SlotId = i + 1;
+                gear.Slot = gear.GetSlotFromId();
             }
         });
 

@@ -1,4 +1,4 @@
-namespace fusion.geartracker.graphql;
+namespace fusion.wcl.graphql;
 
 public record Players(string code) : GraphQL<Query, ReportData>
 {

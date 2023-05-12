@@ -1,19 +1,21 @@
-namespace fusion.geartracker.data;
+namespace fusion.wcl.data;
 
 public class WCLGear : IEquatable<WCLGear>
 {
     public int Id { get; set; }
-    public int SlotId { get; set; }
     public string Name { get; set; } = string.Empty;
+    public int SlotId { get; set; }
     public string Slot { get; set; } = string.Empty;
-    public int InstanceSize { get; set; }
+    public int InstanceSize { get; set; } = 25;
     public string Icon { get; set; } = string.Empty;
     public int ItemLevel { get; set; }
     public int PermanentEnchant { get; set; }
     public List<WCLGem> Gems { get; set; } = new();
+
+    // Set in Program.UpdateGear
     public DateTimeOffset FirstSeenAt { get; set; }
 
-    private static List<string> slots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Main Hand", "Off Hand", "Ranged" };
+    private static List<string> slots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Main Hand", "Off Hand", "Ranged", "Tabard" };
 
 
     public bool Equals (WCLGear? other)
@@ -34,9 +36,23 @@ public class WCLGear : IEquatable<WCLGear>
     }
 
 
-    public override string ToString ()
+    public string GetSlotFromId ()
     {
-        return $"Id: {Id} Icon: {Icon} ItemLevel: {ItemLevel}";
+        return slots[SlotId];
+    }
+
+
+    public void Update (WCLGear gear)
+    {
+        Id = gear.Id;
+        SlotId = gear.SlotId;
+        Name = gear.Name;
+        Slot = gear.Slot;
+        InstanceSize = gear.InstanceSize;
+        Icon = gear.Icon;
+        ItemLevel = gear.ItemLevel;
+        PermanentEnchant = gear.PermanentEnchant;
+        Gems = gear.Gems;
     }
 
 

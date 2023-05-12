@@ -1,4 +1,4 @@
-namespace fusion.geartracker.graphql;
+namespace fusion.wcl.graphql;
 
 public record Gear(string code, double startTime, double endTime, int actorId) : GraphQL<Query, ReportData>
 {

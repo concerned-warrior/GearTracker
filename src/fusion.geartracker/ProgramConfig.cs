@@ -11,16 +11,17 @@ public class ProgramConfig
     public string SheetsClientSecret { get; set; } = string.Empty;
     public string SheetsSpreadsheetId { get; set; } = string.Empty;
     public bool UseReportCache { get; set; }
-    public bool UpdateGear { get; set; }
-    public int PlayerCountToUpdate { get; set; }
+    public int ReportCountToUpdate { get; set; }
     public DateTime FirstReportDate { get; set; }
     public DateTime LastReportDate { get; set; }
+    public HashSet<string> ReportBlacklist { get; set; } = new();
     public HashSet<TrackedItem> ItemsToTrack { get; set; } = new();
     public HashSet<TrackedPlayer> PlayersToTrack { get; set; } = new();
 
 
-    public static ProgramConfig Load (string appSettingsPath)
+    public static ProgramConfig Load ()
     {
+        var appSettingsPath = $"{Directory.GetCurrentDirectory()}/../../appsettings/appsettings.json";
         var config = new ConfigurationBuilder()
             .AddJsonFile(appSettingsPath, optional: false, reloadOnChange: false)
             .Build();

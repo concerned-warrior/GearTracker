@@ -1,13 +1,16 @@
-namespace fusion.geartracker.data;
+namespace fusion.wcl.data;
 
 public class WCLPlayer : IEquatable<WCLPlayer>
 {
     public int ActorId { get; set; }
     public string Name { get; set; } = string.Empty;
+    public WCLReport Report { get; set; } = new();
+
+    // Set in Program.FindPlayers
     public string Raid { get; set; } = string.Empty;
     public string Class { get; set; } = string.Empty;
     public string Spec { get; set; } = string.Empty;
-    public WCLReport Report { get; set; } = new();
+    // Set in Program.UpdateData
     public Dictionary<string, WCLGear> GearById { get; set; } = new();
 
 
@@ -42,11 +45,13 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
-    public DateTimeOffset GetLast10 ()
+    public DateTimeOffset GetLast10 () => getLastInstanceSize(10);
+    public DateTimeOffset GetLast25 () => getLastInstanceSize(25);
+    private DateTimeOffset getLastInstanceSize (int instanceSize)
     {
         var result = DateTimeOffset.MinValue;
 
-        foreach (var gear in GearById.Values.Where(gear => gear.InstanceSize.Equals(10)))
+        foreach (var gear in GearById.Values.Where(gear => gear.InstanceSize.Equals(instanceSize)))
         {
             result = result > gear.FirstSeenAt ? result : gear.FirstSeenAt;
         }
@@ -55,16 +60,10 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
-    public DateTimeOffset GetLast25 ()
+    public string GetActorString () => GetActorString(ActorId, Name);
+    public static string GetActorString (int actorId, string name)
     {
-        var result = DateTimeOffset.MinValue;
-
-        foreach (var gear in GearById.Values.Where(gear => gear.InstanceSize.Equals(25)))
-        {
-            result = result > gear.FirstSeenAt ? result : gear.FirstSeenAt;
-        }
-
-        return result;
+        return $"{actorId}_{name}";
     }
 
 
@@ -80,21 +79,12 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
-    public override string ToString ()
-    {
-        return $"{Name}";
-    }
-
-
-    public static WCLPlayer FromActor (ReportActor actor, WCLReport report, TrackedPlayer trackedPlayer)
+    public static WCLPlayer Create (ReportActor actor, WCLReport report)
     {
         return new()
         {
             ActorId = actor.Id ?? 0,
             Name = actor.Name ?? string.Empty,
-            Raid = trackedPlayer.Raid,
-            Class = trackedPlayer.Class,
-            Spec = trackedPlayer.Spec,
             Report = report,
         };
     }
