@@ -12,6 +12,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fusion.data\fusion.data.csproj" />
+    <ProjectReference Include="..\fusion.wcl\fusion.wcl.csproj" />
   </ItemGroup>
 </Project>

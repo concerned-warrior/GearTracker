@@ -7,7 +7,7 @@ public class GoogleSheetsBuilder
 
     private List<List<object>> data = new();
     private List<string> headersItemGroup = new() { "Icon", "iLvl", "Name", "Date" };
-    private List<string> headersLeft = new() { "Name", "Raid", "aiLvl", "Class", "Spec", "Last 10", "Last 25" };
+    private List<string> headersLeft = new() { "Raid", "aiLvl", "Class", "Spec", "Last 10", "Last 25", "Name" };
     private List<string> headersSlots = new() { "Head", "Neck", "Shoulder", "Back", "Chest", "Wrist", "Hands", "Waist", "Legs", "Feet", "Finger", "Trinket", "Main Hand", "Off Hand", "Ranged" };
 
 
@@ -42,7 +42,7 @@ public class GoogleSheetsBuilder
 
         for (var i = 0; i < rowCount; i++)
         {
-            var row = new List<object> { player.Name, player.Raid, player.GetAverageItemLevel(), player.Class, player.Spec, last10, last25 };
+            var row = new List<object> { player.Raid, player.GetAverageItemLevel(), player.Class, player.Spec, last10, last25, player.Name };
 
             foreach (var slot in headersSlots)
             {

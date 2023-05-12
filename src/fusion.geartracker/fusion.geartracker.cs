@@ -1,2 +1,2 @@
-global using fusion.data;
+global using fusion.wcl.data;
 global using Microsoft.Extensions.Configuration;

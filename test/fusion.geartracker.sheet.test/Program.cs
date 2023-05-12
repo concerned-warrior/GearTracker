@@ -1,4 +1,4 @@
-﻿namespace fusion.geartracker.sheet;
+﻿namespace fusion.geartracker.sheet.test;
 
 internal class Program
 {
@@ -8,7 +8,7 @@ internal class Program
 
     private static async Task Main(string[] args)
     {
-        var programConfig = ProgramConfig.Load($"{Directory.GetCurrentDirectory()}/../../appsettings/appsettings.json");
+        var programConfig = ProgramConfig.Load();
         var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets()
         {
             ClientId = programConfig.SheetsClientId,
@@ -26,10 +26,20 @@ internal class Program
 
         await sheetsService.DeleteSheet(spreadsheet, spreadsheet.Sheets.ElementAtOrDefault(0));
 
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByRaidSpec), data.PlayersByName.ByRaidSpec());
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByRaidLastUpgrade), data.PlayersByName.ByRaidLastUpgrade());
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetBySpec), data.PlayersByName.BySpec());
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByName), data.PlayersByName.ByName());
+        var playersByRaidSpec = data.PlayersByName.ByRaidSpec();
+        var playersByRaidLastUpgrade = data.PlayersByName.ByRaidLastUpgrade();
+        var playersBySpec = data.PlayersByName.BySpec();
+        var playersByName = data.PlayersByName.ByName();
+
+        Console.WriteLine($"ByRaidSpec: {playersByRaidSpec.Count}");
+        Console.WriteLine($"ByRaidLastUpgrade: {playersByRaidLastUpgrade.Count}");
+        Console.WriteLine($"BySpec: {playersBySpec.Count}");
+        Console.WriteLine($"ByName: {playersByName.Count}");
+
+        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByRaidSpec), playersByRaidSpec);
+        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByRaidLastUpgrade), playersByRaidLastUpgrade);
+        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetBySpec), playersBySpec);
+        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByName), playersByName);
 
         Console.WriteLine($"We're tracking gear for {data.PlayersByName.Count} players.");
     }

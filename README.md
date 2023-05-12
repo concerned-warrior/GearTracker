@@ -21,10 +21,12 @@ Make a `appsettings/appsettings.json` file with the following fields:
   "sheetsClientSecret": "{your google client secret}",
   "sheetsSpreadsheetId": "{your google spreadsheet id}",
   "useReportCache": false,
-  "updateGear": true,
-  "playerCountToUpdate": 10,
+  "reportCountToUpdate": 10,
   "firstReportDate": "2023-05-01",
   "lastReportDate": "2023-01-01",
+  "reportBlacklist": [
+    ""
+  ],
   "itemsToTrack": [
     { "id": 45516, "name": "Voldrethar", "slot": "Main Hand", "instanceSize": 25 },
     { "id": 45516, "name": "Voldrethar", "slot": "Off Hand", "instanceSize": 25 },
@@ -46,10 +48,10 @@ Make a `appsettings/appsettings.json` file with the following fields:
 - **sheetsClientId**: Your Google client identifier
 - **sheetsClientSecret**: Your Google client secret
 - **useReportCache**: Whether or not to use saved report data instead of pulling from WCL
-- **updateGear**: Whether or not to update player gear, which will save WCL API Points if just updating the report cache
-- **playerCountToUpdate**: How many player reports to check for gear updates, which will save WCL API Points
+- **reportCountToUpdate**: How many reports to check, which will save WCL API Points
 - **firstReportDate**: The most recent date from which to pull data
 - **lastReportDate**: The oldest date from which to pull data
+- **reportBlacklist**: Report codes to ignore
 - **itemsToTrack**: A list of item identifiers found on [Wowhead](https://www.wowhead.com)
   - **id**: The id of the item, found on Wowhead
   - **name**: A name of the item, which doesn't have to match Wowhead
@@ -63,14 +65,13 @@ Make a `appsettings/appsettings.json` file with the following fields:
 
 ## Running the gear tracker
 
-Execute `dotnet run` in `src/fusion.geartracker`
+Execute `dotnet run` in `test/fusion.geartracker.test`
 
 ## Running the Google Sheets reporter
 
-Execute `dotnet run` in `src/fusion.geartracker.sheet`
+Execute `dotnet run` in `test/fusion.geartracker.sheet.test`
 
 ## Understanding application data
 
-- **reportsByCode**: All WCL reports known to your application.
+- **reportsByCode**: All WCL reports known to your application. These are saved in a reports directory.
 - **playersByName**: Player information includes the report in which the player first appears and all gear acquired by the player. Each item saves the date of the first report in which the item was detected.
-- **reportCodesByPlayer**: Report codes already checked by players.

@@ -3,7 +3,6 @@ namespace fusion.wcl;
 public class WCLAPIService : IWCLService
 {
     private WCLGraphQLClient graphQLClient;
-    private const int degreeOfParallelism = 2;
 
 
     public async Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset firstReportDate, DateTimeOffset lastReportDate)
@@ -33,77 +32,58 @@ public class WCLAPIService : IWCLService
     }
 
 
-    public async Task<List<WCLPlayer>> GetReportPlayers (List<WCLReport> reports)
+    public async Task AddPlayerInfoToReports (List<WCLReport> reports)
     {
-        var playersBag = new ConcurrentBag<WCLPlayer>();
-        var semaphore = new SemaphoreSlim(degreeOfParallelism);
-
-        await Parallel.ForEachAsync(reports, async (report, cancellationToken) =>
+        foreach (var report in reports)
         {
-            await semaphore.WaitAsync();
+            var reportActors = await getReportActors(report);
+            var combatantInfos = await getCombatantInfos(report);
 
-            try
+            reportActors.ForEach(actor => report.Actors.Add((int)actor.Id!, actor.Name!));
+
+            foreach (var combatantInfo in combatantInfos)
             {
-                var result = await graphQLClient.Execute(new Players(report.Code));
-                var actors = result.Data?.__Report.__MasterData.__Actors ?? new ReportActor[0];
+                var actorName = report.Actors[combatantInfo.SourceID];
+                var actorKey = WCLPlayer.GetActorKey(combatantInfo.SourceID, actorName);
 
-                foreach (var actor in actors)
+                if (report.CombatantInfoByActor.ContainsKey(actorKey))
                 {
-                    report.Actors.Add((int)actor.Id!, actor.Name!);
-
-                    playersBag.Add(WCLPlayer.Create(actor, report));
+                    report.CombatantInfoByActor[actorKey].Gear.Union(combatantInfo.Gear);
+                }
+                else
+                {
+                    report.CombatantInfoByActor.Add(actorKey, combatantInfo);
                 }
             }
-            finally
-            {
-                semaphore.Release();
-            }
-        });
-
-        var playersList = playersBag.ToList();
-
-        playersList.Sort((a, b) => a.Report.StartTime.CompareTo(b.Report.StartTime));
-
-        return playersList;
+        };
     }
 
 
-    public async Task<List<WCLCombatantInfo>> GetCombatantInfos (List<WCLPlayer> players)
+    private async Task<List<ReportActor>> getReportActors (WCLReport report)
     {
-        var combatantInfos = new ConcurrentBag<WCLCombatantInfo>();
-        var semaphore = new SemaphoreSlim(degreeOfParallelism);
+        var result = await graphQLClient.Execute(new Players(report.Code));
 
-        await Parallel.ForEachAsync(players, async (player, cancellationToken) =>
+        return new(result.Data?.__Report.__MasterData.__Actors ?? new ReportActor[0]);
+    }
+
+
+    private async Task<List<WCLCombatantInfo>> getCombatantInfos (WCLReport report)
+    {
+        var combatantInfos = new List<WCLCombatantInfo>();
+        var startTime = 0.0;
+        var endTime = (double)(report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds());
+
+        do
         {
-            await semaphore.WaitAsync();
+            var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime));
+            var reportEventPaginator = result.Data?.__Report.__Events ?? new();
 
-            try
-            {
-                var report = player.Report;
-                var startTime = 0.0;
-                var endTime = report.EndTime.ToUnixTimeMilliseconds() - report.StartTime.ToUnixTimeMilliseconds();
-                var result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.ActorId));
-                var reportEventPaginator = result.Data?.__Report.__Events ?? new();
-                var combatantInfo = WCLCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]");
+            startTime = reportEventPaginator.NextPageTimestamp > 0 ? (double)reportEventPaginator.NextPageTimestamp : endTime;
 
-                while (reportEventPaginator.NextPageTimestamp > 0)
-                {
-                    startTime = (double)reportEventPaginator.NextPageTimestamp;
-                    result = await graphQLClient.Execute(new Gear(report.Code, startTime, endTime, player.ActorId));
-                    reportEventPaginator = result.Data?.__Report.__Events ?? new();
+            combatantInfos.AddRange(WCLCombatantInfo.FromJsonArrayString(reportEventPaginator.Data?.ToString() ?? "[]"));
+        } while (startTime < endTime);
 
-                    combatantInfo = WCLCombatantInfo.FromJsonArrayString(player, reportEventPaginator.Data?.ToString() ?? "[]", combatantInfo);
-                }
-
-                combatantInfos.Add(combatantInfo);
-            }
-            finally
-            {
-                semaphore.Release();
-            }
-        });
-
-        return combatantInfos.ToList();
+        return combatantInfos;
     }
 
 

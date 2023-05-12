@@ -12,8 +12,5 @@ public interface IWCLService
     Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset firstReportDate, DateTimeOffset lastReportDate);
 
 
-    Task<List<WCLPlayer>> GetReportPlayers (List<WCLReport> reports);
-
-
-    Task<List<WCLCombatantInfo>> GetCombatantInfos (List<WCLPlayer> players);
+    Task AddPlayerInfoToReports (List<WCLReport> reports);
 }

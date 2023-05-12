@@ -55,13 +55,13 @@ public class WCLData
             Directory.CreateDirectory(dataDirectory);
             Directory.CreateDirectory(reportsDirectory);
 
-            using var stream = File.OpenWrite(path);
+            using var stream = File.Create(path);
 
             JsonSerializer.Serialize(stream, this, IWCLService.DataJsonSerializerOptions);
 
             foreach ((var code, var report) in ReportsByCode)
             {
-                using var reportStream = File.OpenWrite($"{reportsDirectory}/{code}.json");
+                using var reportStream = File.Create($"{reportsDirectory}/{code}.json");
 
                 JsonSerializer.Serialize(reportStream, report, IWCLService.DataJsonSerializerOptions);
             }

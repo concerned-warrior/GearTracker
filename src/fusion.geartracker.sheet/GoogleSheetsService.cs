@@ -106,8 +106,8 @@ public class GoogleSheetsService
             new GoogleCenterHeaderTextRequest(builder),
             new GoogleFormatSheetRequest(builder),
         });
-        requests.AddRange(GoogleMergeCellsLeftRequest.CreateRequests(builder));
-        requests.AddRange(GoogleFormatCellsLeftRequest.CreateRequests(builder));
+        // requests.AddRange(GoogleMergeCellsLeftRequest.CreateRequests(builder));
+        // requests.AddRange(GoogleFormatCellsLeftRequest.CreateRequests(builder));
         requests.AddRange(GoogleMergeCellsHeaderRequest.CreateRequests(builder));
         requests.AddRange(GoogleFormatCellsHeaderRequest.CreateRequests(builder));
         requests.AddRange(GoogleFormatCellsIconRequest.CreateRequests(builder));

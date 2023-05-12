@@ -1,6 +1,6 @@
 ﻿var tabCount = 6;
 var classes = new List<string> { "Death Knight", "Paladin", "Druid", "Paladin", "Priest", "Shaman", "Death Knight", "Druid", "Paladin", "Rogue", "Shaman", "Warrior", "Hunter", "Mage", "Warlock", "Druid", "Priest" };
-var classIndexes = new List<int> { 6, 8, 11 };
+// var classIndexes = new List<int> { 6, 8, 11 };
 var specs = new Dictionary<string, Dictionary<string, string>>
 {
     { "Death Knight", new() {
@@ -56,7 +56,7 @@ var specs = new Dictionary<string, Dictionary<string, string>>
 };
 
 var rosterLines = File.ReadAllLines("../../appdata/roster.txt");
-var trackedPlayers = new List<TrackedPlayer>();
+var trackedPlayers = new List<WCLPlayer>();
 
 foreach (var line in rosterLines)
 {
@@ -75,9 +75,9 @@ foreach (var line in rosterLines)
 
         if (string.IsNullOrWhiteSpace(name)) continue;
         if (raidLetter.Equals("-")) continue;
-        if (!classIndexes.Contains(i)) continue;
+        // if (!classIndexes.Contains(i)) continue;
 
-        trackedPlayers.Add(new TrackedPlayer
+        trackedPlayers.Add(new WCLPlayer
         {
             Name = name,
             Raid = raid,
@@ -87,7 +87,7 @@ foreach (var line in rosterLines)
     }
 }
 
-File.WriteAllText("../../appdata/roster.json", JsonSerializer.Serialize(new Dictionary<string, List<TrackedPlayer>>
+File.WriteAllText("../../appdata/roster.json", JsonSerializer.Serialize(new Dictionary<string, List<WCLPlayer>>
 {
     { "playersToTrack", trackedPlayers },
 }, new JsonSerializerOptions

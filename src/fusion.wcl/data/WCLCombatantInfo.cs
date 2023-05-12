@@ -2,19 +2,13 @@ namespace fusion.wcl.data;
 
 public class WCLCombatantInfo
 {
+    public int SourceID { get; set; }
     public List<WCLGear> Gear { get; set; } = new();
-    [JsonIgnore]
-    public WCLPlayer Player { get; set; } = new();
 
 
-    public static WCLCombatantInfo FromJsonArrayString (WCLPlayer player, string json, WCLCombatantInfo? seed = null)
+    public static List<WCLCombatantInfo> FromJsonArrayString (string json)
     {
         var combatantInfoList = JsonSerializer.Deserialize<List<WCLCombatantInfo>>(json, IWCLService.DataJsonSerializerOptions) ?? new();
-
-        seed = seed is null ? new()
-        {
-            Player = player,
-        } : seed;
 
         // Assign slot identifiers based on their position in the WCL response
         combatantInfoList.ForEach(combatantInfo =>
@@ -29,11 +23,6 @@ public class WCLCombatantInfo
             }
         });
 
-        return combatantInfoList.Aggregate(seed, (seed, combatantInfo) =>
-        {
-            seed.Gear = seed.Gear.Union(combatantInfo.Gear).ToList();
-
-            return seed;
-        });
+        return combatantInfoList;
     }
 }

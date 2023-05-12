@@ -9,10 +9,23 @@ public class WCLReport : IEquatable<WCLReport>
     public int ExportedSegments { get; set; }
     public int Segments { get; set; }
 
-    // Set in IWCLService.GetReportPlayers
+    // Set in IWCLService.AddPlayerInfoToReports
     public Dictionary<int, string> Actors { get; set; } = new();
-    // Set in Program.UpdateGear
+    // Set in IWCLService.AddPlayerInfoToReports
     public Dictionary<string, WCLCombatantInfo> CombatantInfoByActor { get; set; } = new();
+
+
+    public WCLCombatantInfo GetCombatantInfo (string actorKey)
+    {
+        if (CombatantInfoByActor.TryGetValue(actorKey, out var combatantInfo))
+        {
+            return combatantInfo;
+        }
+        else
+        {
+            return new();
+        }
+    }
 
 
     public bool Equals (WCLReport? other)

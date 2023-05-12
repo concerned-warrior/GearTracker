@@ -6,7 +6,7 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     public string Name { get; set; } = string.Empty;
     public WCLReport Report { get; set; } = new();
 
-    // Set in Program.FindPlayers
+    // Set in Program.GetPlayers
     public string Raid { get; set; } = string.Empty;
     public string Class { get; set; } = string.Empty;
     public string Spec { get; set; } = string.Empty;
@@ -41,7 +41,7 @@ public class WCLPlayer : IEquatable<WCLPlayer>
             }
         }
 
-        return itemLevel / itemCount;
+        return itemCount == 0 ? 0 : itemLevel / itemCount;
     }
 
 
@@ -60,8 +60,8 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
-    public string GetActorString () => GetActorString(ActorId, Name);
-    public static string GetActorString (int actorId, string name)
+    public string GetActorKey () => GetActorKey(ActorId, Name);
+    public static string GetActorKey (int actorId, string name)
     {
         return $"{actorId}_{name}";
     }
@@ -79,12 +79,12 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
-    public static WCLPlayer Create (ReportActor actor, WCLReport report)
+    public static WCLPlayer Create (int actorId, string name, WCLReport report)
     {
         return new()
         {
-            ActorId = actor.Id ?? 0,
-            Name = actor.Name ?? string.Empty,
+            ActorId = actorId,
+            Name = name,
             Report = report,
         };
     }
