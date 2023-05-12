@@ -10,7 +10,9 @@ public class ProgramConfig
     public string SheetsClientId { get; set; } = string.Empty;
     public string SheetsClientSecret { get; set; } = string.Empty;
     public string SheetsSpreadsheetId { get; set; } = string.Empty;
+    public int SheetsWeeksOldToIgnore { get; set; }
     public bool UseReportCache { get; set; }
+    public bool UpdateItemCache { get; set; }
     public int ReportCountToUpdate { get; set; }
     public DateTime FirstReportDate { get; set; }
     public DateTime LastReportDate { get; set; }

@@ -24,6 +24,8 @@ internal class Program
 
         program.RemoveUntrackedPlayers();
 
+        await program.UpdateItemCache();
+
         data.Save(programConfig.AppDataPath);
     }
 
@@ -126,6 +128,24 @@ internal class Program
     }
 
 
+    public async Task UpdateItemCache ()
+    {
+        var gearSet = new HashSet<WCLGear>();
+
+        foreach ((var name, var player) in data.PlayersByName)
+        {
+            player.GearById.Values.ToList().ForEach(gear => gearSet.Add(gear));
+        }
+
+        if (wclService is WCLAPIService wclAPIService && config.UpdateItemCache)
+        {
+            var knownItems = await wclAPIService.GetKnownItems(gearSet);
+
+            knownItems.ForEach(item => data.KnownItems.Add(item));
+        }
+    }
+
+
     public void UpdateGear (List<WCLPlayer> players)
     {
         // This is done to deal with multiple slots of the same name, e.g. Finger & Trinket
@@ -144,14 +164,16 @@ internal class Program
             foreach (var gear in player.Report.GetCombatantInfo(player.GetActorKey()).Gear)
             {
                 gear.FirstSeenAt = player.Report.StartTime;
+                gear.LastSeenAt = player.Report.StartTime;
                 gear.ReportCodeFirstSeen = player.Report.Code;
 
                 if (itemsToTrack.TryGetValue(gear, out var trackedItem))
                 {
                     gear.Name = trackedItem.Name;
-                    gear.Slot = trackedItem.Slot;
                     gear.InstanceSize = trackedItem.InstanceSize;
                     gear.Ignore = trackedItem.Ignore;
+                    gear.IsBIS = trackedItem.IsBIS;
+                    gear.SizeOfUpgrade = trackedItem.SizeOfUpgrade;
                 }
             }
         }

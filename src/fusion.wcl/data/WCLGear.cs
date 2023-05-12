@@ -14,7 +14,10 @@ public class WCLGear : IEquatable<WCLGear>
     public string Slot { get; set; } = string.Empty;
     public int InstanceSize { get; set; } = 25;
     public bool Ignore { get; set; }
+    public bool IsBIS { get; set; }
+    public UpgradeType SizeOfUpgrade { get; set; }
     public DateTimeOffset FirstSeenAt { get; set; }
+    public DateTimeOffset LastSeenAt { get; set; }
     public string ReportCodeFirstSeen { get; set; } = string.Empty;
 
     private static List<string> slots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Main Hand", "Off Hand", "Ranged", "Tabard" };
@@ -56,6 +59,10 @@ public class WCLGear : IEquatable<WCLGear>
         Slot = gear.Slot;
         InstanceSize = gear.InstanceSize;
         Ignore = gear.Ignore;
+        IsBIS = gear.IsBIS;
+        SizeOfUpgrade = gear.SizeOfUpgrade;
+        // No FirstSeenAt in update to preserve item history
+        LastSeenAt = gear.LastSeenAt;
     }
 
 
@@ -74,6 +81,8 @@ public class WCLGear : IEquatable<WCLGear>
                 Slot = trackedItem.Slot,
                 InstanceSize = trackedItem.InstanceSize,
                 Ignore = trackedItem.Ignore,
+                IsBIS = trackedItem.IsBIS,
+                SizeOfUpgrade = trackedItem.SizeOfUpgrade,
             });
 
             index = slots.IndexOf(trackedItem.Slot, index + 1);

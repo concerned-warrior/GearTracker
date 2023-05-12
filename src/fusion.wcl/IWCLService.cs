@@ -4,6 +4,10 @@ public interface IWCLService
 {
     static JsonSerializerOptions DataJsonSerializerOptions = new()
     {
+        Converters =
+        {
+            new JsonStringEnumConverter(),
+        },
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true,
     };

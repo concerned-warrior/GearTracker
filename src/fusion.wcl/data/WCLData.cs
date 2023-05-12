@@ -4,6 +4,7 @@ public class WCLData
 {
     [JsonIgnore]
     public Dictionary<string, WCLReport> ReportsByCode { get; set; } = new();
+    public HashSet<WCLGear> KnownItems { get; set; } = new();
     public Dictionary<string, WCLPlayer> PlayersByName { get; set; } = new();
 
     private const string reportsDirectoryName = "reports";

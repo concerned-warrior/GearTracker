@@ -59,6 +59,25 @@ public class WCLAPIService : IWCLService
     }
 
 
+    public async Task<List<WCLGear>> GetKnownItems (HashSet<WCLGear> gearSet)
+    {
+        var knownItems = new List<WCLGear>();
+
+        foreach (var gear in gearSet)
+        {
+            var result = await graphQLClient.Execute(new Item(gear.Id));
+            var item = result.Data?.__Item;
+
+            if (item is not null)
+            {
+                knownItems.Add(new() { Id = item.Id, Icon = item.Icon ?? string.Empty, Name = item.Name ?? string.Empty });
+            }
+        }
+
+        return knownItems;
+    }
+
+
     private async Task<List<ReportActor>> getReportActors (WCLReport report)
     {
         var result = await graphQLClient.Execute(new Players(report.Code));
