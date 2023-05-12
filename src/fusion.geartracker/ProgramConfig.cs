@@ -17,7 +17,6 @@ public class ProgramConfig
     public DateTime FirstReportDate { get; set; }
     public DateTime LastReportDate { get; set; }
     public HashSet<string> ReportBlacklist { get; set; } = new();
-    public HashSet<WCLGear> ItemsToTrack { get; set; } = new();
     public HashSet<WCLPlayer> PlayersToTrack { get; set; } = new();
 
 

@@ -70,7 +70,15 @@ public class WCLAPIService : IWCLService
 
             if (item is not null)
             {
-                knownItems.Add(new() { Id = item.Id, Icon = item.Icon ?? string.Empty, Name = item.Name ?? string.Empty });
+                knownItems.Add(new()
+                {
+                    Id = item.Id,
+                    Icon = item.Icon ?? string.Empty,
+                    Name = item.Name ?? string.Empty,
+                    ItemLevel = gear.ItemLevel,
+                    Slot = gear.Slot,
+                    SlotId = gear.SlotId,
+                });
             }
         }
 

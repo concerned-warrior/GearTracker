@@ -20,18 +20,14 @@ Make a `appsettings/appsettings.json` file with the following fields:
   "sheetsClientId": "{your google client id}",
   "sheetsClientSecret": "{your google client secret}",
   "sheetsSpreadsheetId": "{your google spreadsheet id}",
+  "sheetsWeeksOldToIgnore": 12,
   "useReportCache": false,
+  "updateItemCache": true,
   "reportCountToUpdate": 10,
   "firstReportDate": "2023-05-01",
   "lastReportDate": "2023-01-01",
   "reportBlacklist": [
     ""
-  ],
-  "itemsToTrack": [
-    { "id": 45516, "name": "Voldrethar", "slot": "Main Hand", "instanceSize": 25 },
-    { "id": 45516, "name": "Voldrethar", "slot": "Off Hand", "instanceSize": 25 },
-    { "id": 45536, "name": "Cunning Deception", "slot": "Legs", "instanceSize": 25 },
-    { "id": 45931, "name": "Mjolnir Runestone", "slot": "Trinket", "instanceSize": 10 }
   ],
   "playersToTrack": [
     { "name": "Feralbestclass", "raid": "Raid A", "class": "Warrior", "spec": "Fury" },
@@ -52,11 +48,6 @@ Make a `appsettings/appsettings.json` file with the following fields:
 - **firstReportDate**: The most recent date from which to pull data
 - **lastReportDate**: The oldest date from which to pull data
 - **reportBlacklist**: Report codes to ignore
-- **itemsToTrack**: A list of item identifiers found on [Wowhead](https://www.wowhead.com)
-  - **id**: The id of the item, found on Wowhead
-  - **name**: A name of the item, which doesn't have to match Wowhead
-  - **slot**: The equipped slot of the item
-  - **instanceSize**: The instance size where the item drops
 - **playersToTrack**: A list of player names
   - **name**: The name of the player to track
   - **raid**: A name for the main raid group of the player

@@ -66,26 +66,26 @@ public class WCLGear : IEquatable<WCLGear>
     }
 
 
-    public static List<WCLGear> FromTrackedItem (WCLGear trackedItem)
+    public static List<WCLGear> FromKnownItem (WCLGear knownItem)
     {
         var gear = new List<WCLGear>();
-        var index = slots.IndexOf(trackedItem.Slot);
+        var index = slots.IndexOf(knownItem.Slot);
 
         while (index > -1)
         {
             gear.Add(new()
             {
-                Id = trackedItem.Id,
+                Id = knownItem.Id,
                 SlotId = index,
-                Name = trackedItem.Name,
-                Slot = trackedItem.Slot,
-                InstanceSize = trackedItem.InstanceSize,
-                Ignore = trackedItem.Ignore,
-                IsBIS = trackedItem.IsBIS,
-                SizeOfUpgrade = trackedItem.SizeOfUpgrade,
+                Name = knownItem.Name,
+                Slot = knownItem.Slot,
+                InstanceSize = knownItem.InstanceSize,
+                Ignore = knownItem.Ignore,
+                IsBIS = knownItem.IsBIS,
+                SizeOfUpgrade = knownItem.SizeOfUpgrade,
             });
 
-            index = slots.IndexOf(trackedItem.Slot, index + 1);
+            index = slots.IndexOf(knownItem.Slot, index + 1);
         }
 
         return gear;

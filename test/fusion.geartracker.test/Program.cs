@@ -141,7 +141,7 @@ internal class Program
         {
             var knownItems = await wclAPIService.GetKnownItems(gearSet);
 
-            knownItems.ForEach(item => data.KnownItems.Add(item));
+            knownItems.ForEach(item => { var itemAdded = !data.KnownItems.Contains(item) && data.KnownItems.Add(item); });
         }
     }
 
@@ -149,9 +149,9 @@ internal class Program
     public void UpdateGear (List<WCLPlayer> players)
     {
         // This is done to deal with multiple slots of the same name, e.g. Finger & Trinket
-        var itemsToTrack = config.ItemsToTrack.Aggregate(new HashSet<WCLGear>(config.ItemsToTrack.Count), (itemsToTrack, trackedItem) =>
+        var itemsToTrack = data.KnownItems.Aggregate(new HashSet<WCLGear>(data.KnownItems.Count), (itemsToTrack, trackedItem) =>
         {
-            foreach (var gear in WCLGear.FromTrackedItem(trackedItem))
+            foreach (var gear in WCLGear.FromKnownItem(trackedItem))
             {
                 itemsToTrack.Add(gear);
             }
