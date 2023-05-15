@@ -2,6 +2,8 @@ namespace fusion.wcl.data;
 
 public class WCLGear : IEquatable<WCLGear>
 {
+    public const int DefaultInstanceSize = 25;
+
     public int Id { get; set; }
     public int SlotId { get; set; }
     public string Icon { get; set; } = string.Empty;
@@ -12,7 +14,7 @@ public class WCLGear : IEquatable<WCLGear>
     // Set in Program.UpdateGear
     public string Name { get; set; } = string.Empty;
     public string Slot { get; set; } = string.Empty;
-    public int InstanceSize { get; set; } = 25;
+    public int InstanceSize { get; set; } = DefaultInstanceSize;
     public bool Ignore { get; set; }
     public bool IsBIS { get; set; }
     public UpgradeType SizeOfUpgrade { get; set; }

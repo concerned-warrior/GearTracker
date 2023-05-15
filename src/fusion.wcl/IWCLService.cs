@@ -13,7 +13,7 @@ public interface IWCLService
     };
 
 
-    Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset firstReportDate, DateTimeOffset lastReportDate);
+    Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset newestReportDate, DateTimeOffset oldestReportDate);
 
 
     Task AddPlayerInfoToReports (List<WCLReport> reports);

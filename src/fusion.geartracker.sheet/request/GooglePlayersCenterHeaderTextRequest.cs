@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GoogleCenterHeaderTextRequest : Request
+public class GooglePlayersCenterHeaderTextRequest : Request
 {
-    public GoogleCenterHeaderTextRequest (GoogleSheetsBuilder builder)
+    public GooglePlayersCenterHeaderTextRequest (GoogleSheetsBuilder builder)
     {
         RepeatCell = new()
         {

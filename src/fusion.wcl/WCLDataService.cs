@@ -5,13 +5,13 @@ public class WCLDataService : IWCLService
     private WCLData data;
 
 
-    public async Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset firstReportDate, DateTimeOffset lastReportDate)
+    public async Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset newestReportDate, DateTimeOffset oldestReportDate)
     {
         var reports = new List<WCLReport>();
 
         foreach ((var code, var report) in data.ReportsByCode)
         {
-            if (report.StartTime < firstReportDate && report.EndTime > lastReportDate)
+            if (report.StartTime < newestReportDate && report.EndTime > oldestReportDate)
             {
                 reports.Add(report);
             }

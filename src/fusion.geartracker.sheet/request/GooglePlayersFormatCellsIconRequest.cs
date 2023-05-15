@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GoogleFormatCellsIconRequest : Request
+public class GooglePlayersFormatCellsIconRequest : Request
 {
-    public static List<Request> CreateRequests (GoogleSheetsBuilder builder)
+    public static List<Request> CreateRequests (GoogleSheetsPlayersBuilder builder)
     {
         var gridRanges = builder.GetItemGroupIconGridRanges();
 
@@ -24,7 +24,7 @@ public class GoogleFormatCellsIconRequest : Request
     }
 
 
-    private GoogleFormatCellsIconRequest ()
+    private GooglePlayersFormatCellsIconRequest ()
     {
 
     }

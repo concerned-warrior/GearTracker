@@ -24,8 +24,8 @@ Make a `appsettings/appsettings.json` file with the following fields:
   "useReportCache": false,
   "updateItemCache": true,
   "reportCountToUpdate": 10,
-  "firstReportDate": "2023-05-01",
-  "lastReportDate": "2023-01-01",
+  "newestReportDate": "2023-05-01",
+  "oldestReportDate": "2023-01-01",
   "reportBlacklist": [
     ""
   ],
@@ -45,8 +45,8 @@ Make a `appsettings/appsettings.json` file with the following fields:
 - **sheetsClientSecret**: Your Google client secret
 - **useReportCache**: Whether or not to use saved report data instead of pulling from WCL
 - **reportCountToUpdate**: How many reports to check, which will save WCL API Points
-- **firstReportDate**: The most recent date from which to pull data
-- **lastReportDate**: The oldest date from which to pull data
+- **newestReportDate**: The most recent date from which to pull data
+- **oldestReportDate**: The oldest date from which to pull data
 - **reportBlacklist**: Report codes to ignore
 - **playersToTrack**: A list of player names
   - **name**: The name of the player to track

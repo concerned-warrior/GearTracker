@@ -2,8 +2,14 @@
 
 internal class Program
 {
+    private ProgramConfig config;
     private GoogleSheetsService sheetsService;
     private WCLData data;
+
+    private const string LootDumpTitle = "Loot Dump";
+    private const string KnownItemsTitle = "Known Items";
+
+    public List<(string Name, Func<List<WCLPlayer>> GetSortedPlayers)> GeneratedSheets { get; set; }
 
 
     private static async Task Main(string[] args)
@@ -16,36 +22,68 @@ internal class Program
         }, new[] { SheetsService.Scope.Spreadsheets }, "console", CancellationToken.None);
         var sheetsService = new GoogleSheetsService(programConfig, credential);
         var data = WCLData.Load(programConfig.AppDataPath);
-        var program = new Program(sheetsService, data);
+        var program = new Program(programConfig, sheetsService, data);
 
         var spreadsheet = await sheetsService.ResetSpreadsheet();
-        var sheetByRaidSpec = await sheetsService.CreateSheet(spreadsheet, "By Raid Spec");
-        var sheetByRaidLastUpgrade = await sheetsService.CreateSheet(spreadsheet, "By Raid Last Upgrade");
-        var sheetBySpec = await sheetsService.CreateSheet(spreadsheet, "By Spec");
-        var sheetByName = await sheetsService.CreateSheet(spreadsheet, "By Name");
+        var defaultSheet = spreadsheet.Sheets.ElementAt(0);
 
-        await sheetsService.DeleteSheet(spreadsheet, spreadsheet.Sheets.ElementAtOrDefault(0));
+        await program.CreateGeneratedSheets(spreadsheet);
 
-        var playersByRaidSpec = data.PlayersByName.ByRaidSpec();
-        var playersByRaidLastUpgrade = data.PlayersByName.ByRaidLastUpgrade();
-        var playersBySpec = data.PlayersByName.BySpec();
-        var playersByName = data.PlayersByName.ByName();
+        var lootDumpSheet = await sheetsService.CreateSheet(spreadsheet, program.GeneratedSheets.Count, LootDumpTitle);
+        var knownItemsSheet = await sheetsService.CreateSheet(spreadsheet, program.GeneratedSheets.Count + 1, KnownItemsTitle);
 
-        Console.WriteLine($"ByRaidSpec: {playersByRaidSpec.Count}");
-        Console.WriteLine($"ByRaidLastUpgrade: {playersByRaidLastUpgrade.Count}");
-        Console.WriteLine($"BySpec: {playersBySpec.Count}");
-        Console.WriteLine($"ByName: {playersByName.Count}");
+        var lootBuilder = new GoogleSheetsLootBuilder(spreadsheet, lootDumpSheet);
+        var itemsBuilder = new GoogleSheetsItemsBuilder(spreadsheet, knownItemsSheet);
 
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByRaidSpec), playersByRaidSpec);
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByRaidLastUpgrade), playersByRaidLastUpgrade);
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetBySpec), playersBySpec);
-        await program.UpdateSheet(new GoogleSheetsBuilder(spreadsheet, sheetByName), playersByName);
+        await program.UpdateSheet(lootBuilder);
+        await program.UpdateSheet(itemsBuilder);
+        await sheetsService.DeleteSheet(spreadsheet, defaultSheet);
 
         Console.WriteLine($"We're tracking gear for {data.PlayersByName.Count} players.");
     }
 
 
-    public async Task UpdateSheet (GoogleSheetsBuilder builder, List<WCLPlayer> players)
+    public async Task CreateGeneratedSheets (Spreadsheet spreadsheet)
+    {
+        var index = 0;
+
+        foreach ((var name, var getSortedPlayers) in GeneratedSheets)
+        {
+            var sheet = await sheetsService.CreateSheet(spreadsheet, index++, name);
+
+            await UpdateSheet(new GoogleSheetsPlayersBuilder(spreadsheet, sheet, config.SheetsWeeksOldToIgnore), getSortedPlayers());
+        }
+    }
+
+
+    public async Task UpdateSheet (GoogleSheetsLootBuilder builder)
+    {
+        builder.AddHeaders();
+
+        await sheetsService.UpdateSheet(builder);
+        await sheetsService.StyleSheet(builder, data);
+    }
+
+
+    public async Task UpdateSheet (GoogleSheetsItemsBuilder builder)
+    {
+        var knownItems = data.KnownItems
+            .OrderBy(gear => gear.SlotId)
+            .ThenBy(gear => gear.ItemLevel, Comparer<int>.Create((a, b) => b.CompareTo(a)))
+            .ThenBy(gear => gear.Name);
+        builder.AddHeaders();
+
+        foreach (var gear in knownItems)
+        {
+            builder.AddItem(gear);
+        }
+
+        await sheetsService.UpdateSheet(builder);
+        await sheetsService.StyleSheet(builder);
+    }
+
+
+    public async Task UpdateSheet (GoogleSheetsPlayersBuilder builder, List<WCLPlayer> players)
     {
         builder.AddHeaders();
         players.ForEach(builder.AddPlayer);
@@ -55,9 +93,18 @@ internal class Program
     }
 
 
-    public Program (GoogleSheetsService sheetsService, WCLData data)
+    public Program (ProgramConfig programConfig, GoogleSheetsService sheetsService, WCLData data)
     {
+        this.config = programConfig;
         this.sheetsService = sheetsService;
         this.data = data;
+
+        GeneratedSheets = new()
+        {
+            // { ("By Raid Spec", data.PlayersByName.ByRaidSpec) },
+            // { ("By Raid Last Upgrade", data.PlayersByName.ByRaidLastUpgrade) },
+            // { ("By Spec", data.PlayersByName.BySpec) },
+            { ("By Name", data.PlayersByName.ByName) },
+        };
     }
 }

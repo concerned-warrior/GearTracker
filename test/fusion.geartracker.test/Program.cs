@@ -78,7 +78,7 @@ internal class Program
 
     public async Task<List<WCLReport>> GetReports ()
     {
-        var reports = await wclService.GetReports(config.GuildId, config.FirstReportDate, config.LastReportDate);
+        var reports = await wclService.GetReports(config.GuildId, config.NewestReportDate, config.OldestReportDate);
 
         reports = reports.FindAll(report => !config.ReportBlacklist.Contains(report.Code));
 
@@ -141,7 +141,19 @@ internal class Program
         {
             var knownItems = await wclAPIService.GetKnownItems(gearSet);
 
-            knownItems.ForEach(item => { var itemAdded = !data.KnownItems.Contains(item) && data.KnownItems.Add(item); });
+            knownItems.ForEach(item => {
+                if (data.KnownItems.TryGetValue(item, out var knownItem))
+                {
+                    knownItem.Icon = item.Icon;
+                    knownItem.Slot = item.Slot;
+                    knownItem.SlotId = item.SlotId;
+                    knownItem.ItemLevel = item.ItemLevel;
+                }
+                else
+                {
+                    data.KnownItems.Add(item);
+                }
+            });
         }
     }
 

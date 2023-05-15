@@ -14,8 +14,8 @@ public class ProgramConfig
     public bool UseReportCache { get; set; }
     public bool UpdateItemCache { get; set; }
     public int ReportCountToUpdate { get; set; }
-    public DateTime FirstReportDate { get; set; }
-    public DateTime LastReportDate { get; set; }
+    public DateTime NewestReportDate { get; set; }
+    public DateTime OldestReportDate { get; set; }
     public HashSet<string> ReportBlacklist { get; set; } = new();
     public HashSet<WCLPlayer> PlayersToTrack { get; set; } = new();
 

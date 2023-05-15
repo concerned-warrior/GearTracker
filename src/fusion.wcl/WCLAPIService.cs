@@ -5,7 +5,7 @@ public class WCLAPIService : IWCLService
     private WCLGraphQLClient graphQLClient;
 
 
-    public async Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset firstReportDate, DateTimeOffset lastReportDate)
+    public async Task<List<WCLReport>> GetReports (int guildId, DateTimeOffset newestReportDate, DateTimeOffset oldestReportDate)
     {
         ReportPagination reportPagination = new();
         WCLReport lastReport = new();
@@ -21,12 +21,12 @@ public class WCLAPIService : IWCLService
             {
                 lastReport = WCLReport.FromReport(report);
 
-                if (lastReport.StartTime < firstReportDate && lastReport.EndTime > lastReportDate)
+                if (lastReport.StartTime < newestReportDate && lastReport.EndTime > oldestReportDate)
                 {
                     reports.Add(lastReport);
                 }
             }
-        } while (lastReport.EndTime > lastReportDate && reportPagination.Has_more_pages);
+        } while (lastReport.EndTime > oldestReportDate && reportPagination.Has_more_pages);
 
         return reports;
     }

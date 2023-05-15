@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GoogleFreezeCellsRequest : Request
+public class GooglePlayersFreezeCellsRequest : Request
 {
-    public GoogleFreezeCellsRequest (GoogleSheetsBuilder builder)
+    public GooglePlayersFreezeCellsRequest (GoogleSheetsBuilder builder)
     {
         UpdateSheetProperties = new()
         {

@@ -16,7 +16,7 @@ public class GoogleConditionalFormatRuleRequest : Request
                 },
             },
             Type = "NUMBER",
-            Value = "=today()-49",
+            Value = "=today()-28",
         },
         Maxpoint = new()
         {

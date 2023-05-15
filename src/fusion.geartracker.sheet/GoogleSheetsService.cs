@@ -35,7 +35,7 @@ public class GoogleSheetsService
     }
 
 
-    public async Task<Sheet> CreateSheet (Spreadsheet spreadsheet, string title)
+    public async Task<Sheet> CreateSheet (Spreadsheet spreadsheet, int index, string title)
     {
         var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
         {
@@ -48,6 +48,7 @@ public class GoogleSheetsService
                     {
                         Properties = new()
                         {
+                            Index = index,
                             Title = title,
                         },
                     },
@@ -89,7 +90,55 @@ public class GoogleSheetsService
     }
 
 
-    public async Task StyleSheet (GoogleSheetsBuilder builder)
+    public async Task StyleSheet (GoogleSheetsLootBuilder builder, WCLData data)
+    {
+        var requests = new List<Request>();
+        var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
+        {
+            Requests = requests,
+        }, programConfig.SheetsSpreadsheetId);
+
+        requests.AddRange(new List<Request>
+        {
+            new GoogleUpdateSpreadsheetPropertiesRequest(builder),
+            new GoogleLootFormatCellsDateRequest(builder),
+            new GoogleLootFormatCellsHeaderRequest(builder),
+            new GoogleLootFormatCellsIconRequest(builder),
+            new GoogleLootFormatCellsItemIdRequest(builder),
+            new GoogleLootFormatCellsItemRequest(builder),
+            new GoogleLootFormatCellsNameRequest(builder, data),
+            new GoogleFormatSheetRequest(builder),
+        });
+        requests.AddRange(GoogleLootResizeRequest.CreateRequests(builder));
+
+        await request.ExecuteAsync();
+    }
+
+
+    public async Task StyleSheet (GoogleSheetsItemsBuilder builder)
+    {
+        var requests = new List<Request>();
+        var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
+        {
+            Requests = requests,
+        }, programConfig.SheetsSpreadsheetId);
+
+        requests.AddRange(new List<Request>
+        {
+            new GoogleUpdateSpreadsheetPropertiesRequest(builder),
+            new GoogleItemsFormatCellsHeaderRequest(builder),
+            new GoogleItemsFormatCellsIconRequest(builder),
+            new GoogleItemsFormatCellsUpgradeRequest(builder),
+            new GoogleAutoResizeRequest(builder),
+            new GoogleFormatSheetRequest(builder),
+        });
+        requests.AddRange(GoogleItemsFormatCellsCheckboxRequest.CreateRequests(builder));
+
+        await request.ExecuteAsync();
+    }
+
+
+    public async Task StyleSheet (GoogleSheetsPlayersBuilder builder)
     {
         var requests = new List<Request>();
         var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
@@ -101,16 +150,16 @@ public class GoogleSheetsService
         {
             new GoogleUpdateSpreadsheetPropertiesRequest(builder),
             new GoogleConditionalFormatRuleRequest(builder),
-            new GoogleFreezeCellsRequest(builder),
+            new GooglePlayersFreezeCellsRequest(builder),
             new GoogleAutoResizeRequest(builder),
-            new GoogleCenterHeaderTextRequest(builder),
+            new GooglePlayersCenterHeaderTextRequest(builder),
             new GoogleFormatSheetRequest(builder),
         });
-        // requests.AddRange(GoogleMergeCellsLeftRequest.CreateRequests(builder));
-        // requests.AddRange(GoogleFormatCellsLeftRequest.CreateRequests(builder));
-        requests.AddRange(GoogleMergeCellsHeaderRequest.CreateRequests(builder));
-        requests.AddRange(GoogleFormatCellsHeaderRequest.CreateRequests(builder));
-        requests.AddRange(GoogleFormatCellsIconRequest.CreateRequests(builder));
+        requests.AddRange(GooglePlayersMergeCellsLeftRequest.CreateRequests(builder));
+        requests.AddRange(GooglePlayersFormatCellsLeftRequest.CreateRequests(builder));
+        requests.AddRange(GooglePlayersMergeCellsHeaderRequest.CreateRequests(builder));
+        requests.AddRange(GooglePlayersFormatCellsHeaderRequest.CreateRequests(builder));
+        requests.AddRange(GooglePlayersFormatCellsIconRequest.CreateRequests(builder));
 
         await request.ExecuteAsync();
     }
