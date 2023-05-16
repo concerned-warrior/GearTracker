@@ -9,15 +9,7 @@ public class WCLDataService : IWCLService
     {
         var reports = new List<WCLReport>();
 
-        foreach ((var code, var report) in data.ReportsByCode)
-        {
-            if (report.StartTime < newestReportDate && report.EndTime > oldestReportDate)
-            {
-                reports.Add(report);
-            }
-        }
-
-        return await Task.FromResult(reports);
+        return await Task.FromResult(data.ReportsByCode.Values.ToList());
     }
 
 

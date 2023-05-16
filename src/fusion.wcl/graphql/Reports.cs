@@ -16,6 +16,11 @@ public record Reports(int guildId, int limit = 50, int page = 1) : GraphQL<Query
                     EndTime = report.EndTime,
                     ExportedSegments = report.ExportedSegments,
                     Segments = report.Segments,
+                    __Zone = report.Zone(zone => new Zone
+                    {
+                        Id = zone.Id,
+                        Name = zone.Name,
+                    })!,
                 })!,
                 Total = reportPagination.Total,
                 From = reportPagination.From,

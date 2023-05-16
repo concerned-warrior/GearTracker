@@ -79,6 +79,14 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
+    public void Update (WCLPlayer trackedPlayer)
+    {
+        Raid = trackedPlayer.Raid;
+        Class = trackedPlayer.Class;
+        Spec = trackedPlayer.Spec;
+    }
+
+
     public static WCLPlayer Create (int actorId, string name, WCLReport report)
     {
         return new()

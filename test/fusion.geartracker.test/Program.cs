@@ -80,7 +80,21 @@ internal class Program
     {
         var reports = await wclService.GetReports(config.GuildId, config.NewestReportDate, config.OldestReportDate);
 
-        reports = reports.FindAll(report => !config.ReportBlacklist.Contains(report.Code));
+        reports = reports.FindAll(report =>
+        {
+            var result = !config.ReportBlacklist.Contains(report.Code);
+
+            if (result && config.DateValidByZoneId.TryGetValue(report.Zone.Id, out var dateValid))
+            {
+                result = report.StartTime > dateValid;
+            }
+            else
+            {
+                result = false;
+            }
+
+            return result;
+        });
 
         Console.WriteLine($"Pulled {reports.Count} reports");
 
@@ -114,12 +128,7 @@ internal class Program
 
         players.ForEach(player =>
         {
-            if (config.PlayersToTrack.TryGetValue(player, out var trackedPlayer))
-            {
-                player.Raid = trackedPlayer.Raid;
-                player.Class = trackedPlayer.Class;
-                player.Spec = trackedPlayer.Spec;
-            }
+            if (config.PlayersToTrack.TryGetValue(player, out var trackedPlayer)) player.Update(trackedPlayer);
         });
 
         players.Sort((a, b) => a.Report.StartTime.CompareTo(b.Report.StartTime));
@@ -134,7 +143,11 @@ internal class Program
 
         foreach ((var name, var player) in data.PlayersByName)
         {
-            player.GearById.Values.ToList().ForEach(gear => gearSet.Add(gear));
+            player.GearById.Values.ToList().ForEach(gear =>
+            {
+                if (data.KnownItems.TryGetValue(gear, out var knownItem)) knownItem.UpdateWCLInfo(gear);
+                else gearSet.Add(gear);
+            });
         }
 
         if (wclService is WCLAPIService wclAPIService && config.UpdateItemCache)
@@ -142,17 +155,7 @@ internal class Program
             var knownItems = await wclAPIService.GetKnownItems(gearSet);
 
             knownItems.ForEach(item => {
-                if (data.KnownItems.TryGetValue(item, out var knownItem))
-                {
-                    knownItem.Icon = item.Icon;
-                    knownItem.Slot = item.Slot;
-                    knownItem.SlotId = item.SlotId;
-                    knownItem.ItemLevel = item.ItemLevel;
-                }
-                else
-                {
-                    data.KnownItems.Add(item);
-                }
+                if (!data.KnownItems.Contains(item)) data.KnownItems.Add(item);
             });
         }
     }
@@ -163,10 +166,7 @@ internal class Program
         // This is done to deal with multiple slots of the same name, e.g. Finger & Trinket
         var itemsToTrack = data.KnownItems.Aggregate(new HashSet<WCLGear>(data.KnownItems.Count), (itemsToTrack, trackedItem) =>
         {
-            foreach (var gear in WCLGear.FromKnownItem(trackedItem))
-            {
-                itemsToTrack.Add(gear);
-            }
+            foreach (var gear in WCLGear.FromKnownItem(trackedItem)) itemsToTrack.Add(gear);
 
             return itemsToTrack;
         });
@@ -175,18 +175,9 @@ internal class Program
         {
             foreach (var gear in player.Report.GetCombatantInfo(player.GetActorKey()).Gear)
             {
-                gear.FirstSeenAt = player.Report.StartTime;
-                gear.LastSeenAt = player.Report.StartTime;
-                gear.ReportCodeFirstSeen = player.Report.Code;
+                gear.UpdateReportInfo(player.Report);
 
-                if (itemsToTrack.TryGetValue(gear, out var trackedItem))
-                {
-                    gear.Name = trackedItem.Name;
-                    gear.InstanceSize = trackedItem.InstanceSize;
-                    gear.Ignore = trackedItem.Ignore;
-                    gear.IsBIS = trackedItem.IsBIS;
-                    gear.SizeOfUpgrade = trackedItem.SizeOfUpgrade;
-                }
+                if (itemsToTrack.TryGetValue(gear, out var trackedItem)) gear.UpdateCustomInfo(trackedItem);
             }
         }
     }
@@ -235,17 +226,9 @@ internal class Program
                 }
             }
 
-            playerData.Raid = player.Raid;
-            playerData.Class = player.Class;
-            playerData.Spec = player.Spec;
+            playerData.Update(player);
             // Only save necessary information on the player's report reference
-            playerData.Report = new()
-            {
-                Code = playerData.Report.Code,
-                Title = playerData.Report.Title,
-                StartTime = playerData.Report.StartTime,
-                EndTime = playerData.Report.EndTime,
-            };
+            playerData.Report = WCLReport.CreateSlimReport(playerData.Report);
         }
     }
 

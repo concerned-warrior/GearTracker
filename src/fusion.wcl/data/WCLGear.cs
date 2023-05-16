@@ -52,19 +52,47 @@ public class WCLGear : IEquatable<WCLGear>
     public void Update (WCLGear gear)
     {
         Id = gear.Id;
-        SlotId = gear.SlotId;
         Icon = gear.Icon;
+        Slot = gear.Slot;
+        SlotId = gear.SlotId;
         ItemLevel = gear.ItemLevel;
         PermanentEnchant = gear.PermanentEnchant;
         Gems = gear.Gems;
         Name = gear.Name;
-        Slot = gear.Slot;
         InstanceSize = gear.InstanceSize;
         Ignore = gear.Ignore;
         IsBIS = gear.IsBIS;
         SizeOfUpgrade = gear.SizeOfUpgrade;
         // No FirstSeenAt in update to preserve item history
         LastSeenAt = gear.LastSeenAt;
+    }
+
+
+    public void UpdateCustomInfo (WCLGear trackedItem)
+    {
+        Name = trackedItem.Name;
+        InstanceSize = trackedItem.InstanceSize;
+        Ignore = trackedItem.Ignore;
+        IsBIS = trackedItem.IsBIS;
+        SizeOfUpgrade = trackedItem.SizeOfUpgrade;
+    }
+
+
+    public void UpdateReportInfo (WCLReport report)
+    {
+        FirstSeenAt = report.StartTime;
+        LastSeenAt = report.StartTime;
+        ReportCodeFirstSeen = report.Code;
+    }
+
+
+    public void UpdateWCLInfo (WCLGear gear)
+    {
+        Id = gear.Id;
+        Icon = gear.Icon;
+        Slot = gear.Slot;
+        SlotId = gear.SlotId;
+        ItemLevel = gear.ItemLevel;
     }
 
 
