@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GoogleItemsFormatCellsIconRequest : Request
+public class GooglePlayersCenterSpecRequest : Request
 {
-    public GoogleItemsFormatCellsIconRequest (GoogleSheetsItemsBuilder builder)
+    public GooglePlayersCenterSpecRequest (GoogleSheetsPlayersBuilder builder)
     {
         RepeatCell = new()
         {
@@ -16,11 +16,10 @@ public class GoogleItemsFormatCellsIconRequest : Request
             },
             Range = new()
             {
-                StartColumnIndex = builder.IconColumnIndex,
-                EndColumnIndex = builder.IconColumnIndex + 1,
-                StartRowIndex = 1,
+                StartColumnIndex = builder.SpecColumnIndex,
+                EndColumnIndex = builder.SpecColumnIndex + 1,
                 SheetId = builder.Sheet.Properties.SheetId,
-            }
+            },
         };
     }
 }

@@ -4,6 +4,8 @@ public class GoogleLootFormatCellsItemIdRequest : Request
 {
     public GoogleLootFormatCellsItemIdRequest (GoogleSheetsLootBuilder builder)
     {
+        var columnItemName = builder.GetColumnOffset(builder.ItemNameColumnIndex);
+
         RepeatCell = new()
         {
             Fields = "userEnteredValue.formulaValue",
@@ -11,13 +13,13 @@ public class GoogleLootFormatCellsItemIdRequest : Request
             {
                 UserEnteredValue = new()
                 {
-                    FormulaValue = "=ifna(lookup(C2, 'Known Items'!$E$2:$E, 'Known Items'!$A$2:$A),\"\")",
+                    FormulaValue = $"=ifna(lookup({columnItemName}2, 'Known Items'!$E$2:$E, 'Known Items'!$A$2:$A),\"\")",
                 },
             },
             Range = new()
             {
-                StartColumnIndex = 0,
-                EndColumnIndex = 1,
+                StartColumnIndex = builder.ItemIdColumnIndex,
+                EndColumnIndex = builder.ItemIdColumnIndex + 1,
                 StartRowIndex = 1,
                 SheetId = builder.Sheet.Properties.SheetId,
             }

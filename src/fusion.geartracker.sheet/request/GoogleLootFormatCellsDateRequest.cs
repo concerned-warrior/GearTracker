@@ -20,8 +20,8 @@ public class GoogleLootFormatCellsDateRequest : Request
             },
             Range = new()
             {
-                StartColumnIndex = 4,
-                EndColumnIndex = 5,
+                StartColumnIndex = builder.DateColumnIndex,
+                EndColumnIndex = builder.DateColumnIndex + 1,
                 StartRowIndex = 1,
                 SheetId = builder.Sheet.Properties.SheetId,
             }

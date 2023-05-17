@@ -2,10 +2,14 @@ namespace fusion.geartracker.sheet;
 
 public class GoogleSheetsPlayersBuilder : GoogleSheetsBuilder
 {
+    public int ItemGroupStartColumnIndex { get => headersLeft.Count; }
+    public int NameColumnIndex { get => headersLeft.IndexOf("Name"); }
+    public int SpecColumnIndex { get => headersLeft.IndexOf("Spec"); }
+
     private int weeksToIgnore;
 
     private List<string> headersItemGroup = new() { "Icon", "iLvl", "Name", "Date" };
-    private List<string> headersLeft = new() { "Raid", "aiLvl", "Class", "Spec", "Last 10", "Last 25", "Name" };
+    private List<string> headersLeft = new() { "Raid", "Spec", "Last 10", "Last 25", "Last Min", "Last Mod", "Last Maj", "Last BIS", "BIS", "aiLvl", "Name" };
     private List<string> headersSlots = new() { "Head", "Neck", "Shoulder", "Back", "Chest", "Wrist", "Hands", "Waist", "Legs", "Feet", "Finger", "Trinket", "Main Hand", "Off Hand", "Ranged" };
 
 
@@ -29,37 +33,44 @@ public class GoogleSheetsPlayersBuilder : GoogleSheetsBuilder
 
     public void AddPlayer (WCLPlayer player)
     {
+        var gear = player.GetOrderedGear();
+        var averageItemLevel = player.GetAverageItemLevel(gear);
         var last10 = player.GetLast10().ToLocalTime().ToString("d");
         var last25 = player.GetLast25().ToLocalTime().ToString("d");
-        var gear = player.GearById.Values.ToList()
-            .Where(g => !g.Ignore && g.LastSeenAt > DateTimeOffset.Now.AddDays(weeksToIgnore * -7))
-            .OrderBy(g => g.LastSeenAt, Comparer<DateTimeOffset>.Create((a, b) => b.CompareTo(a)))
-            .ThenBy(g => g.SizeOfUpgrade, Comparer<UpgradeType>.Create((a, b) => b.CompareTo(a)))
-            .ThenBy(g => g.IsBIS)
-            .ThenBy(g => g.ItemLevel, Comparer<int>.Create((a, b) => b.CompareTo(a)));
+        var lastMin = player.GetLastMin().ToLocalTime().ToString("d");
+        var lastMod = player.GetLastMod().ToLocalTime().ToString("d");
+        var lastMaj = player.GetLastMaj().ToLocalTime().ToString("d");
+        var lastBIS = player.GetLastBIS().ToLocalTime().ToString("d");
+        var bisCount = player.GetBISCount();
         var rows = new List<List<object>>();
         var rowCount = 1;
 
         for (var i = 0; i < rowCount; i++)
         {
-            var row = new List<object> { player.Raid, player.GetAverageItemLevel(), player.Class, player.Spec, last10, last25, player.Name };
+            var row = new List<object> { player.Raid, $"{player.Spec}\n{player.Class}", last10, last25, lastMin, lastMod, lastMaj, lastBIS, bisCount, averageItemLevel, player.Name };
 
             foreach (var slot in headersSlots)
             {
-                var slotGear = gear.Aggregate(new List<WCLGear>(), (list, item) =>
+                var slotGear = gear.Where(item => item.Slot.Equals(slot)).Aggregate(new HashSet<WCLGear>(), (gearSet, item) =>
                 {
-                    var existingItem = list.Find(existingItem => existingItem.Id.Equals(item.Id));
-
-                    if (item.Slot.Equals(slot) && existingItem is null)
+                    if (gearSet.TryGetValue(item, out var existingItem))
                     {
-                        list.Add(item);
+                        var olderItem = item.FirstSeenAt < existingItem.FirstSeenAt ? item : existingItem;
+
+                        gearSet.Remove(item);
+                        gearSet.Add(olderItem);
+                    }
+                    else
+                    {
+                        gearSet.Add(item);
                     }
 
-                    return list;
-                });
+                    return gearSet;
+                }).Where(item => item.LastSeenAt > DateTimeOffset.Now.AddDays(weeksToIgnore * -7));
+
                 var currentItem = slotGear.ElementAtOrDefault(i);
 
-                rowCount = rowCount > slotGear.Count ? rowCount : slotGear.Count;
+                rowCount = rowCount > slotGear.Count() ? rowCount : slotGear.Count();
 
                 if (currentItem is null || currentItem.ItemLevel == 0)
                 {
@@ -90,7 +101,7 @@ public class GoogleSheetsPlayersBuilder : GoogleSheetsBuilder
         for (i = startingRowCurrentName; i < data.Count; i++)
         {
             var row = data[i];
-            var name = row.ElementAtOrDefault(headersLeft.IndexOf("Name")) as string;
+            var name = row.ElementAtOrDefault(NameColumnIndex) as string;
 
             if (string.IsNullOrWhiteSpace(name)) break;
             if (name.Equals(currentName)) continue;

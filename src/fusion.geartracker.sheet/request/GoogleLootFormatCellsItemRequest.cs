@@ -24,8 +24,8 @@ public class GoogleLootFormatCellsItemRequest : Request
             },
             Range = new()
             {
-                StartColumnIndex = 2,
-                EndColumnIndex = 3,
+                StartColumnIndex = builder.ItemNameColumnIndex,
+                EndColumnIndex = builder.ItemNameColumnIndex + 1,
                 StartRowIndex = 1,
                 SheetId = builder.Sheet.Properties.SheetId,
             }

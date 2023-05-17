@@ -63,8 +63,9 @@ public class WCLGear : IEquatable<WCLGear>
         Ignore = gear.Ignore;
         IsBIS = gear.IsBIS;
         SizeOfUpgrade = gear.SizeOfUpgrade;
-        // No FirstSeenAt in update to preserve item history
         LastSeenAt = gear.LastSeenAt;
+        ReportCodeFirstSeen = FirstSeenAt < gear.FirstSeenAt ? ReportCodeFirstSeen : gear.ReportCodeFirstSeen;
+        FirstSeenAt = FirstSeenAt < gear.FirstSeenAt ? FirstSeenAt : gear.FirstSeenAt;
     }
 
 

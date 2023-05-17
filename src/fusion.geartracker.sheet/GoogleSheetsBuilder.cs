@@ -17,11 +17,11 @@ public abstract class GoogleSheetsBuilder
             max = max > list.Count ? max : list.Count;
         }
 
-        return $"'{Sheet.Properties.Title}'!A1:{getColumnOffset(max)}{data.Count}";
+        return $"'{Sheet.Properties.Title}'!A1:{GetColumnOffset(max)}{data.Count}";
     }
 
 
-    protected string getColumnOffset (int offset)
+    public string GetColumnOffset (int offset)
     {
         var column = string.Empty;
         var letter = (int)'A';

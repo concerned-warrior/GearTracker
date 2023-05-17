@@ -2,7 +2,7 @@ namespace fusion.geartracker.sheet.request;
 
 public class GooglePlayersFreezeCellsRequest : Request
 {
-    public GooglePlayersFreezeCellsRequest (GoogleSheetsBuilder builder)
+    public GooglePlayersFreezeCellsRequest (GoogleSheetsPlayersBuilder builder)
     {
         UpdateSheetProperties = new()
         {
@@ -11,7 +11,7 @@ public class GooglePlayersFreezeCellsRequest : Request
             {
                 GridProperties = new()
                 {
-                    FrozenColumnCount = 7,
+                    FrozenColumnCount = builder.ItemGroupStartColumnIndex,
                     FrozenRowCount = 2,
                 },
                 SheetId = builder.Sheet.Properties.SheetId,

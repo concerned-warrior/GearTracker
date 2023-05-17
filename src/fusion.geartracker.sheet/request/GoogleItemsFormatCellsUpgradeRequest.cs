@@ -26,8 +26,8 @@ public class GoogleItemsFormatCellsUpgradeRequest : Request
             },
             Range = new()
             {
-                StartColumnIndex = 8,
-                EndColumnIndex = 9,
+                StartColumnIndex = builder.UpgradeColumnIndex,
+                EndColumnIndex = builder.UpgradeColumnIndex + 1,
                 StartRowIndex = 1,
                 SheetId = builder.Sheet.Properties.SheetId,
             }

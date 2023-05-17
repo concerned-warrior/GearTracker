@@ -18,8 +18,8 @@ public class GoogleLootResizeRequest : Request
                     Range = new()
                     {
                         Dimension = "COLUMNS",
-                        StartIndex = 0,
-                        EndIndex = 1,
+                        StartIndex = builder.ItemIdColumnIndex,
+                        EndIndex = builder.ItemIdColumnIndex + 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
                 },
@@ -36,8 +36,8 @@ public class GoogleLootResizeRequest : Request
                     Range = new()
                     {
                         Dimension = "COLUMNS",
-                        StartIndex = 1,
-                        EndIndex = 2,
+                        StartIndex = builder.IconColumnIndex,
+                        EndIndex = builder.IconColumnIndex + 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
                 },
@@ -54,8 +54,8 @@ public class GoogleLootResizeRequest : Request
                     Range = new()
                     {
                         Dimension = "COLUMNS",
-                        StartIndex = 2,
-                        EndIndex = 3,
+                        StartIndex = builder.ItemNameColumnIndex,
+                        EndIndex = builder.ItemNameColumnIndex + 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
                 },
@@ -72,8 +72,8 @@ public class GoogleLootResizeRequest : Request
                     Range = new()
                     {
                         Dimension = "COLUMNS",
-                        StartIndex = 3,
-                        EndIndex = 4,
+                        StartIndex = builder.PlayerNameColumnIndex,
+                        EndIndex = builder.PlayerNameColumnIndex + 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
                 },
@@ -90,8 +90,8 @@ public class GoogleLootResizeRequest : Request
                     Range = new()
                     {
                         Dimension = "COLUMNS",
-                        StartIndex = 4,
-                        EndIndex = 5,
+                        StartIndex = builder.DateColumnIndex,
+                        EndIndex = builder.DateColumnIndex + 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
                 },

@@ -101,9 +101,11 @@ internal class Program
 
         GeneratedSheets = new()
         {
+            // { ("By Raid BIS Count", data.PlayersByName.ByRaidBISCount) },
             // { ("By Raid Spec", data.PlayersByName.ByRaidSpec) },
             // { ("By Raid Last Upgrade", data.PlayersByName.ByRaidLastUpgrade) },
             // { ("By Spec", data.PlayersByName.BySpec) },
+            // { ("By BIS Count", data.PlayersByName.ByBISCount) },
             { ("By Name", data.PlayersByName.ByName) },
         };
     }

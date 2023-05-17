@@ -1,6 +1,6 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GooglePlayersFormatCellsLeftRequest : Request
+public class GooglePlayersFormatCellsDataRequest : Request
 {
     public static List<Request> CreateRequests (GoogleSheetsPlayersBuilder builder)
     {
@@ -8,7 +8,7 @@ public class GooglePlayersFormatCellsLeftRequest : Request
 
         return gridRanges.ConvertAll(gridRange =>
         {
-            gridRange.StartColumnIndex = 7;
+            gridRange.StartColumnIndex = builder.ItemGroupStartColumnIndex;
             gridRange.EndColumnIndex = null;
             gridRange.EndRowIndex = gridRange.EndRowIndex - 1;
 
@@ -16,7 +16,7 @@ public class GooglePlayersFormatCellsLeftRequest : Request
             {
                 RepeatCell = new()
                 {
-                    Fields = "userEnteredFormat.borders,userEnteredFormat.verticalAlignment",
+                    Fields = "userEnteredFormat.borders",
                     Cell = new()
                     {
                         UserEnteredFormat = new()
@@ -28,7 +28,6 @@ public class GooglePlayersFormatCellsLeftRequest : Request
                                     Style = "NONE",
                                 },
                             },
-                            VerticalAlignment = "MIDDLE",
                         },
                     },
                     Range = gridRange,
@@ -39,7 +38,7 @@ public class GooglePlayersFormatCellsLeftRequest : Request
 
 
 
-    private GooglePlayersFormatCellsLeftRequest ()
+    private GooglePlayersFormatCellsDataRequest ()
     {
 
     }

@@ -4,6 +4,8 @@ public class GoogleLootFormatCellsIconRequest : Request
 {
     public GoogleLootFormatCellsIconRequest (GoogleSheetsLootBuilder builder)
     {
+        var columnItemName = builder.GetColumnOffset(builder.ItemNameColumnIndex);
+
         RepeatCell = new()
         {
             Fields = "userEnteredFormat.horizontalAlignment,userEnteredValue.formulaValue",
@@ -15,13 +17,13 @@ public class GoogleLootFormatCellsIconRequest : Request
                 },
                 UserEnteredValue = new()
                 {
-                    FormulaValue = "=ifna(lookup(C2, 'Known Items'!$E$2:$E, 'Known Items'!$D$2:$D),\"\")",
+                    FormulaValue = $"=ifna(lookup({columnItemName}2, 'Known Items'!$E$2:$E, 'Known Items'!$D$2:$D),\"\")",
                 },
             },
             Range = new()
             {
-                StartColumnIndex = 1,
-                EndColumnIndex = 2,
+                StartColumnIndex = builder.IconColumnIndex,
+                EndColumnIndex = builder.IconColumnIndex + 1,
                 StartRowIndex = 1,
                 SheetId = builder.Sheet.Properties.SheetId,
             }

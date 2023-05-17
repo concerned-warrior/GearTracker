@@ -23,8 +23,8 @@ public class GoogleItemsFormatCellsCheckboxRequest : Request
                     },
                     Range = new()
                     {
-                        StartColumnIndex = 1,
-                        EndColumnIndex = 2,
+                        StartColumnIndex = builder.IgnoreColumnIndex,
+                        EndColumnIndex = builder.IgnoreColumnIndex + 1,
                         StartRowIndex = 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
@@ -47,8 +47,8 @@ public class GoogleItemsFormatCellsCheckboxRequest : Request
                     },
                     Range = new()
                     {
-                        StartColumnIndex = 6,
-                        EndColumnIndex = 7,
+                        StartColumnIndex = builder.InstanceSizeColumnIndex,
+                        EndColumnIndex = builder.InstanceSizeColumnIndex + 1,
                         StartRowIndex = 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }
@@ -71,8 +71,8 @@ public class GoogleItemsFormatCellsCheckboxRequest : Request
                     },
                     Range = new()
                     {
-                        StartColumnIndex = 7,
-                        EndColumnIndex = 8,
+                        StartColumnIndex = builder.IsBISColumnIndex,
+                        EndColumnIndex = builder.IsBISColumnIndex + 1,
                         StartRowIndex = 1,
                         SheetId = builder.Sheet.Properties.SheetId,
                     }

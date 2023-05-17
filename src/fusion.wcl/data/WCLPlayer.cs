@@ -13,31 +13,35 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     // Set in Program.UpdateData
     public Dictionary<string, WCLGear> GearById { get; set; } = new();
 
+    private List<string> ignoredGearSlots = new() { "Tabard", "Shirt" };
+    private List<string> doubledGearSlots = new() { "Finger", "Trinket" };
 
-    public int GetAverageItemLevel ()
+
+    public int GetAverageItemLevel (IOrderedEnumerable<WCLGear> gear)
     {
         var itemCount = 0;
         var itemLevel = 0;
-        var gearSlots = GearById.Values
-            .GroupBy(gear => gear.Slot)
-            .Select(group =>
-            {
-                var groupList = group.ToList();
+        var gearSlots = gear.GroupBy(gear => gear.Slot);
 
-                groupList.Sort((a, b) => b.ItemLevel.CompareTo(a.ItemLevel));
-
-                return groupList;
-            })
-            .ToList();
-
-        foreach (var gear in gearSlots)
+        foreach (var gearSlot in gearSlots)
         {
-            var item = gear.ElementAtOrDefault(0);
+            if (ignoredGearSlots.Contains(gearSlot.Key)) continue;
 
-            if (item is not null)
+            var item1 = gearSlot.ElementAtOrDefault(0);
+            var item2 = gearSlot.ElementAtOrDefault(1);
+
+            if (item1 is not null && item1.ItemLevel > 0)
             {
                 itemCount += 1;
-                itemLevel += item.ItemLevel;
+                itemLevel += item1.ItemLevel;
+            }
+
+            if (!doubledGearSlots.Contains(gearSlot.Key)) continue;
+
+            if (item2 is not null && item2.ItemLevel > 0)
+            {
+                itemCount += 1;
+                itemLevel += item2.ItemLevel;
             }
         }
 
@@ -45,13 +49,29 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     }
 
 
-    public DateTimeOffset GetLast10 () => getLastInstanceSize(10);
-    public DateTimeOffset GetLast25 () => getLastInstanceSize(25);
-    private DateTimeOffset getLastInstanceSize (int instanceSize)
+    public IOrderedEnumerable<WCLGear> GetOrderedGear ()
+    {
+        return GearById.Values.ToList()
+            .Where(g => !g.Ignore)
+            .OrderBy(g => g.LastSeenAt, Comparer<DateTimeOffset>.Create((a, b) => b.CompareTo(a)))
+            .ThenBy(g => g.IsBIS)
+            .ThenBy(g => g.SizeOfUpgrade, Comparer<UpgradeType>.Create((a, b) => b.CompareTo(a)))
+            .ThenBy(g => g.ItemLevel, Comparer<int>.Create((a, b) => b.CompareTo(a)));
+    }
+
+
+    public DateTimeOffset GetLast10 () => getLast(gear => gear.InstanceSize == 10);
+    public DateTimeOffset GetLast25 () => getLast(gear => gear.InstanceSize == 25);
+    public DateTimeOffset GetLastMin () => getLast(gear => gear.SizeOfUpgrade == UpgradeType.Minor);
+    public DateTimeOffset GetLastMod () => getLast(gear => gear.SizeOfUpgrade == UpgradeType.Moderate);
+    public DateTimeOffset GetLastMaj () => getLast(gear => gear.SizeOfUpgrade == UpgradeType.Major);
+    public DateTimeOffset GetLastBIS () => getLast(gear => gear.IsBIS);
+    public int GetBISCount () => GearById.Values.Where(gear => gear.IsBIS).Count();
+    private DateTimeOffset getLast (Func<WCLGear, bool> predicate)
     {
         var result = DateTimeOffset.MinValue;
 
-        foreach (var gear in GearById.Values.Where(gear => gear.InstanceSize.Equals(instanceSize)))
+        foreach (var gear in GearById.Values.Where(predicate))
         {
             result = result > gear.FirstSeenAt ? result : gear.FirstSeenAt;
         }

@@ -154,9 +154,10 @@ public class GoogleSheetsService
             new GoogleAutoResizeRequest(builder),
             new GooglePlayersCenterHeaderTextRequest(builder),
             new GoogleFormatSheetRequest(builder),
+            new GooglePlayersCenterSpecRequest(builder),
         });
         requests.AddRange(GooglePlayersMergeCellsLeftRequest.CreateRequests(builder));
-        requests.AddRange(GooglePlayersFormatCellsLeftRequest.CreateRequests(builder));
+        requests.AddRange(GooglePlayersFormatCellsDataRequest.CreateRequests(builder));
         requests.AddRange(GooglePlayersMergeCellsHeaderRequest.CreateRequests(builder));
         requests.AddRange(GooglePlayersFormatCellsHeaderRequest.CreateRequests(builder));
         requests.AddRange(GooglePlayersFormatCellsIconRequest.CreateRequests(builder));
