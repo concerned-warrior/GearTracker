@@ -4,9 +4,19 @@ public class WCLData
 {
     [JsonIgnore]
     public Dictionary<string, WCLReport> ReportsByCode { get; set; } = new();
+    public HashSet<WCLPlayer> PlayersToTrack { get; set; } = new();
     public HashSet<WCLGear> KnownItems { get; set; } = new();
-    public Dictionary<string, WCLGear> LootDumpByPlayer { get; set; } = new();
     public Dictionary<string, WCLPlayer> PlayersByName { get; set; } = new();
+
+    public static JsonSerializerOptions DataJsonSerializerOptions = new()
+    {
+        Converters =
+        {
+            new JsonStringEnumConverter(),
+        },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = true,
+    };
 
     private const string reportsDirectoryName = "reports";
 
@@ -26,14 +36,14 @@ public class WCLData
             var reportFiles = Directory.GetFiles(reportsDirectory, "*.json");
             using var stream = File.OpenRead(path);
 
-            data = JsonSerializer.Deserialize<WCLData>(stream, IWCLService.DataJsonSerializerOptions) ?? new();
+            data = JsonSerializer.Deserialize<WCLData>(stream, DataJsonSerializerOptions) ?? new();
 
             foreach (var file in reportFiles)
             {
                 var code = Path.GetFileNameWithoutExtension(file);
                 using var reportStream = File.OpenRead(file);
 
-                data.ReportsByCode.Add(code, JsonSerializer.Deserialize<WCLReport>(reportStream, IWCLService.DataJsonSerializerOptions) ?? new());
+                data.ReportsByCode.Add(code, JsonSerializer.Deserialize<WCLReport>(reportStream, DataJsonSerializerOptions) ?? new());
             }
         }
         catch (Exception ex)
@@ -59,13 +69,13 @@ public class WCLData
 
             using var stream = File.Create(path);
 
-            JsonSerializer.Serialize(stream, this, IWCLService.DataJsonSerializerOptions);
+            JsonSerializer.Serialize(stream, this, DataJsonSerializerOptions);
 
             foreach ((var code, var report) in ReportsByCode)
             {
                 using var reportStream = File.Create($"{reportsDirectory}/{code}.json");
 
-                JsonSerializer.Serialize(reportStream, report, IWCLService.DataJsonSerializerOptions);
+                JsonSerializer.Serialize(reportStream, report, DataJsonSerializerOptions);
             }
         }
         catch (Exception ex)

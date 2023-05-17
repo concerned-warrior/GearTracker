@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GooglePlayersFormatCellsDataRequest : Request
+public class GoogleGeneratedFormatCellsDataRequest : Request
 {
-    public static List<Request> CreateRequests (GoogleSheetsPlayersBuilder builder)
+    public static List<Request> CreateRequests (GoogleSheetsGeneratedBuilder builder)
     {
         var gridRanges = builder.GetPlayerGridRanges();
 
@@ -38,7 +38,7 @@ public class GooglePlayersFormatCellsDataRequest : Request
 
 
 
-    private GooglePlayersFormatCellsDataRequest ()
+    private GoogleGeneratedFormatCellsDataRequest ()
     {
 
     }

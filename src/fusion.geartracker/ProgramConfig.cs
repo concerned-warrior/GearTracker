@@ -11,14 +11,11 @@ public class ProgramConfig
     public string SheetsClientSecret { get; set; } = string.Empty;
     public string SheetsSpreadsheetId { get; set; } = string.Empty;
     public int SheetsWeeksOldToIgnore { get; set; }
-    public bool UseReportCache { get; set; }
-    public bool UpdateItemCache { get; set; }
     public int ReportCountToUpdate { get; set; }
     public DateTime NewestReportDate { get; set; }
     public DateTime OldestReportDate { get; set; }
-    public Dictionary<int, DateTime> DateValidByZoneId { get; set; } = new();
+    public Dictionary<int, DateTime> ValidReportDateByZoneId { get; set; } = new();
     public HashSet<string> ReportBlacklist { get; set; } = new();
-    public HashSet<WCLPlayer> PlayersToTrack { get; set; } = new();
 
 
     public static ProgramConfig Load ()

@@ -8,7 +8,7 @@ public class WCLCombatantInfo
 
     public static List<WCLCombatantInfo> FromJsonArrayString (string json)
     {
-        var combatantInfoList = JsonSerializer.Deserialize<List<WCLCombatantInfo>>(json, IWCLService.DataJsonSerializerOptions) ?? new();
+        var combatantInfoList = JsonSerializer.Deserialize<List<WCLCombatantInfo>>(json, WCLData.DataJsonSerializerOptions) ?? new();
 
         // Assign slot identifiers based on their position in the WCL response
         combatantInfoList.ForEach(combatantInfo =>

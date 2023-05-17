@@ -1,0 +1,1 @@
+global using fusion.wcl.data;

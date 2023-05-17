@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GooglePlayersCenterSpecRequest : Request
+public class GoogleGeneratedCenterHeaderTextRequest : Request
 {
-    public GooglePlayersCenterSpecRequest (GoogleSheetsPlayersBuilder builder)
+    public GoogleGeneratedCenterHeaderTextRequest (GoogleSheetsGeneratedBuilder builder)
     {
         RepeatCell = new()
         {
@@ -16,8 +16,8 @@ public class GooglePlayersCenterSpecRequest : Request
             },
             Range = new()
             {
-                StartColumnIndex = builder.SpecColumnIndex,
-                EndColumnIndex = builder.SpecColumnIndex + 1,
+                StartRowIndex = 1,
+                EndRowIndex = 2,
                 SheetId = builder.Sheet.Properties.SheetId,
             },
         };

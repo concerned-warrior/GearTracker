@@ -3,10 +3,16 @@ namespace fusion.geartracker.sheet;
 public class GoogleSheetsItemsBuilder : GoogleSheetsBuilder
 {
     public int IconColumnIndex { get => headers.IndexOf("Icon"); }
+    public int IdColumnIndex { get => headers.IndexOf("Id"); }
     public int IgnoreColumnIndex { get => headers.IndexOf("Ignore"); }
     public int InstanceSizeColumnIndex { get => headers.IndexOf("10 Man"); }
     public int IsBISColumnIndex { get => headers.IndexOf("BIS"); }
+    public int ItemLevelColumnIndex { get => headers.IndexOf("iLvl"); }
+    public int NameColumnIndex { get => headers.IndexOf("Name"); }
+    public int SlotColumnIndex { get => headers.IndexOf("Slot"); }
     public int UpgradeColumnIndex { get => headers.IndexOf("Size of Upgrade"); }
+
+    public int DataStartRowIndex { get => 1; }
 
     private List<string> headers = new() { "Id", "Ignore", "Slot", "Icon", "Name", "iLvl", "10 Man", "BIS", "Size of Upgrade" };
 

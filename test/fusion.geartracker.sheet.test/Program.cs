@@ -6,8 +6,9 @@ internal class Program
     private GoogleSheetsService sheetsService;
     private WCLData data;
 
-    private const string LootDumpTitle = "Loot Dump";
+    private const string PlayersTitle = "Players";
     private const string KnownItemsTitle = "Known Items";
+    private const string LootDumpTitle = "Loot Dump";
 
     public List<(string Name, Func<List<WCLPlayer>> GetSortedPlayers)> GeneratedSheets { get; set; }
 
@@ -29,14 +30,18 @@ internal class Program
 
         await program.CreateGeneratedSheets(spreadsheet);
 
-        var lootDumpSheet = await sheetsService.CreateSheet(spreadsheet, program.GeneratedSheets.Count, LootDumpTitle);
+        var playersSheet = await sheetsService.CreateSheet(spreadsheet, program.GeneratedSheets.Count, PlayersTitle);
         var knownItemsSheet = await sheetsService.CreateSheet(spreadsheet, program.GeneratedSheets.Count + 1, KnownItemsTitle);
+        var lootDumpSheet = await sheetsService.CreateSheet(spreadsheet, program.GeneratedSheets.Count + 2, LootDumpTitle);
 
+        var playersBuilder = new GoogleSheetsPlayersBuilder(spreadsheet, playersSheet);
         var lootBuilder = new GoogleSheetsLootBuilder(spreadsheet, lootDumpSheet);
         var itemsBuilder = new GoogleSheetsItemsBuilder(spreadsheet, knownItemsSheet);
 
+        await program.UpdateSheet(playersBuilder);
         await program.UpdateSheet(lootBuilder);
         await program.UpdateSheet(itemsBuilder);
+
         await sheetsService.DeleteSheet(spreadsheet, defaultSheet);
 
         Console.WriteLine($"We're tracking gear for {data.PlayersByName.Count} players.");
@@ -51,17 +56,27 @@ internal class Program
         {
             var sheet = await sheetsService.CreateSheet(spreadsheet, index++, name);
 
-            await UpdateSheet(new GoogleSheetsPlayersBuilder(spreadsheet, sheet, config.SheetsWeeksOldToIgnore), getSortedPlayers());
+            await UpdateSheet(new GoogleSheetsGeneratedBuilder(spreadsheet, sheet, config.SheetsWeeksOldToIgnore), getSortedPlayers());
         }
     }
 
 
-    public async Task UpdateSheet (GoogleSheetsLootBuilder builder)
+    public async Task UpdateSheet (GoogleSheetsPlayersBuilder builder)
     {
+        var players = data.PlayersToTrack
+            .OrderBy(player => player.Raid)
+            .ThenBy(player => player.Class)
+            .ThenBy(player => player.Spec)
+            .ThenBy(player => player.Name);
         builder.AddHeaders();
 
+        foreach (var player in players)
+        {
+            builder.AddPlayer(player);
+        }
+
         await sheetsService.UpdateSheet(builder);
-        await sheetsService.StyleSheet(builder, data);
+        await sheetsService.StyleSheet(builder);
     }
 
 
@@ -83,7 +98,16 @@ internal class Program
     }
 
 
-    public async Task UpdateSheet (GoogleSheetsPlayersBuilder builder, List<WCLPlayer> players)
+    public async Task UpdateSheet (GoogleSheetsLootBuilder builder)
+    {
+        builder.AddHeaders();
+
+        await sheetsService.UpdateSheet(builder);
+        await sheetsService.StyleSheet(builder);
+    }
+
+
+    public async Task UpdateSheet (GoogleSheetsGeneratedBuilder builder, List<WCLPlayer> players)
     {
         builder.AddHeaders();
         players.ForEach(builder.AddPlayer);

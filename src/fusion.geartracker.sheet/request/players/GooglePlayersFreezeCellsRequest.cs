@@ -11,8 +11,7 @@ public class GooglePlayersFreezeCellsRequest : Request
             {
                 GridProperties = new()
                 {
-                    FrozenColumnCount = builder.ItemGroupStartColumnIndex,
-                    FrozenRowCount = 2,
+                    FrozenRowCount = builder.DataStartRowIndex,
                 },
                 SheetId = builder.Sheet.Properties.SheetId,
             },

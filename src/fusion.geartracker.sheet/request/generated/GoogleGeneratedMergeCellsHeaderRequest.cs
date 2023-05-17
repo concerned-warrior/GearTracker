@@ -1,8 +1,8 @@
 namespace fusion.geartracker.sheet.request;
 
-public class GooglePlayersMergeCellsHeaderRequest : Request
+public class GoogleGeneratedMergeCellsHeaderRequest : Request
 {
-    public static List<Request> CreateRequests (GoogleSheetsPlayersBuilder builder)
+    public static List<Request> CreateRequests (GoogleSheetsGeneratedBuilder builder)
     {
         var gridRanges = builder.GetItemGroupGridRanges();
 
@@ -16,7 +16,7 @@ public class GooglePlayersMergeCellsHeaderRequest : Request
     }
 
 
-    private GooglePlayersMergeCellsHeaderRequest ()
+    private GoogleGeneratedMergeCellsHeaderRequest ()
     {
 
     }

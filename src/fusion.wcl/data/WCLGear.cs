@@ -63,7 +63,7 @@ public class WCLGear : IEquatable<WCLGear>
         Ignore = gear.Ignore;
         IsBIS = gear.IsBIS;
         SizeOfUpgrade = gear.SizeOfUpgrade;
-        LastSeenAt = gear.LastSeenAt;
+        LastSeenAt = LastSeenAt > gear.LastSeenAt ? LastSeenAt : gear.LastSeenAt;
         ReportCodeFirstSeen = FirstSeenAt < gear.FirstSeenAt ? ReportCodeFirstSeen : gear.ReportCodeFirstSeen;
         FirstSeenAt = FirstSeenAt < gear.FirstSeenAt ? FirstSeenAt : gear.FirstSeenAt;
     }

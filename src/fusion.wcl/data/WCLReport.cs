@@ -10,10 +10,33 @@ public class WCLReport : IEquatable<WCLReport>
     public int Segments { get; set; }
     public WCLZone Zone { get; set; } = new();
 
-    // Set in IWCLService.AddPlayerInfoToReports
+    // Set in WCLService.AddPlayerInfoToReports
     public Dictionary<int, string> Actors { get; set; } = new();
-    // Set in IWCLService.AddPlayerInfoToReports
+    // Set in WCLService.AddPlayerInfoToReports
     public Dictionary<string, WCLCombatantInfo> CombatantInfoByActor { get; set; } = new();
+
+
+    public static List<WCLPlayer> GetPlayers (IEnumerable<WCLReport> reports, HashSet<WCLPlayer> playersToTrack)
+    {
+        var players = new List<WCLPlayer>();
+
+        foreach (var report in reports)
+        {
+            foreach ((var actorId, var name) in report.Actors)
+            {
+                players.Add(WCLPlayer.Create(actorId, name, report));
+            }
+        }
+
+        players.ForEach(player =>
+        {
+            if (playersToTrack.TryGetValue(player, out var trackedPlayer)) player.Update(trackedPlayer);
+        });
+
+        players.Sort((a, b) => a.Report.StartTime.CompareTo(b.Report.StartTime));
+
+        return players;
+    }
 
 
     public WCLCombatantInfo GetCombatantInfo (string actorKey)

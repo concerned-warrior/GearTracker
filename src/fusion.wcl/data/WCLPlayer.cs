@@ -66,10 +66,10 @@ public class WCLPlayer : IEquatable<WCLPlayer>
     public DateTimeOffset GetLastMod () => getLast(gear => gear.SizeOfUpgrade == UpgradeType.Moderate);
     public DateTimeOffset GetLastMaj () => getLast(gear => gear.SizeOfUpgrade == UpgradeType.Major);
     public DateTimeOffset GetLastBIS () => getLast(gear => gear.IsBIS);
-    public int GetBISCount () => GearById.Values.Where(gear => gear.IsBIS).Count();
+    public int GetBISCount () => GearById.Values.DistinctBy(gear => gear.Id).Where(gear => gear.IsBIS).Count();
     private DateTimeOffset getLast (Func<WCLGear, bool> predicate)
     {
-        var result = DateTimeOffset.MinValue;
+        var result = GearById.Values.Aggregate(DateTimeOffset.Now, (date, gear) => date < gear.FirstSeenAt ? date : gear.FirstSeenAt);
 
         foreach (var gear in GearById.Values.Where(predicate))
         {

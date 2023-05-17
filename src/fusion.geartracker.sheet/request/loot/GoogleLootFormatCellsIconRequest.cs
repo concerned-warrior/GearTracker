@@ -17,7 +17,7 @@ public class GoogleLootFormatCellsIconRequest : Request
                 },
                 UserEnteredValue = new()
                 {
-                    FormulaValue = $"=ifna(lookup({columnItemName}2, 'Known Items'!$E$2:$E, 'Known Items'!$D$2:$D),\"\")",
+                    FormulaValue = $"=xlookup({columnItemName}2, 'Known Items'!$E$2:$E, 'Known Items'!$D$2:$D, \"\", 0, 1)",
                 },
             },
             Range = new()

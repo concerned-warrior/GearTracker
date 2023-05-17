@@ -2,7 +2,7 @@ namespace fusion.geartracker.sheet.request;
 
 public class GoogleLootFormatCellsNameRequest : Request
 {
-    public GoogleLootFormatCellsNameRequest (GoogleSheetsLootBuilder builder, WCLData data)
+    public GoogleLootFormatCellsNameRequest (GoogleSheetsLootBuilder builder)
     {
         RepeatCell = new()
         {
@@ -13,11 +13,11 @@ public class GoogleLootFormatCellsNameRequest : Request
                 {
                     Condition = new()
                     {
-                        Type = "ONE_OF_LIST",
-                        Values = data.PlayersByName.Keys.OrderBy(name => name).ToList().ConvertAll(name => new ConditionValue()
+                        Type = "ONE_OF_RANGE",
+                        Values = new List<ConditionValue>()
                         {
-                            UserEnteredValue = name,
-                        }),
+                            new() { UserEnteredValue = "='Players'!$B$2:$B" },
+                        },
                     },
                     ShowCustomUi = true,
                 },

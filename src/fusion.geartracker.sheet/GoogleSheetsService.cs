@@ -90,7 +90,7 @@ public class GoogleSheetsService
     }
 
 
-    public async Task StyleSheet (GoogleSheetsLootBuilder builder, WCLData data)
+    public async Task StyleSheet (GoogleSheetsPlayersBuilder builder)
     {
         var requests = new List<Request>();
         var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
@@ -101,15 +101,11 @@ public class GoogleSheetsService
         requests.AddRange(new List<Request>
         {
             new GoogleUpdateSpreadsheetPropertiesRequest(builder),
-            new GoogleLootFormatCellsDateRequest(builder),
-            new GoogleLootFormatCellsHeaderRequest(builder),
-            new GoogleLootFormatCellsIconRequest(builder),
-            new GoogleLootFormatCellsItemIdRequest(builder),
-            new GoogleLootFormatCellsItemRequest(builder),
-            new GoogleLootFormatCellsNameRequest(builder, data),
             new GoogleFormatSheetRequest(builder),
+            new GooglePlayersFreezeCellsRequest(builder),
+            new GooglePlayersFormatCellsHeaderRequest(builder),
+            new GoogleAutoResizeRequest(builder),
         });
-        requests.AddRange(GoogleLootResizeRequest.CreateRequests(builder));
 
         await request.ExecuteAsync();
     }
@@ -126,11 +122,12 @@ public class GoogleSheetsService
         requests.AddRange(new List<Request>
         {
             new GoogleUpdateSpreadsheetPropertiesRequest(builder),
+            new GoogleFormatSheetRequest(builder),
+            new GoogleItemsFreezeCellsRequest(builder),
             new GoogleItemsFormatCellsHeaderRequest(builder),
             new GoogleItemsFormatCellsIconRequest(builder),
             new GoogleItemsFormatCellsUpgradeRequest(builder),
             new GoogleAutoResizeRequest(builder),
-            new GoogleFormatSheetRequest(builder),
         });
         requests.AddRange(GoogleItemsFormatCellsCheckboxRequest.CreateRequests(builder));
 
@@ -138,7 +135,7 @@ public class GoogleSheetsService
     }
 
 
-    public async Task StyleSheet (GoogleSheetsPlayersBuilder builder)
+    public async Task StyleSheet (GoogleSheetsLootBuilder builder)
     {
         var requests = new List<Request>();
         var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
@@ -149,18 +146,58 @@ public class GoogleSheetsService
         requests.AddRange(new List<Request>
         {
             new GoogleUpdateSpreadsheetPropertiesRequest(builder),
-            new GoogleConditionalFormatRuleRequest(builder),
-            new GooglePlayersFreezeCellsRequest(builder),
-            new GoogleAutoResizeRequest(builder),
-            new GooglePlayersCenterHeaderTextRequest(builder),
             new GoogleFormatSheetRequest(builder),
-            new GooglePlayersCenterSpecRequest(builder),
+            new GoogleLootFreezeCellsRequest(builder),
+            new GoogleLootFormatCellsDateRequest(builder),
+            new GoogleLootFormatCellsHeaderRequest(builder),
+            new GoogleLootFormatCellsIconRequest(builder),
+            new GoogleLootFormatCellsItemIdRequest(builder),
+            new GoogleLootFormatCellsItemRequest(builder),
+            new GoogleLootFormatCellsNameRequest(builder),
         });
-        requests.AddRange(GooglePlayersMergeCellsLeftRequest.CreateRequests(builder));
-        requests.AddRange(GooglePlayersFormatCellsDataRequest.CreateRequests(builder));
-        requests.AddRange(GooglePlayersMergeCellsHeaderRequest.CreateRequests(builder));
-        requests.AddRange(GooglePlayersFormatCellsHeaderRequest.CreateRequests(builder));
-        requests.AddRange(GooglePlayersFormatCellsIconRequest.CreateRequests(builder));
+        requests.AddRange(GoogleLootResizeRequest.CreateRequests(builder));
+
+        await request.ExecuteAsync();
+    }
+
+
+    public async Task StyleSheet (GoogleSheetsGeneratedBuilder builder)
+    {
+        var requests = new List<Request>();
+        var request = new SpreadsheetsResource.BatchUpdateRequest(service, new()
+        {
+            Requests = requests,
+        }, programConfig.SheetsSpreadsheetId);
+
+        requests.AddRange(new List<Request>
+        {
+            new GoogleUpdateSpreadsheetPropertiesRequest(builder),
+            new GoogleFormatSheetRequest(builder),
+            new GoogleRecentWeekConditionalGradientRequest(builder, 0, new() { new()
+            {
+                StartColumnIndex = builder.Last10ColumnIndex,
+                EndColumnIndex = builder.LastBISColumnIndex + 1,
+                StartRowIndex = builder.DataStartRowIndex,
+                SheetId = builder.Sheet.Properties.SheetId,
+            }}),
+            new GoogleHighCountConditionalGradientRequest(builder, 1, new() { new()
+            {
+                StartColumnIndex = builder.IsBISColumnIndex,
+                EndColumnIndex = builder.IsBISColumnIndex + 1,
+                StartRowIndex = builder.DataStartRowIndex,
+                SheetId = builder.Sheet.Properties.SheetId,
+            }}),
+            new GoogleRecentDateConditionalGradientRequest(builder, 2, new() { new() { SheetId = builder.Sheet.Properties.SheetId } }),
+            new GoogleGeneratedFreezeCellsRequest(builder),
+            new GoogleGeneratedCenterHeaderTextRequest(builder),
+            new GoogleGeneratedCenterSpecRequest(builder),
+            new GoogleAutoResizeRequest(builder),
+        });
+        requests.AddRange(GoogleGeneratedMergeCellsLeftRequest.CreateRequests(builder));
+        requests.AddRange(GoogleGeneratedFormatCellsDataRequest.CreateRequests(builder));
+        requests.AddRange(GoogleGeneratedMergeCellsHeaderRequest.CreateRequests(builder));
+        requests.AddRange(GoogleGeneratedFormatCellsHeaderRequest.CreateRequests(builder));
+        requests.AddRange(GoogleGeneratedFormatCellsIconRequest.CreateRequests(builder));
 
         await request.ExecuteAsync();
     }

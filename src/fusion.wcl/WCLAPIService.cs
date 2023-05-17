@@ -1,6 +1,6 @@
 namespace fusion.wcl;
 
-public class WCLAPIService : IWCLService
+public class WCLService
 {
     private WCLGraphQLClient graphQLClient;
 
@@ -114,7 +114,7 @@ public class WCLAPIService : IWCLService
     }
 
 
-    public WCLAPIService (WCLGraphQLClient graphQLClient)
+    public WCLService (WCLGraphQLClient graphQLClient)
     {
         this.graphQLClient = graphQLClient;
     }
