@@ -21,7 +21,7 @@ internal class Program
         var data = WCLData.Load(programConfig.AppDataPath);
         var program = new Program(programConfig, sheetsService, data);
 
-        var spreadsheet = await sheetsService.GetSpreadsheet();
+        var spreadsheet = await sheetsService.GetSpreadsheet($"'{KnownItemsTitle}'");
         var sheet = spreadsheet.Sheets.Single(sheet => sheet.Properties.Title.Equals(KnownItemsTitle));
         var knownItems = program.GetKnownItems(sheet);
 

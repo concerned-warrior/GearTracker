@@ -6,11 +6,12 @@ public class GoogleSheetsService
     private SheetsService service;
 
 
-    public async Task<Spreadsheet> GetSpreadsheet ()
+    public async Task<Spreadsheet> GetSpreadsheet (string range)
     {
         var requestSpreadsheet = new SpreadsheetsResource.GetRequest(service, programConfig.SheetsSpreadsheetId)
         {
             IncludeGridData = true,
+            Ranges = new List<string> { range },
         };
 
         return await requestSpreadsheet.ExecuteAsync();
