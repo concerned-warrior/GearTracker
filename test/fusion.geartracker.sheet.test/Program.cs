@@ -83,6 +83,7 @@ internal class Program
     public async Task UpdateSheet (GoogleSheetsItemsBuilder builder)
     {
         var knownItems = data.KnownItems
+            .DistinctBy(gear => gear.Id)
             .OrderBy(gear => gear.SlotId)
             .ThenBy(gear => gear.ItemLevel, Comparer<int>.Create((a, b) => b.CompareTo(a)))
             .ThenBy(gear => gear.Name);
@@ -125,11 +126,11 @@ internal class Program
 
         GeneratedSheets = new()
         {
-            // { ("By Raid BIS Count", data.PlayersByName.ByRaidBISCount) },
-            // { ("By Raid Spec", data.PlayersByName.ByRaidSpec) },
-            // { ("By Raid Last Upgrade", data.PlayersByName.ByRaidLastUpgrade) },
-            // { ("By Spec", data.PlayersByName.BySpec) },
-            // { ("By BIS Count", data.PlayersByName.ByBISCount) },
+            { ("By Raid BIS Count", data.PlayersByName.ByRaidBISCount) },
+            { ("By Raid Spec", data.PlayersByName.ByRaidSpec) },
+            { ("By Raid Last Upgrade", data.PlayersByName.ByRaidLastUpgrade) },
+            { ("By Spec", data.PlayersByName.BySpec) },
+            { ("By BIS Count", data.PlayersByName.ByBISCount) },
             { ("By Name", data.PlayersByName.ByName) },
         };
     }

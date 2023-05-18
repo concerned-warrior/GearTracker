@@ -24,21 +24,13 @@ internal class Program
 
     public void UpdateGear (List<WCLPlayer> players)
     {
-        // This is done to deal with multiple slots of the same name, e.g. Finger & Trinket
-        var itemsToTrack = data.KnownItems.Aggregate(new HashSet<WCLGear>(data.KnownItems.Count), (itemsToTrack, trackedItem) =>
-        {
-            foreach (var gear in WCLGear.FromKnownItem(trackedItem)) itemsToTrack.Add(gear);
-
-            return itemsToTrack;
-        });
-
         foreach (var player in players)
         {
             foreach (var gear in player.Report.GetCombatantInfo(player.GetActorKey()).Gear)
             {
                 gear.UpdateReportInfo(player.Report);
 
-                if (itemsToTrack.TryGetValue(gear, out var trackedItem)) gear.UpdateCustomInfo(trackedItem);
+                if (data.KnownItems.TryGetValue(gear, out var trackedItem)) gear.UpdateCustomInfo(trackedItem);
             }
         }
     }

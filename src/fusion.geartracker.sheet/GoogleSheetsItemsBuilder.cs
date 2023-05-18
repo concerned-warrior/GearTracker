@@ -28,7 +28,9 @@ public class GoogleSheetsItemsBuilder : GoogleSheetsBuilder
 
     public void AddItem (WCLGear gear)
     {
-        var row = new List<object> { gear.Id, gear.Ignore, gear.Slot, $"=image(\"https://assets.rpglogs.com/img/warcraft/abilities/{gear.Icon}\")", gear.Name, gear.ItemLevel, gear.InstanceSize == 10, gear.IsBIS, gear.SizeOfUpgrade.ToString() };
+        var slot = new List<string>() { "Main Hand", "Off Hand" }.Contains(gear.Slot) ? "Weapon" : gear.Slot;
+
+        var row = new List<object> { gear.Id, gear.Ignore, slot, $"=image(\"https://assets.rpglogs.com/img/warcraft/abilities/{gear.Icon}\")", gear.Name, gear.ItemLevel, gear.InstanceSize == 10, gear.IsBIS, gear.SizeOfUpgrade.ToString() };
 
         data.Add(row);
     }

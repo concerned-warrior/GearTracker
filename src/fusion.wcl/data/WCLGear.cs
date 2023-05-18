@@ -22,7 +22,8 @@ public class WCLGear : IEquatable<WCLGear>
     public DateTimeOffset LastSeenAt { get; set; }
     public string ReportCodeFirstSeen { get; set; } = string.Empty;
 
-    private static List<string> slots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Main Hand", "Off Hand", "Ranged", "Tabard" };
+    private static List<string> realSlots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Main Hand", "Off Hand", "Ranged", "Tabard" };
+    private static List<string> knownItemSlots = new() { "Ammo", "Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger", "Finger", "Trinket", "Trinket", "Back", "Weapon", "Weapon", "Ranged", "Tabard" };
 
 
     public bool Equals (WCLGear? other)
@@ -45,7 +46,7 @@ public class WCLGear : IEquatable<WCLGear>
 
     public string GetSlotFromId ()
     {
-        return slots[SlotId];
+        return realSlots[SlotId];
     }
 
 
@@ -100,15 +101,17 @@ public class WCLGear : IEquatable<WCLGear>
     public static List<WCLGear> FromKnownItem (WCLGear knownItem)
     {
         var gear = new List<WCLGear>();
-        var index = slots.IndexOf(knownItem.Slot);
+        var index = knownItemSlots.IndexOf(knownItem.Slot);
 
         while (index > -1)
         {
             gear.Add(new()
             {
                 Id = knownItem.Id,
+                Icon = knownItem.Icon,
                 SlotId = index,
                 Name = knownItem.Name,
+                ItemLevel = knownItem.ItemLevel,
                 Slot = knownItem.Slot,
                 InstanceSize = knownItem.InstanceSize,
                 Ignore = knownItem.Ignore,
@@ -116,7 +119,7 @@ public class WCLGear : IEquatable<WCLGear>
                 SizeOfUpgrade = knownItem.SizeOfUpgrade,
             });
 
-            index = slots.IndexOf(knownItem.Slot, index + 1);
+            index = knownItemSlots.IndexOf(knownItem.Slot, index + 1);
         }
 
         return gear;
