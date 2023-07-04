@@ -1,4 +1,4 @@
-﻿namespace fusion.geartracker.wcl.test;
+﻿namespace fusion.geartracker.wcl.items.test;
 
 internal class Program
 {
@@ -14,10 +14,9 @@ internal class Program
         var wclService = await CreateWCLService(programConfig, data);
         var program = new Program(programConfig, wclService, data);
 
-        var reports = await program.GetReports();
-        var players = await program.GetPlayers(reports);
+        var players = data.PlayersByName.Values.ToList();
 
-        program.SaveReports(players);
+        await program.UpdateItemCache(players);
 
         data.Save(programConfig.AppDataPath);
     }
@@ -58,61 +57,26 @@ internal class Program
     }
 
 
-    public async Task<List<WCLReport>> GetReports ()
+    public async Task UpdateItemCache (List<WCLPlayer> players)
     {
-        Console.WriteLine($"Getting reports between {config.OldestReportDate.ToLongDateString()} and {config.NewestReportDate.ToLongDateString()}");
+        var gearSet = new HashSet<WCLGear>();
 
-        var reportsPulled = await wclService.GetReports(config.GuildId, config.NewestReportDate, config.OldestReportDate);
-        var validReportsPulled = reportsPulled.FindAll(report =>
-        {
-            var result = !config.ReportBlacklist.Contains(report.Code);
-
-            if (result && config.ValidReportDateByZoneId.TryGetValue(report.Zone.Id, out var dateValid))
-            {
-                result = report.StartTime > dateValid;
-            }
-            else
-            {
-                result = false;
-            }
-
-            return result;
-        });
-        var newReports = validReportsPulled.FindAll(report => !data.ReportsByCode.ContainsKey(report.Code));
-        var reportsToUpdate = newReports.GetRange(0, config.ReportCountToUpdate < newReports.Count ? config.ReportCountToUpdate : newReports.Count);
-
-        Console.WriteLine($"Pulled {validReportsPulled.Count}/{reportsPulled.Count} valid reports");
-        Console.WriteLine($"Updating {reportsToUpdate.Count}/{newReports.Count} new reports");
-
-        return reportsToUpdate;
-    }
-
-
-    public async Task<List<WCLPlayer>> GetPlayers (List<WCLReport> reports)
-    {
-        Console.WriteLine($"Adding player information to reports. This may take a while...");
-
-        await wclService.AddPlayerInfoToReports(reports);
-
-        return WCLReport.GetPlayers(reports, data.PlayersToTrack);
-    }
-
-
-    public void SaveReports (List<WCLPlayer> players)
-    {
         foreach (var player in players)
         {
-            if (data.ReportsByCode.ContainsKey(player.Report.Code))
+            foreach ((var id, var gear) in player.GearById)
             {
-                data.ReportsByCode[player.Report.Code] = player.Report;
-            }
-            else
-            {
-                data.ReportsByCode.Add(player.Report.Code, player.Report);
+                if (data.KnownItems.TryGetValue(gear, out var knownItem)) knownItem.UpdateWCLInfo(gear);
+                else gearSet.Add(gear);
             }
         }
 
-        Console.WriteLine($"Reports saved");
+        Console.WriteLine($"Getting item information for {gearSet.Count} items. This may take a while...");
+
+        var knownItems = await wclService.GetKnownItems(gearSet);
+
+        knownItems.ForEach(item => data.KnownItems.Add(item));
+
+        Console.WriteLine($"Item cache updated");
     }
 
 
